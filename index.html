@@ -1760,7 +1760,9 @@
                             <label class="flex items-center gap-2 p-2.5 rounded-xl bg-white dark:bg-neutral-900 border"><input type="checkbox" id="admob-place-dashboard"> Dashboard Feed</label>
                             <label class="flex items-center gap-2 p-2.5 rounded-xl bg-white dark:bg-neutral-900 border"><input type="checkbox" id="admob-place-history"> History Feed</label>
                             <label class="flex items-center gap-2 p-2.5 rounded-xl bg-white dark:bg-neutral-900 border"><input type="checkbox" id="admob-place-grocery"> Shopping Screen</label>
+                            <label class="flex items-center gap-2 p-2.5 rounded-xl bg-white dark:bg-neutral-900 border"><input type="checkbox" id="admob-place-udhar"> Udhar Khata</label>
                             <label class="flex items-center gap-2 p-2.5 rounded-xl bg-white dark:bg-neutral-900 border"><input type="checkbox" id="admob-place-hub"> Friends Hub</label>
+                            <label class="flex items-center gap-2 p-2.5 rounded-xl bg-white dark:bg-neutral-900 border"><input type="checkbox" id="admob-place-analytics"> Reports & Analytics</label>
                             <label class="flex items-center gap-2 p-2.5 rounded-xl bg-white dark:bg-neutral-900 border"><input type="checkbox" id="admob-place-bottom"> Sticky Bottom</label>
                         </div>
                         <button type="submit" class="px-6 py-2.5 rounded-xl bg-blue-600 text-white font-extrabold text-xs">Save AdMob Settings</button>
@@ -1807,11 +1809,11 @@
         </footer>
     </div>
 
-    <!-- Sticky Floating AdMob Bottom Anchor Banner (100% invisible unless real ad fills) -->
-    <div id="admob-slot-bottom" class="hidden fixed bottom-14 left-0 right-0 z-40 px-2 sm:px-6 transition-all pointer-events-auto">
-        <div class="max-w-md mx-auto sm:max-w-xl rounded-2xl overflow-hidden text-center relative">
-            <button onclick="document.getElementById('admob-slot-bottom').classList.add('hidden')" class="absolute top-1 right-2 w-6 h-6 rounded-full bg-black/50 text-white text-xs z-10 flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
-            <div id="admob-bottom-container" class="flex items-center justify-center"></div>
+    <!-- Sticky Floating AdMob Bottom Anchor Banner -->
+    <div id="admob-slot-bottom" class="hidden fixed bottom-16 left-0 right-0 z-40 px-2 sm:px-6 transition-all pointer-events-auto">
+        <div class="max-w-md mx-auto sm:max-w-xl rounded-2xl overflow-hidden text-center relative bg-white/95 dark:bg-neutral-900/95 border border-neutral-200 dark:border-neutral-800 shadow-lg p-1.5">
+            <button onclick="document.getElementById('admob-slot-bottom').classList.add('hidden')" class="absolute top-1 right-2 w-6 h-6 rounded-full bg-black/60 text-white text-xs z-10 flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
+            <div id="admob-bottom-container" class="flex items-center justify-center min-h-[52px]"></div>
         </div>
     </div>
 
@@ -5588,8 +5590,11 @@
             adDeliveryMode: 'hybrid',
             admobPubId: '',
             admobSlotId: '',
-            places: { top: true, dashboard: true, history: true, grocery: true, hub: true, bottom: false }
+            places: { top: true, dashboard: true, history: true, grocery: true, udhar: true, hub: true, analytics: true, bottom: true }
         };
+        if (!adminConfig.places) {
+            adminConfig.places = { top: true, dashboard: true, history: true, grocery: true, udhar: true, hub: true, analytics: true, bottom: true };
+        }
         if (adminConfig.adDeliveryMode === 'admob-only' && !adminConfig.admobPubId) {
             adminConfig.adDeliveryMode = 'hybrid';
             localStorage.setItem('khataflow_admin_config', JSON.stringify(adminConfig));
@@ -5718,6 +5723,23 @@
             if (document.getElementById('admin-announcement-enabled')) document.getElementById('admin-announcement-enabled').checked = !!adminConfig.announcementEnabled;
             if (document.getElementById('admin-admob-pub-id')) document.getElementById('admin-admob-pub-id').value = adminConfig.admobPubId || '';
             if (document.getElementById('admin-admob-slot-id')) document.getElementById('admin-admob-slot-id').value = adminConfig.admobSlotId || '';
+
+            const p = adminConfig.places || {};
+            const placeIds = {
+                'admob-place-top': p.top !== false,
+                'admob-place-dashboard': p.dashboard !== false,
+                'admob-place-history': p.history !== false,
+                'admob-place-grocery': p.grocery !== false,
+                'admob-place-udhar': p.udhar !== false,
+                'admob-place-hub': p.hub !== false,
+                'admob-place-analytics': p.analytics !== false,
+                'admob-place-bottom': !!p.bottom
+            };
+            Object.entries(placeIds).forEach(([elId, checked]) => {
+                const cb = document.getElementById(elId);
+                if (cb) cb.checked = checked;
+            });
+            renderAdmobSlots();
         }
 
         function dismissAnnouncement() {
@@ -6125,17 +6147,106 @@
             e.preventDefault();
             adminConfig.admobPubId = document.getElementById('admin-admob-pub-id')?.value.trim() || '';
             adminConfig.admobSlotId = document.getElementById('admin-admob-slot-id')?.value.trim() || '';
+            adminConfig.places = {
+                top: !!document.getElementById('admob-place-top')?.checked,
+                dashboard: !!document.getElementById('admob-place-dashboard')?.checked,
+                history: !!document.getElementById('admob-place-history')?.checked,
+                grocery: !!document.getElementById('admob-place-grocery')?.checked,
+                udhar: !!document.getElementById('admob-place-udhar')?.checked,
+                hub: !!document.getElementById('admob-place-hub')?.checked,
+                analytics: !!document.getElementById('admob-place-analytics')?.checked,
+                bottom: !!document.getElementById('admob-place-bottom')?.checked
+            };
             localStorage.setItem('khataflow_admin_config', JSON.stringify(adminConfig));
             renderAdmobSlots();
             saveAllAdminChangesLive();
         }
+        function hydrateLiveAdSlot(containerId, isEnabled = true, isBottomAnchor = false) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            if (!isEnabled || adminConfig.adDeliveryMode === 'custom-only') {
+                container.classList.add('hidden');
+                return;
+            }
+
+            // Always show every enabled AdMob slot; Admin toggles control visibility
+            container.classList.remove('hidden');
+
+            const pubId = (adminConfig.admobPubId || '').trim();
+            const slotId = (adminConfig.admobSlotId || '').trim();
+            const targetBox = isBottomAnchor ? (document.getElementById('admob-bottom-container') || container) : container;
+
+            if (pubId && slotId) {
+                ensureAdSenseScript(pubId);
+                const sig = `${pubId}_${slotId}`;
+                if (targetBox.dataset.adSig !== sig) {
+                    targetBox.dataset.adSig = sig;
+                    targetBox.innerHTML = `<ins class="adsbygoogle" style="display:block" data-ad-client="${pubId}" data-ad-slot="${slotId}" data-ad-format="auto" data-full-width-responsive="true"></ins>`;
+                    try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch (e) {}
+                }
+            } else if (!targetBox.dataset.adSig) {
+                targetBox.innerHTML = `
+                    <div class="p-3 rounded-2xl bg-blue-50/70 dark:bg-blue-950/30 border border-dashed border-blue-300 dark:border-blue-800/70 flex items-center justify-between gap-2 text-left">
+                        <div class="flex items-center gap-2.5 min-w-0">
+                            <span class="px-2 py-0.5 rounded-md bg-blue-600 text-white text-[9px] font-black uppercase tracking-wider flex-shrink-0">AdMob Slot</span>
+                            <span class="text-[11px] font-bold text-neutral-700 dark:text-neutral-200 truncate">Active Placement (${containerId.replace('admob-slot-', '').toUpperCase()})</span>
+                        </div>
+                        <span class="text-[10px] font-mono text-blue-600 dark:text-blue-400 flex-shrink-0">Admin Controlled</span>
+                    </div>
+                `;
+            }
+        }
+
+        function renderAdmobSlots() {
+            const p = adminConfig.places || { top: true, dashboard: true, history: true, grocery: true, udhar: true, hub: true, analytics: true, bottom: true };
+            const slotMap = [
+                { id: 'admob-slot-top', enabled: p.top !== false },
+                { id: 'admob-slot-dashboard', enabled: p.dashboard !== false },
+                { id: 'admob-slot-dashboard-2', enabled: p.dashboard !== false },
+                { id: 'admob-slot-history-top', enabled: p.history !== false },
+                { id: 'admob-slot-history', enabled: p.history !== false },
+                { id: 'admob-slot-grocery-top', enabled: p.grocery !== false },
+                { id: 'admob-slot-grocery', enabled: p.grocery !== false },
+                { id: 'admob-slot-udhar-top', enabled: p.udhar !== false },
+                { id: 'admob-slot-udhar', enabled: p.udhar !== false },
+                { id: 'admob-slot-hub-top', enabled: p.hub !== false },
+                { id: 'admob-slot-hub', enabled: p.hub !== false },
+                { id: 'admob-slot-analytics-top', enabled: p.analytics !== false },
+                { id: 'admob-slot-analytics-2', enabled: p.analytics !== false },
+                { id: 'admob-slot-bottom', enabled: !!p.bottom, isBottom: true }
+            ];
+            slotMap.forEach(s => hydrateLiveAdSlot(s.id, s.enabled, !!s.isBottom));
+        }
 
         function saveAllAdminChangesLive() {
+            adminConfig.announcementText = document.getElementById('admin-announcement-text')?.value.trim() || '';
+            adminConfig.announcementType = document.getElementById('admin-announcement-type')?.value || 'info';
+            adminConfig.announcementEnabled = !!document.getElementById('admin-announcement-enabled')?.checked;
+            adminConfig.admobPubId = document.getElementById('admin-admob-pub-id')?.value.trim() || '';
+            adminConfig.admobSlotId = document.getElementById('admin-admob-slot-id')?.value.trim() || '';
+            adminConfig.places = {
+                top: !!document.getElementById('admob-place-top')?.checked,
+                dashboard: !!document.getElementById('admob-place-dashboard')?.checked,
+                history: !!document.getElementById('admob-place-history')?.checked,
+                grocery: !!document.getElementById('admob-place-grocery')?.checked,
+                udhar: !!document.getElementById('admob-place-udhar')?.checked,
+                hub: !!document.getElementById('admob-place-hub')?.checked,
+                analytics: !!document.getElementById('admob-place-analytics')?.checked,
+                bottom: !!document.getElementById('admob-place-bottom')?.checked
+            };
             localStorage.setItem('khataflow_admin_config', JSON.stringify(adminConfig));
             localStorage.setItem('khataflow_sponsored_ads', JSON.stringify(SPONSORED_ADS_LIST));
+
             if (typeof window.publishAdminBroadcastToCloud === 'function') {
-                window.publishAdminBroadcastToCloud({ adminConfig, sponsoredAds: SPONSORED_ADS_LIST, updatedAt: Date.now() });
+                window.publishAdminBroadcastToCloud({
+                    adminConfig,
+                    sponsoredAds: SPONSORED_ADS_LIST
+                }).catch(() => {});
             }
+
+            applyAdminConfigToUI();
+            renderAdmobSlots();
             showToast('All admin settings published live!');
         }
 
@@ -6159,34 +6270,6 @@
             s.crossOrigin = 'anonymous';
             s.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${encodeURIComponent(pubId)}`;
             document.head.appendChild(s);
-        }
-
-        function hydrateLiveAdSlot(containerId) {
-            const container = document.getElementById(containerId);
-            if (!container) return;
-            const pubId = (adminConfig.admobPubId || '').trim();
-            const slotId = (adminConfig.admobSlotId || '').trim();
-            if (!pubId || !slotId || adminConfig.adDeliveryMode === 'custom-only') {
-                container.classList.add('hidden');
-                return;
-            }
-            ensureAdSenseScript(pubId);
-            if (!container.dataset.adRequested) {
-                container.dataset.adRequested = 'true';
-                container.innerHTML = `<ins class="adsbygoogle" style="display:block" data-ad-client="${pubId}" data-ad-slot="${slotId}" data-ad-format="auto" data-full-width-responsive="true"></ins>`;
-                try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch (e) {}
-            }
-            // Reveal container ONLY if Google AdSense/AdMob actually fills an iframe with height > 0
-            setTimeout(() => {
-                const ins = container.querySelector('ins.adsbygoogle');
-                const filled = ins && (ins.getAttribute('data-ad-status') === 'filled' || ins.offsetHeight > 20);
-                container.classList.toggle('hidden', !filled);
-            }, 1500);
-        }
-
-        function renderAdmobSlots() {
-            const slots = ['admob-slot-top', 'admob-slot-dashboard', 'admob-slot-dashboard-2', 'admob-slot-history-top', 'admob-slot-history', 'admob-slot-grocery-top', 'admob-slot-grocery', 'admob-slot-udhar-top', 'admob-slot-udhar', 'admob-slot-hub-top', 'admob-slot-hub', 'admob-slot-analytics-top', 'admob-slot-analytics-2'];
-            slots.forEach(id => hydrateLiveAdSlot(id));
         }
 
         function runWithLiveRewardedAd(callback) {
