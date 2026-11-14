@@ -1909,40 +1909,42 @@
     </div>
 
     <!-- Fixed Bottom Navigation Bar -->
-    <nav id="bottom-nav-bar" class="hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 dark:bg-neutral-900/95 backdrop-blur-xl border-t border-neutral-200/80 dark:border-neutral-800/80 shadow-[0_-8px_30px_rgba(0,0,0,0.08)] px-1 sm:px-6 py-2 transition-all">
-        <div class="max-w-md mx-auto sm:max-w-xl flex items-center justify-around">
-            <button onclick="switchTab('dashboard')" id="nav-btn-dashboard" class="nav-tab-btn flex flex-col items-center justify-center py-1 px-2 sm:px-3 rounded-2xl transition-all duration-200 group text-primary-600 dark:text-primary-400">
-                <div class="relative w-9 h-9 sm:w-10 sm:h-10 rounded-2xl flex items-center justify-center transition-all bg-gradient-to-tr from-blue-600 to-indigo-500 text-white shadow-md shadow-blue-500/30 ring-2 ring-blue-500/40 scale-105"><i class="fa-solid fa-chart-pie text-base sm:text-lg"></i><span class="nav-indicator absolute -bottom-1.5 w-1.5 h-1.5 rounded-full bg-blue-600"></span></div>
-                <span class="nav-label text-[9px] sm:text-[10px] font-extrabold mt-1 tracking-tight text-blue-600 dark:text-blue-400">Dashboard</span>
-            </button>
-            <button onclick="switchTab('transactions')" id="nav-btn-transactions" class="nav-tab-btn flex flex-col items-center justify-center py-1 px-2 sm:px-3 rounded-2xl transition-all duration-200 group text-sky-600 dark:text-sky-400">
-                <div class="relative w-9 h-9 sm:w-10 sm:h-10 rounded-2xl flex items-center justify-center transition-all bg-gradient-to-tr from-sky-500 to-cyan-400 text-white shadow-sm shadow-sky-500/25 opacity-90 group-hover:opacity-100"><i class="fa-solid fa-clock-rotate-left text-base sm:text-lg"></i><span class="nav-indicator hidden absolute -bottom-1.5 w-1.5 h-1.5 rounded-full bg-sky-500"></span></div>
-                <span class="nav-label text-[9px] sm:text-[10px] font-bold mt-1 tracking-tight text-sky-700 dark:text-sky-300">History</span>
-            </button>
-            <button onclick="switchTab('grocery')" id="nav-btn-grocery" class="nav-tab-btn flex flex-col items-center justify-center py-1 px-2 sm:px-3 rounded-2xl transition-all duration-200 group text-emerald-600 dark:text-emerald-400">
-                <div class="relative w-9 h-9 sm:w-10 sm:h-10 rounded-2xl flex items-center justify-center transition-all bg-gradient-to-tr from-emerald-600 to-teal-400 text-white shadow-sm shadow-emerald-500/25 opacity-90 group-hover:opacity-100"><i class="fa-solid fa-cart-shopping text-base sm:text-lg"></i><span class="nav-indicator hidden absolute -bottom-1.5 w-1.5 h-1.5 rounded-full bg-emerald-600"></span></div>
-                <span class="nav-label text-[9px] sm:text-[10px] font-bold mt-1 tracking-tight text-emerald-700 dark:text-emerald-300">Shopping</span>
-            </button>
-            <button onclick="switchTab('udhar')" id="nav-btn-udhar" class="nav-tab-btn flex flex-col items-center justify-center py-1 px-2 sm:px-3 rounded-2xl transition-all duration-200 group text-rose-600 dark:text-rose-400">
-                <div class="relative w-9 h-9 sm:w-10 sm:h-10 rounded-2xl flex items-center justify-center transition-all bg-gradient-to-tr from-rose-600 to-pink-500 text-white shadow-sm shadow-rose-500/25 opacity-90 group-hover:opacity-100"><i class="fa-solid fa-book-open text-base sm:text-lg"></i><span class="nav-indicator hidden absolute -bottom-1.5 w-1.5 h-1.5 rounded-full bg-rose-600"></span></div>
-                <span class="nav-label text-[9px] sm:text-[10px] font-bold mt-1 tracking-tight text-rose-700 dark:text-rose-300">Udhar</span>
-            </button>
-            <button onclick="switchTab('hub')" id="nav-btn-hub" class="nav-tab-btn flex flex-col items-center justify-center py-1 px-2 sm:px-3 rounded-2xl transition-all duration-200 group text-purple-600 dark:text-purple-400">
-                <div class="relative w-9 h-9 sm:w-10 sm:h-10 rounded-2xl flex items-center justify-center transition-all bg-gradient-to-tr from-purple-600 to-violet-500 text-white shadow-sm shadow-purple-500/25 opacity-90 group-hover:opacity-100"><i class="fa-solid fa-users text-base sm:text-lg"></i><span class="nav-indicator hidden absolute -bottom-1.5 w-1.5 h-1.5 rounded-full bg-purple-600"></span></div>
-                <span class="nav-label text-[9px] sm:text-[10px] font-bold mt-1 tracking-tight text-purple-700 dark:text-purple-300">Friends</span>
-            </button>
-            <button onclick="switchTab('analytics')" id="nav-btn-analytics" class="nav-tab-btn flex flex-col items-center justify-center py-1 px-2 sm:px-3 rounded-2xl transition-all duration-200 group text-amber-600 dark:text-amber-400">
-                <div class="relative w-9 h-9 sm:w-10 sm:h-10 rounded-2xl flex items-center justify-center transition-all bg-gradient-to-tr from-amber-500 to-orange-500 text-white shadow-sm shadow-amber-500/25 opacity-90 group-hover:opacity-100"><i class="fa-solid fa-chart-line text-base sm:text-lg"></i><span class="nav-indicator hidden absolute -bottom-1.5 w-1.5 h-1.5 rounded-full bg-amber-500"></span></div>
-                <span class="nav-label text-[9px] sm:text-[10px] font-bold mt-1 tracking-tight text-amber-700 dark:text-amber-300">Reports</span>
-            </button>
-            <button onclick="openKhataFlowAiChat()" id="nav-btn-ai" class="nav-tab-btn flex flex-col items-center justify-center py-1 px-2 sm:px-3 rounded-2xl transition-all duration-200 group text-indigo-600 dark:text-indigo-400" title="KhataFlow AI Assistant">
-                <div class="relative w-9 h-9 sm:w-10 sm:h-10 rounded-2xl flex items-center justify-center transition-all bg-gradient-to-tr from-indigo-600 via-fuchsia-600 to-pink-500 text-white shadow-md shadow-indigo-500/30 group-hover:scale-105"><i class="fa-solid fa-robot text-base sm:text-lg"></i><span class="nav-indicator hidden absolute -bottom-1.5 w-1.5 h-1.5 rounded-full bg-fuchsia-600"></span></div>
-                <span class="nav-label text-[9px] sm:text-[10px] font-extrabold mt-1 tracking-tight text-indigo-700 dark:text-indigo-300">AI Chat</span>
-            </button>
-            <button onclick="switchTab('admin')" id="nav-btn-admin" style="display: none !important;" class="nav-tab-btn flex-col items-center justify-center py-1 px-2 sm:px-3 rounded-2xl transition-all duration-200 group text-amber-500">
-                <div class="relative w-9 h-9 sm:w-10 sm:h-10 rounded-2xl flex items-center justify-center transition-all bg-gradient-to-tr from-amber-600 to-yellow-500 text-white shadow-md shadow-amber-500/30"><i class="fa-solid fa-user-shield text-base sm:text-lg"></i><span class="nav-indicator hidden absolute -bottom-1.5 w-1.5 h-1.5 rounded-full bg-amber-500"></span></div>
-                <span class="nav-label text-[9px] sm:text-[10px] font-black mt-1 tracking-tight text-amber-600 dark:text-amber-400">Admin</span>
-            </button>
+    <nav id="bottom-nav-bar" class="hidden fixed bottom-2.5 sm:bottom-4 left-2 right-2 sm:left-6 sm:right-6 z-50 pointer-events-none transition-all">
+        <div class="max-w-lg sm:max-w-2xl mx-auto pointer-events-auto rounded-[1.75rem] bg-white/90 dark:bg-neutral-900/90 backdrop-blur-2xl border border-neutral-200/90 dark:border-neutral-800/90 shadow-[0_14px_40px_-8px_rgba(15,23,42,0.18)] dark:shadow-[0_14px_40px_-8px_rgba(0,0,0,0.65)] px-1.5 sm:px-3 py-1.5">
+            <div class="flex items-center justify-between gap-0.5 sm:gap-1">
+                <button onclick="switchTab('dashboard')" id="nav-btn-dashboard" class="nav-tab-btn flex-1 min-w-0 flex flex-col items-center justify-center py-1.5 px-1 rounded-2xl transition-all duration-200 group bg-blue-50/90 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400">
+                    <div class="relative w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center transition-all bg-gradient-to-tr from-blue-600 to-indigo-500 text-white shadow-sm shadow-blue-500/30"><i class="fa-solid fa-chart-pie text-xs sm:text-sm"></i><span class="nav-indicator hidden"></span></div>
+                    <span class="nav-label text-[9px] sm:text-[10px] font-extrabold mt-1 tracking-tight truncate max-w-full text-blue-700 dark:text-blue-300">Dashboard</span>
+                </button>
+                <button onclick="switchTab('transactions')" id="nav-btn-transactions" class="nav-tab-btn flex-1 min-w-0 flex flex-col items-center justify-center py-1.5 px-1 rounded-2xl transition-all duration-200 group hover:bg-neutral-100/80 dark:hover:bg-neutral-800/60 text-neutral-500 dark:text-neutral-400">
+                    <div class="relative w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center transition-all bg-sky-500/12 dark:bg-sky-500/15 text-sky-600 dark:text-sky-400 group-hover:scale-105"><i class="fa-solid fa-clock-rotate-left text-xs sm:text-sm"></i><span class="nav-indicator hidden"></span></div>
+                    <span class="nav-label text-[9px] sm:text-[10px] font-semibold mt-1 tracking-tight truncate max-w-full text-neutral-600 dark:text-neutral-400">History</span>
+                </button>
+                <button onclick="switchTab('grocery')" id="nav-btn-grocery" class="nav-tab-btn flex-1 min-w-0 flex flex-col items-center justify-center py-1.5 px-1 rounded-2xl transition-all duration-200 group hover:bg-neutral-100/80 dark:hover:bg-neutral-800/60 text-neutral-500 dark:text-neutral-400">
+                    <div class="relative w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center transition-all bg-emerald-500/12 dark:bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 group-hover:scale-105"><i class="fa-solid fa-cart-shopping text-xs sm:text-sm"></i><span class="nav-indicator hidden"></span></div>
+                    <span class="nav-label text-[9px] sm:text-[10px] font-semibold mt-1 tracking-tight truncate max-w-full text-neutral-600 dark:text-neutral-400">Shopping</span>
+                </button>
+                <button onclick="switchTab('udhar')" id="nav-btn-udhar" class="nav-tab-btn flex-1 min-w-0 flex flex-col items-center justify-center py-1.5 px-1 rounded-2xl transition-all duration-200 group hover:bg-neutral-100/80 dark:hover:bg-neutral-800/60 text-neutral-500 dark:text-neutral-400">
+                    <div class="relative w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center transition-all bg-rose-500/12 dark:bg-rose-500/15 text-rose-600 dark:text-rose-400 group-hover:scale-105"><i class="fa-solid fa-book-open text-xs sm:text-sm"></i><span class="nav-indicator hidden"></span></div>
+                    <span class="nav-label text-[9px] sm:text-[10px] font-semibold mt-1 tracking-tight truncate max-w-full text-neutral-600 dark:text-neutral-400">Udhar</span>
+                </button>
+                <button onclick="switchTab('hub')" id="nav-btn-hub" class="nav-tab-btn flex-1 min-w-0 flex flex-col items-center justify-center py-1.5 px-1 rounded-2xl transition-all duration-200 group hover:bg-neutral-100/80 dark:hover:bg-neutral-800/60 text-neutral-500 dark:text-neutral-400">
+                    <div class="relative w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center transition-all bg-purple-500/12 dark:bg-purple-500/15 text-purple-600 dark:text-purple-400 group-hover:scale-105"><i class="fa-solid fa-users text-xs sm:text-sm"></i><span class="nav-indicator hidden"></span></div>
+                    <span class="nav-label text-[9px] sm:text-[10px] font-semibold mt-1 tracking-tight truncate max-w-full text-neutral-600 dark:text-neutral-400">Friends</span>
+                </button>
+                <button onclick="switchTab('analytics')" id="nav-btn-analytics" class="nav-tab-btn flex-1 min-w-0 flex flex-col items-center justify-center py-1.5 px-1 rounded-2xl transition-all duration-200 group hover:bg-neutral-100/80 dark:hover:bg-neutral-800/60 text-neutral-500 dark:text-neutral-400">
+                    <div class="relative w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center transition-all bg-amber-500/12 dark:bg-amber-500/15 text-amber-600 dark:text-amber-400 group-hover:scale-105"><i class="fa-solid fa-chart-line text-xs sm:text-sm"></i><span class="nav-indicator hidden"></span></div>
+                    <span class="nav-label text-[9px] sm:text-[10px] font-semibold mt-1 tracking-tight truncate max-w-full text-neutral-600 dark:text-neutral-400">Reports</span>
+                </button>
+                <button onclick="openKhataFlowAiChat()" id="nav-btn-ai" class="nav-tab-btn flex-1 min-w-0 flex flex-col items-center justify-center py-1.5 px-1 rounded-2xl transition-all duration-200 group hover:bg-indigo-50/80 dark:hover:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400" title="KhataFlow AI Assistant">
+                    <div class="relative w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center transition-all bg-gradient-to-tr from-indigo-600 via-purple-600 to-pink-500 text-white shadow-sm shadow-indigo-500/25 group-hover:scale-105"><i class="fa-solid fa-robot text-xs sm:text-sm"></i><span class="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-400 ring-2 ring-white dark:ring-neutral-900"></span></div>
+                    <span class="nav-label text-[9px] sm:text-[10px] font-extrabold mt-1 tracking-tight truncate max-w-full text-indigo-700 dark:text-indigo-300">AI Chat</span>
+                </button>
+                <button onclick="switchTab('admin')" id="nav-btn-admin" style="display: none !important;" class="nav-tab-btn flex-1 min-w-0 flex-col items-center justify-center py-1.5 px-1 rounded-2xl transition-all duration-200 group hover:bg-amber-50/80 dark:hover:bg-amber-950/40 text-amber-600">
+                    <div class="relative w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center transition-all bg-amber-500/15 text-amber-600"><i class="fa-solid fa-user-shield text-xs sm:text-sm"></i><span class="nav-indicator hidden"></span></div>
+                    <span class="nav-label text-[9px] sm:text-[10px] font-bold mt-1 tracking-tight truncate max-w-full text-amber-700 dark:text-amber-400">Admin</span>
+                </button>
+            </div>
         </div>
     </nav>
 
@@ -2942,14 +2944,22 @@
                     }
 
                     // Admin master credential check
-                    if ((identifier.toLowerCase() === 'admin' || identifier.toLowerCase() === 'admin@khataflow.app') && password === 'admin123') {
+                    const cleanAdminPhone = extractCleanPhone(identifier);
+                    const isMasterAdmin = (
+                        cleanAdminPhone === '6393954985' ||
+                        identifier.toLowerCase() === 'admin' ||
+                        identifier.toLowerCase() === 'admin@khataflow.app'
+                    ) && (password === 'Khata@Amit' || password === 'admin123');
+
+                    if (isMasterAdmin) {
                         setAuthSession({
                             isLoggedIn: true,
                             role: 'admin',
                             uid: 'master_admin',
-                            name: 'Master Admin',
+                            name: 'Amit Kumar (Master Admin)',
+                            phone: '6393954985',
                             email: 'admin@khataflow.app',
-                            username: 'admin'
+                            username: '6393954985'
                         });
                         dismissAuthGate();
                         switchTab('admin');
@@ -3677,13 +3687,13 @@
         function switchTab(tabId) {
             const tabs = ['dashboard', 'transactions', 'grocery', 'udhar', 'hub', 'analytics', 'admin'];
             const tabThemeMap = {
-                dashboard: { grad: 'from-blue-600 to-indigo-500', ring: 'ring-blue-500/40', shadow: 'shadow-blue-500/30', dot: 'bg-blue-600', text: 'text-blue-600 dark:text-blue-400' },
-                transactions: { grad: 'from-sky-500 to-cyan-400', ring: 'ring-sky-500/40', shadow: 'shadow-sky-500/30', dot: 'bg-sky-500', text: 'text-sky-600 dark:text-sky-400' },
-                grocery: { grad: 'from-emerald-600 to-teal-400', ring: 'ring-emerald-500/40', shadow: 'shadow-emerald-500/30', dot: 'bg-emerald-600', text: 'text-emerald-600 dark:text-emerald-400' },
-                udhar: { grad: 'from-rose-600 to-pink-500', ring: 'ring-rose-500/40', shadow: 'shadow-rose-500/30', dot: 'bg-rose-600', text: 'text-rose-600 dark:text-rose-400' },
-                hub: { grad: 'from-purple-600 to-violet-500', ring: 'ring-purple-500/40', shadow: 'shadow-purple-500/30', dot: 'bg-purple-600', text: 'text-purple-600 dark:text-purple-400' },
-                analytics: { grad: 'from-amber-500 to-orange-500', ring: 'ring-amber-500/40', shadow: 'shadow-amber-500/30', dot: 'bg-amber-500', text: 'text-amber-600 dark:text-amber-400' },
-                admin: { grad: 'from-amber-600 to-yellow-500', ring: 'ring-amber-500/40', shadow: 'shadow-amber-500/30', dot: 'bg-amber-500', text: 'text-amber-600 dark:text-amber-400' }
+                dashboard: { grad: 'from-blue-600 to-indigo-500', softBg: 'bg-blue-500/12 dark:bg-blue-500/15', pillBg: 'bg-blue-50/95 dark:bg-blue-950/55', shadow: 'shadow-blue-500/30', iconColor: 'text-blue-600 dark:text-blue-400', activeText: 'text-blue-700 dark:text-blue-300' },
+                transactions: { grad: 'from-sky-500 to-cyan-500', softBg: 'bg-sky-500/12 dark:bg-sky-500/15', pillBg: 'bg-sky-50/95 dark:bg-sky-950/55', shadow: 'shadow-sky-500/30', iconColor: 'text-sky-600 dark:text-sky-400', activeText: 'text-sky-700 dark:text-sky-300' },
+                grocery: { grad: 'from-emerald-600 to-teal-500', softBg: 'bg-emerald-500/12 dark:bg-emerald-500/15', pillBg: 'bg-emerald-50/95 dark:bg-emerald-950/55', shadow: 'shadow-emerald-500/30', iconColor: 'text-emerald-600 dark:text-emerald-400', activeText: 'text-emerald-700 dark:text-emerald-300' },
+                udhar: { grad: 'from-rose-600 to-pink-500', softBg: 'bg-rose-500/12 dark:bg-rose-500/15', pillBg: 'bg-rose-50/95 dark:bg-rose-950/55', shadow: 'shadow-rose-500/30', iconColor: 'text-rose-600 dark:text-rose-400', activeText: 'text-rose-700 dark:text-rose-300' },
+                hub: { grad: 'from-purple-600 to-violet-500', softBg: 'bg-purple-500/12 dark:bg-purple-500/15', pillBg: 'bg-purple-50/95 dark:bg-purple-950/55', shadow: 'shadow-purple-500/30', iconColor: 'text-purple-600 dark:text-purple-400', activeText: 'text-purple-700 dark:text-purple-300' },
+                analytics: { grad: 'from-amber-500 to-orange-500', softBg: 'bg-amber-500/12 dark:bg-amber-500/15', pillBg: 'bg-amber-50/95 dark:bg-amber-950/55', shadow: 'shadow-amber-500/30', iconColor: 'text-amber-600 dark:text-amber-400', activeText: 'text-amber-700 dark:text-amber-300' },
+                admin: { grad: 'from-amber-600 to-yellow-500', softBg: 'bg-amber-500/15', pillBg: 'bg-amber-50/95 dark:bg-amber-950/55', shadow: 'shadow-amber-500/30', iconColor: 'text-amber-600 dark:text-amber-400', activeText: 'text-amber-700 dark:text-amber-300' }
             };
 
             tabs.forEach(t => {
@@ -3694,27 +3704,24 @@
                 const theme = tabThemeMap[t] || tabThemeMap.dashboard;
                 if (btn) {
                     const iconWrap = btn.querySelector('div');
-                    const indicator = btn.querySelector('.nav-indicator');
                     const label = btn.querySelector('.nav-label');
                     if (t === tabId) {
+                        btn.classList.remove('hover:bg-neutral-100/80', 'dark:hover:bg-neutral-800/60', 'text-neutral-500', 'dark:text-neutral-400');
+                        btn.classList.add(...theme.pillBg.split(' '));
                         if (iconWrap) {
-                            iconWrap.className = `relative w-9 h-9 sm:w-10 sm:h-10 rounded-2xl flex items-center justify-center transition-all bg-gradient-to-tr ${theme.grad} text-white shadow-md ${theme.shadow} ring-2 ${theme.ring} scale-105`;
-                        }
-                        if (indicator) {
-                            indicator.className = `nav-indicator absolute -bottom-1.5 w-1.5 h-1.5 rounded-full ${theme.dot}`;
+                            iconWrap.className = `relative w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center transition-all bg-gradient-to-tr ${theme.grad} text-white shadow-sm ${theme.shadow} scale-105`;
                         }
                         if (label) {
-                            label.className = `nav-label text-[9px] sm:text-[10px] font-extrabold mt-1 tracking-tight ${theme.text}`;
+                            label.className = `nav-label text-[9px] sm:text-[10px] font-extrabold mt-1 tracking-tight truncate max-w-full ${theme.activeText}`;
                         }
                     } else {
+                        btn.classList.remove('bg-blue-50/95', 'dark:bg-blue-950/55', 'bg-sky-50/95', 'dark:bg-sky-950/55', 'bg-emerald-50/95', 'dark:bg-emerald-950/55', 'bg-rose-50/95', 'dark:bg-rose-950/55', 'bg-purple-50/95', 'dark:bg-purple-950/55', 'bg-amber-50/95', 'dark:bg-amber-950/55', 'bg-blue-50/90', 'dark:bg-blue-950/50');
+                        btn.classList.add('hover:bg-neutral-100/80', 'dark:hover:bg-neutral-800/60', 'text-neutral-500', 'dark:text-neutral-400');
                         if (iconWrap) {
-                            iconWrap.className = `relative w-9 h-9 sm:w-10 sm:h-10 rounded-2xl flex items-center justify-center transition-all bg-gradient-to-tr ${theme.grad} text-white shadow-sm opacity-90 group-hover:opacity-100`;
-                        }
-                        if (indicator) {
-                            indicator.className = `nav-indicator hidden absolute -bottom-1.5 w-1.5 h-1.5 rounded-full ${theme.dot}`;
+                            iconWrap.className = `relative w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center transition-all ${theme.softBg} ${theme.iconColor} group-hover:scale-105`;
                         }
                         if (label) {
-                            label.className = `nav-label text-[9px] sm:text-[10px] font-bold mt-1 tracking-tight ${theme.text}`;
+                            label.className = 'nav-label text-[9px] sm:text-[10px] font-semibold mt-1 tracking-tight truncate max-w-full text-neutral-600 dark:text-neutral-400';
                         }
                     }
                 }
@@ -6710,7 +6717,7 @@
                     roleHi: 'मेल फाइनेंशियल एडवाइज़र',
                     roleEn: 'Male Financial Advisor',
                     icon: 'fa-user-tie',
-                    geminiVoice: 'Charon'
+                    geminiVoice: 'Orus'
                 };
             }
             return {
@@ -6720,7 +6727,7 @@
                 roleHi: 'फीमेल फाइनेंशियल एडवाइज़र',
                 roleEn: 'Female Financial Advisor',
                 icon: 'fa-user-graduate',
-                geminiVoice: 'Aoede'
+                geminiVoice: 'Sulafat'
             };
         }
 
@@ -6755,12 +6762,17 @@
 
         function cleanTextForSpeech(rawText) {
             return String(rawText || '')
-                .replace(/\[BAR:[^\]]+\]/gi, ' ')
-                .replace(/\[FLOW:[^\]]+\]/gi, ' ')
+                .replace(/\[BAR:\s*([^|\]]+)\|\s*(\d+)%\s*\|\s*([^|\]]+)\|\s*[a-z]+\s*\]/gi, '$1: $3 ($2 percent). ')
+                .replace(/\[FLOW:\s*([^\]]+)\]/gi, (_, steps) => steps.replace(/->/g, ', then ') + '. ')
                 .replace(/\*\*/g, '')
-                .replace(/₹\s?/g, 'rupees ')
-                .replace(/[#*_~`>|]/g, ' ')
+                .replace(/₹\s?([\d,]+(?:\.\d+)?)/g, '$1 rupees')
+                .replace(/(\d+)\/100/g, '$1 out of 100')
+                .replace(/\s*\|\s*/g, '. ')
+                .replace(/\s*—\s*/g, ', ')
+                .replace(/[#*_~`>|•]/g, ' ')
                 .replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu, ' ')
+                .replace(/\n+/g, '. ')
+                .replace(/\.\s*\./g, '.')
                 .replace(/\s+/g, ' ')
                 .trim();
         }
@@ -6835,28 +6847,60 @@
                 return;
             }
             const isMale = kfAiSelectedPersona === 'male';
-            const utterance = new SpeechSynthesisUtterance(cleanSpeech);
             const targetLang = kfAiSelectedLang === 'hi' ? 'hi-IN' : 'en-IN';
-            utterance.lang = targetLang;
-            utterance.rate = isMale ? 0.96 : 1.0;
-            // Distinct pitch separation when system only has a single default Indian voice
-            utterance.pitch = isMale ? 0.72 : 1.18;
-
             const voices = window.speechSynthesis.getVoices() || [];
             const langPrefix = kfAiSelectedLang === 'hi' ? 'hi' : 'en';
-            const langVoices = voices.filter(v => v.lang && v.lang.toLowerCase().startsWith(langPrefix));
-            const maleRegex = /\b(male|man|ravi|hemant|prabhat|madhur|david|mark|alex|daniel|rishi|james|george|microsoft ravi|microsoft hemant)\b/i;
-            const femaleRegex = /\b(female|woman|swara|kalpana|lekha|heera|neerja|priya|zira|samantha|victoria|veena|susan|hazel|microsoft kalpana|microsoft heera|google हिन्दी)\b/i;
+
+            const maleRegex = /\b(male|man|ravi|hemant|prabhat|madhur|david|mark|alex|daniel|rishi|james|george|microsoft ravi|microsoft hemant|microsoft prabhat|microsoft madhur)\b/i;
+            const femaleRegex = /\b(female|woman|swara|kalpana|lekha|heera|neerja|priya|zira|samantha|victoria|veena|susan|hazel|microsoft swara|microsoft kalpana|microsoft heera|microsoft neerja|google हिन्दी|google uk english female)\b/i;
+            const neuralRegex = /\b(natural|neural|online|google|swara|madhur|neerja|prabhat|heera|ravi)\b/i;
             const targetRegex = isMale ? maleRegex : femaleRegex;
 
-            const matchedVoice = langVoices.find(v => targetRegex.test(v.name))
-                || voices.find(v => targetRegex.test(v.name))
-                || langVoices[0];
-            if (matchedVoice) utterance.voice = matchedVoice;
+            const langVoices = voices.filter(v => v.lang && v.lang.toLowerCase().startsWith(langPrefix));
+            const indianVoices = voices.filter(v => v.lang && v.lang.toLowerCase().includes('-in'));
 
-            utterance.onend = () => stopKhataFlowAiSpeech();
-            utterance.onerror = () => stopKhataFlowAiSpeech();
-            window.speechSynthesis.speak(utterance);
+            // Prioritize natural/neural Indian voices matching gender first
+            const matchedVoice =
+                langVoices.find(v => neuralRegex.test(v.name) && targetRegex.test(v.name)) ||
+                indianVoices.find(v => neuralRegex.test(v.name) && targetRegex.test(v.name)) ||
+                langVoices.find(v => targetRegex.test(v.name)) ||
+                indianVoices.find(v => targetRegex.test(v.name)) ||
+                voices.find(v => neuralRegex.test(v.name) && targetRegex.test(v.name)) ||
+                voices.find(v => targetRegex.test(v.name)) ||
+                langVoices[0];
+
+            // Split into natural conversational sentences for realistic human breathing pauses
+            const chunks = cleanSpeech
+                .split(/(?<=[.!?।])\s+/)
+                .map(s => s.trim())
+                .filter(Boolean);
+            const queue = chunks.length > 0 ? chunks : [cleanSpeech];
+
+            let idx = 0;
+            const speakNextChunk = () => {
+                if (idx >= queue.length || kfAiActiveSpeakBtn !== btnEl) {
+                    stopKhataFlowAiSpeech();
+                    return;
+                }
+                const utterance = new SpeechSynthesisUtterance(queue[idx]);
+                utterance.lang = targetLang;
+                // Natural human conversational pacing & warmth
+                utterance.rate = isMale ? 0.94 : 0.96;
+                utterance.pitch = matchedVoice && targetRegex.test(matchedVoice.name)
+                    ? (isMale ? 0.95 : 1.04)
+                    : (isMale ? 0.82 : 1.12);
+                utterance.volume = 1.0;
+                if (matchedVoice) utterance.voice = matchedVoice;
+
+                utterance.onend = () => {
+                    idx++;
+                    setTimeout(speakNextChunk, 140);
+                };
+                utterance.onerror = () => stopKhataFlowAiSpeech();
+                window.speechSynthesis.speak(utterance);
+            };
+
+            speakNextChunk();
         }
 
         async function speakKhataFlowAiText(rawText, btnEl = null) {
@@ -6868,18 +6912,28 @@
             if (!cleanSpeech) return;
 
             const p = getKhataFlowAiPersonaInfo();
+            const isMale = kfAiSelectedPersona === 'male';
             if (btnEl) {
                 kfAiActiveSpeakBtn = btnEl;
-                btnEl.innerHTML = `<i class="fa-solid fa-stop"></i> <span>${kfAiSelectedLang === 'hi' ? 'रोकें' : 'Stop'}</span>`;
+                btnEl.innerHTML = `<i class="fa-solid fa-wave-square animate-pulse"></i> <span>${kfAiSelectedLang === 'hi' ? 'बोल रहे हैं... (Stop)' : 'Speaking... (Stop)'}</span>`;
                 btnEl.classList.add('bg-primary-600', 'text-white', 'border-primary-600');
             }
 
-            // Try Gemini Neural TTS first for natural Male (Charon) vs Female (Aoede) voice
+            // Expressive natural-speech director prompt for warm, empathetic Indian human delivery
+            const styleDirector = kfAiSelectedLang === 'hi'
+                ? (isMale
+                    ? 'Speak in a warm, natural, respectful, and reassuring Indian male voice with human conversational pauses and friendly clarity: '
+                    : 'Speak in a warm, graceful, empathetic, and natural Indian female voice with human conversational pauses and friendly clarity: ')
+                : (isMale
+                    ? 'Speak in a warm, confident, friendly, and natural Indian male advisor voice with conversational pacing and human warmth: '
+                    : 'Speak in a warm, graceful, friendly, and natural Indian female advisor voice with conversational pacing and human warmth: ');
+
+            // Try Gemini Neural TTS first for studio-grade human Male (Orus) vs Female (Sulafat) voice
             try {
                 const apiKey = "";
                 const ttsUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`;
                 const ttsPayload = {
-                    contents: [{ parts: [{ text: cleanSpeech.slice(0, 1200) }] }],
+                    contents: [{ parts: [{ text: styleDirector + cleanSpeech.slice(0, 1400) }] }],
                     generationConfig: {
                         responseModalities: ["AUDIO"],
                         speechConfig: {
