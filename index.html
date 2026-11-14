@@ -6717,7 +6717,7 @@
                     roleHi: 'मेल फाइनेंशियल एडवाइज़र',
                     roleEn: 'Male Financial Advisor',
                     icon: 'fa-user-tie',
-                    geminiVoice: 'Orus'
+                    geminiVoice: 'Charon'
                 };
             }
             return {
@@ -6727,7 +6727,7 @@
                 roleHi: 'फीमेल फाइनेंशियल एडवाइज़र',
                 roleEn: 'Female Financial Advisor',
                 icon: 'fa-user-graduate',
-                geminiVoice: 'Sulafat'
+                geminiVoice: 'Aoede'
             };
         }
 
@@ -6762,17 +6762,12 @@
 
         function cleanTextForSpeech(rawText) {
             return String(rawText || '')
-                .replace(/\[BAR:\s*([^|\]]+)\|\s*(\d+)%\s*\|\s*([^|\]]+)\|\s*[a-z]+\s*\]/gi, '$1: $3 ($2 percent). ')
-                .replace(/\[FLOW:\s*([^\]]+)\]/gi, (_, steps) => steps.replace(/->/g, ', then ') + '. ')
+                .replace(/\[BAR:[^\]]+\]/gi, ' ')
+                .replace(/\[FLOW:[^\]]+\]/gi, ' ')
                 .replace(/\*\*/g, '')
-                .replace(/₹\s?([\d,]+(?:\.\d+)?)/g, '$1 rupees')
-                .replace(/(\d+)\/100/g, '$1 out of 100')
-                .replace(/\s*\|\s*/g, '. ')
-                .replace(/\s*—\s*/g, ', ')
-                .replace(/[#*_~`>|•]/g, ' ')
+                .replace(/₹\s?/g, 'rupees ')
+                .replace(/[#*_~`>|]/g, ' ')
                 .replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu, ' ')
-                .replace(/\n+/g, '. ')
-                .replace(/\.\s*\./g, '.')
                 .replace(/\s+/g, ' ')
                 .trim();
         }
@@ -6847,60 +6842,28 @@
                 return;
             }
             const isMale = kfAiSelectedPersona === 'male';
+            const utterance = new SpeechSynthesisUtterance(cleanSpeech);
             const targetLang = kfAiSelectedLang === 'hi' ? 'hi-IN' : 'en-IN';
+            utterance.lang = targetLang;
+            utterance.rate = isMale ? 0.96 : 1.0;
+            // Distinct pitch separation when system only has a single default Indian voice
+            utterance.pitch = isMale ? 0.72 : 1.18;
+
             const voices = window.speechSynthesis.getVoices() || [];
             const langPrefix = kfAiSelectedLang === 'hi' ? 'hi' : 'en';
-
-            const maleRegex = /\b(male|man|ravi|hemant|prabhat|madhur|david|mark|alex|daniel|rishi|james|george|microsoft ravi|microsoft hemant|microsoft prabhat|microsoft madhur)\b/i;
-            const femaleRegex = /\b(female|woman|swara|kalpana|lekha|heera|neerja|priya|zira|samantha|victoria|veena|susan|hazel|microsoft swara|microsoft kalpana|microsoft heera|microsoft neerja|google हिन्दी|google uk english female)\b/i;
-            const neuralRegex = /\b(natural|neural|online|google|swara|madhur|neerja|prabhat|heera|ravi)\b/i;
+            const langVoices = voices.filter(v => v.lang && v.lang.toLowerCase().startsWith(langPrefix));
+            const maleRegex = /\b(male|man|ravi|hemant|prabhat|madhur|david|mark|alex|daniel|rishi|james|george|microsoft ravi|microsoft hemant)\b/i;
+            const femaleRegex = /\b(female|woman|swara|kalpana|lekha|heera|neerja|priya|zira|samantha|victoria|veena|susan|hazel|microsoft kalpana|microsoft heera|google हिन्दी)\b/i;
             const targetRegex = isMale ? maleRegex : femaleRegex;
 
-            const langVoices = voices.filter(v => v.lang && v.lang.toLowerCase().startsWith(langPrefix));
-            const indianVoices = voices.filter(v => v.lang && v.lang.toLowerCase().includes('-in'));
+            const matchedVoice = langVoices.find(v => targetRegex.test(v.name))
+                || voices.find(v => targetRegex.test(v.name))
+                || langVoices[0];
+            if (matchedVoice) utterance.voice = matchedVoice;
 
-            // Prioritize natural/neural Indian voices matching gender first
-            const matchedVoice =
-                langVoices.find(v => neuralRegex.test(v.name) && targetRegex.test(v.name)) ||
-                indianVoices.find(v => neuralRegex.test(v.name) && targetRegex.test(v.name)) ||
-                langVoices.find(v => targetRegex.test(v.name)) ||
-                indianVoices.find(v => targetRegex.test(v.name)) ||
-                voices.find(v => neuralRegex.test(v.name) && targetRegex.test(v.name)) ||
-                voices.find(v => targetRegex.test(v.name)) ||
-                langVoices[0];
-
-            // Split into natural conversational sentences for realistic human breathing pauses
-            const chunks = cleanSpeech
-                .split(/(?<=[.!?।])\s+/)
-                .map(s => s.trim())
-                .filter(Boolean);
-            const queue = chunks.length > 0 ? chunks : [cleanSpeech];
-
-            let idx = 0;
-            const speakNextChunk = () => {
-                if (idx >= queue.length || kfAiActiveSpeakBtn !== btnEl) {
-                    stopKhataFlowAiSpeech();
-                    return;
-                }
-                const utterance = new SpeechSynthesisUtterance(queue[idx]);
-                utterance.lang = targetLang;
-                // Natural human conversational pacing & warmth
-                utterance.rate = isMale ? 0.94 : 0.96;
-                utterance.pitch = matchedVoice && targetRegex.test(matchedVoice.name)
-                    ? (isMale ? 0.95 : 1.04)
-                    : (isMale ? 0.82 : 1.12);
-                utterance.volume = 1.0;
-                if (matchedVoice) utterance.voice = matchedVoice;
-
-                utterance.onend = () => {
-                    idx++;
-                    setTimeout(speakNextChunk, 140);
-                };
-                utterance.onerror = () => stopKhataFlowAiSpeech();
-                window.speechSynthesis.speak(utterance);
-            };
-
-            speakNextChunk();
+            utterance.onend = () => stopKhataFlowAiSpeech();
+            utterance.onerror = () => stopKhataFlowAiSpeech();
+            window.speechSynthesis.speak(utterance);
         }
 
         async function speakKhataFlowAiText(rawText, btnEl = null) {
@@ -6912,28 +6875,18 @@
             if (!cleanSpeech) return;
 
             const p = getKhataFlowAiPersonaInfo();
-            const isMale = kfAiSelectedPersona === 'male';
             if (btnEl) {
                 kfAiActiveSpeakBtn = btnEl;
-                btnEl.innerHTML = `<i class="fa-solid fa-wave-square animate-pulse"></i> <span>${kfAiSelectedLang === 'hi' ? 'बोल रहे हैं... (Stop)' : 'Speaking... (Stop)'}</span>`;
+                btnEl.innerHTML = `<i class="fa-solid fa-stop"></i> <span>${kfAiSelectedLang === 'hi' ? 'रोकें' : 'Stop'}</span>`;
                 btnEl.classList.add('bg-primary-600', 'text-white', 'border-primary-600');
             }
 
-            // Expressive natural-speech director prompt for warm, empathetic Indian human delivery
-            const styleDirector = kfAiSelectedLang === 'hi'
-                ? (isMale
-                    ? 'Speak in a warm, natural, respectful, and reassuring Indian male voice with human conversational pauses and friendly clarity: '
-                    : 'Speak in a warm, graceful, empathetic, and natural Indian female voice with human conversational pauses and friendly clarity: ')
-                : (isMale
-                    ? 'Speak in a warm, confident, friendly, and natural Indian male advisor voice with conversational pacing and human warmth: '
-                    : 'Speak in a warm, graceful, friendly, and natural Indian female advisor voice with conversational pacing and human warmth: ');
-
-            // Try Gemini Neural TTS first for studio-grade human Male (Orus) vs Female (Sulafat) voice
+            // Try Gemini Neural TTS first for natural Male (Charon) vs Female (Aoede) voice
             try {
                 const apiKey = "";
                 const ttsUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`;
                 const ttsPayload = {
-                    contents: [{ parts: [{ text: styleDirector + cleanSpeech.slice(0, 1400) }] }],
+                    contents: [{ parts: [{ text: cleanSpeech.slice(0, 1200) }] }],
                     generationConfig: {
                         responseModalities: ["AUDIO"],
                         speechConfig: {
