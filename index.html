@@ -641,15 +641,6 @@
         <div id="adsterra-slot-top" class="hidden mb-6 w-full rounded-3xl overflow-visible transition-all duration-300 flex items-center justify-center"></div>
         <div id="sponsored-ad-banner" class="mb-6 rounded-3xl overflow-hidden shadow-md border border-neutral-200/80 dark:border-neutral-800/80 relative h-44 sm:h-56 md:h-64 select-none group">
             <div id="ad-slides-track" class="w-full h-full"></div>
-            <!-- Left & Right Slide Controls -->
-            <button type="button" onclick="event.stopPropagation(); changeAdSlide(-1)" aria-label="Previous Slide" class="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-black/35 hover:bg-black/60 text-white backdrop-blur-md border border-white/25 flex items-center justify-center text-xs transition opacity-85 sm:opacity-0 sm:group-hover:opacity-100 active:scale-90">
-                <i class="fa-solid fa-chevron-left"></i>
-            </button>
-            <button type="button" onclick="event.stopPropagation(); changeAdSlide(1)" aria-label="Next Slide" class="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-black/35 hover:bg-black/60 text-white backdrop-blur-md border border-white/25 flex items-center justify-center text-xs transition opacity-85 sm:opacity-0 sm:group-hover:opacity-100 active:scale-90">
-                <i class="fa-solid fa-chevron-right"></i>
-            </button>
-            <!-- Clickable Slide Pagination Dots -->
-            <div id="ad-slides-dots" class="absolute bottom-2.5 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/30 backdrop-blur-md border border-white/15"></div>
             <div class="absolute bottom-0 left-0 right-0 h-1 bg-black/15 z-20">
                 <div id="ad-progress-bar" class="h-full bg-white/80 transition-all duration-150" style="width: 0%"></div>
             </div>
@@ -2657,480 +2648,363 @@
                     </div>
                     <div class="flex items-center gap-2 flex-wrap">
                         <button onclick="saveAllAdminChangesLive()" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white text-xs font-black transition flex items-center gap-2 shadow-lg"><i class="fa-solid fa-cloud-arrow-up"></i> Save All Live Changes</button>
+                        <button onclick="downloadFullMasterAppBackup()" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-primary-600 to-indigo-600 hover:from-primary-700 hover:to-indigo-700 text-white text-xs font-black transition flex items-center gap-2 shadow-lg"><i class="fa-solid fa-download"></i> Full App Backup (All Users)</button>
+                        <button onclick="document.getElementById('admin-master-restore-input').click()" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-600 text-white text-xs font-black transition flex items-center gap-2 shadow-lg"><i class="fa-solid fa-upload"></i> Restore Full Backup</button>
+                        <input type="file" id="admin-master-restore-input" accept=".json" onchange="handleMasterAppRestoreFile(event)" class="hidden">
                         <button onclick="resetAdminCustomizationsToDefault()" class="px-3.5 py-2 rounded-xl bg-neutral-200 dark:bg-neutral-800 text-xs font-bold"><i class="fa-solid fa-rotate-left"></i> Reset Defaults</button>
                         <button onclick="logoutCurrentUser()" class="px-3.5 py-2 rounded-xl bg-error-500 hover:bg-error-600 text-white text-xs font-bold"><i class="fa-solid fa-right-from-bracket"></i> Exit Admin Mode</button>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
-                    <div class="p-4 rounded-2xl bg-white dark:bg-neutral-900 border"><span class="text-[10px] uppercase font-bold text-neutral-400">Total Transactions</span><div class="text-xl font-black text-primary-600 mt-1" id="admin-stat-tx-count">0</div></div>
-                    <div class="p-4 rounded-2xl bg-white dark:bg-neutral-900 border"><span class="text-[10px] uppercase font-bold text-neutral-400">Total Volume</span><div class="text-xl font-black text-emerald-600 mt-1" id="admin-stat-volume">₹0</div></div>
-                    <div class="p-4 rounded-2xl bg-white dark:bg-neutral-900 border"><span class="text-[10px] uppercase font-bold text-neutral-400">Active Ad Slots</span><div class="text-xl font-black text-amber-600 mt-1" id="admin-stat-ads-count">0</div></div>
-                    <div class="p-4 rounded-2xl bg-white dark:bg-neutral-900 border"><span class="text-[10px] uppercase font-bold text-neutral-400">Registered Users</span><div class="text-xl font-black text-purple-600 mt-1" id="admin-stat-users-count">1</div></div>
-                </div>
-
-                <!-- Master 9-Module Live Control Hub (Dashboard, History, Shopping, Udhar, Friends, Reports, Milk, Vyapari, AI Chat) -->
-                <div class="p-5 rounded-3xl bg-gradient-to-br from-indigo-500/10 via-white/95 to-emerald-500/10 dark:from-indigo-950/50 dark:via-neutral-900/90 dark:to-emerald-950/40 border border-indigo-500/30 mb-6 space-y-4 shadow-sm">
-                    <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-neutral-200/80 dark:border-neutral-800">
+                <!-- Master Full-App & All-Users Cloud Vault Backup & Restore Studio -->
+                <div class="p-5 rounded-3xl bg-gradient-to-br from-purple-500/10 via-white/95 to-primary-500/10 dark:from-purple-950/50 dark:via-neutral-900/90 dark:to-primary-950/40 border border-purple-500/30 mb-6 space-y-4 shadow-sm">
+                    <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-3 pb-3 border-b border-neutral-200/80 dark:border-neutral-800">
                         <div>
-                            <span class="px-2.5 py-0.5 rounded-full bg-indigo-600 text-white text-[10px] font-black uppercase tracking-wider">9 Core App Modules</span>
+                            <span class="px-2.5 py-0.5 rounded-full bg-purple-600 text-white text-[10px] font-black uppercase tracking-wider">Enterprise Disaster Recovery Vault</span>
                             <h4 class="text-base font-black mt-1 text-neutral-900 dark:text-white flex items-center gap-2">
-                                <i class="fa-solid fa-sliders text-indigo-600"></i> All App Modules Master Controller (Enable, Rename & Configure)
+                                <i class="fa-solid fa-server text-purple-600"></i> Full App & All-Users Master Backup / Restore Engine
                             </h4>
-                            <p class="text-[11px] text-neutral-500 mt-0.5">Control Dashboard, History, Shopping, Udhar, Friends, Reports, Milk, Vyapari & AI Chat live for all users.</p>
+                            <p class="text-[11px] text-neutral-500 mt-0.5">Download a complete JSON backup of all registered users, all user ledgers (Transactions, Udhar, Milk, Shopping, Friends, Vyapari, Goals) & admin settings, or restore everything to Firebase Cloud.</p>
                         </div>
-                        <button type="button" onclick="saveMasterModulesControl()" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs shadow-sm transition flex items-center gap-1.5 active:scale-95">
-                            <i class="fa-solid fa-floppy-disk"></i> Save All 9 Modules
-                        </button>
-                    </div>
-                    <div id="admin-9-modules-control-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 text-xs"></div>
-                </div>
-
-                <!-- Opening Screen, Font, Color, Look & Design Studio (Immediate Opening Controls with Dedicated Save Buttons) -->
-                <div class="p-5 rounded-3xl bg-gradient-to-br from-primary-500/10 via-white/90 to-indigo-500/10 dark:from-primary-950/50 dark:via-neutral-900/85 dark:to-indigo-950/40 border border-primary-500/30 mb-6 space-y-4 shadow-sm">
-                    <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-neutral-200/80 dark:border-neutral-800">
-                        <div>
-                            <span class="px-2.5 py-0.5 rounded-full bg-primary-600 text-white text-[10px] font-black uppercase tracking-wider">Opening & Look Studio</span>
-                            <h4 class="text-base font-black mt-1 text-neutral-900 dark:text-white">App Opening Screen, Colors, Typography & Visual Look</h4>
-                        </div>
-                        <span class="text-[11px] font-bold text-neutral-500">Each card saves independently</span>
+                        <span id="admin-backup-last-status" class="px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 text-[11px] font-black">Cloud Snapshot Ready</span>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3.5 text-xs">
-                        <!-- Card A: Opening / Auth Gate Screen Customizer -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                        <!-- Export Full Snapshot Card -->
                         <div class="p-4 rounded-2xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 flex flex-col justify-between gap-3">
-                            <div class="space-y-2.5">
-                                <div class="flex items-center justify-between">
-                                    <span class="font-black text-neutral-900 dark:text-white flex items-center gap-1.5"><i class="fa-solid fa-door-open text-primary-600"></i> Opening Screen</span>
-                                    <span class="text-[9px] font-mono font-bold px-2 py-0.5 rounded bg-primary-500/10 text-primary-600">LOGIN / LANDING</span>
+                            <div class="space-y-1.5">
+                                <div class="font-black text-sm text-neutral-900 dark:text-white flex items-center gap-2">
+                                    <span class="w-8 h-8 rounded-xl bg-primary-600/15 text-primary-600 flex items-center justify-center"><i class="fa-solid fa-cloud-arrow-down"></i></span>
+                                    <span>1. Export Complete App & All-Users Data</span>
                                 </div>
-                                <div>
-                                    <label class="block text-[10px] font-bold text-neutral-500 mb-1">Opening Brand Title</label>
-                                    <input type="text" id="adm-open-title" placeholder="NeoKhata" class="w-full p-2 rounded-xl bg-neutral-100 dark:bg-neutral-800 border font-bold">
-                                </div>
-                                <div>
-                                    <label class="block text-[10px] font-bold text-neutral-500 mb-1">Opening Tagline</label>
-                                    <input type="text" id="adm-open-subtitle" placeholder="Smart Financial OS • Cloud Workspace" class="w-full p-2 rounded-xl bg-neutral-100 dark:bg-neutral-800 border font-medium">
-                                </div>
-                                <div>
-                                    <label class="block text-[10px] font-bold text-neutral-500 mb-1">Default Opening Screen</label>
-                                    <select id="adm-open-default-tab" class="w-full p-2 rounded-xl bg-neutral-100 dark:bg-neutral-800 border font-bold">
-                                        <option value="dashboard">Dashboard Overview</option>
-                                        <option value="udhar">Udhar Khata</option>
-                                        <option value="milk">Milk Ledger</option>
-                                        <option value="grocery">Shopping Checklist</option>
-                                        <option value="transactions">All Transactions</option>
-                                    </select>
-                                </div>
+                                <p class="text-[11px] text-neutral-500 leading-relaxed">Fetches the latest live records of every user from Firebase Cloud & local cache and exports a single encrypted-ready <strong>.json</strong> master vault file.</p>
                             </div>
-                            <button type="button" onclick="saveOpeningDesignSection('opening')" class="w-full py-2 rounded-xl bg-primary-600 hover:bg-primary-700 text-white font-black text-[11px] shadow-sm transition active:scale-95">
-                                <i class="fa-solid fa-floppy-disk mr-1"></i> Save Opening Screen
+                            <button type="button" onclick="downloadFullMasterAppBackup()" class="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-primary-600 to-indigo-600 hover:from-primary-700 hover:to-indigo-700 text-white font-black text-xs transition shadow-md flex items-center justify-center gap-2 active:scale-95">
+                                <i class="fa-solid fa-file-export"></i> Download Full App & All-Users Backup (.JSON)
                             </button>
                         </div>
 
-                        <!-- Card B: Brand Colors & Gradient Customizer -->
-                        <div class="p-4 rounded-2xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 flex flex-col justify-between gap-3">
-                            <div class="space-y-2.5">
-                                <div class="flex items-center justify-between">
-                                    <span class="font-black text-neutral-900 dark:text-white flex items-center gap-1.5"><i class="fa-solid fa-palette text-rose-600"></i> Brand Colors</span>
-                                    <span class="text-[9px] font-mono font-bold px-2 py-0.5 rounded bg-rose-500/10 text-rose-600">PALETTE</span>
+                        <!-- Restore Full Snapshot Card (Click or Drag & Drop) -->
+                        <div ondragover="handleMasterRestoreDragOver(event)" ondragleave="handleMasterRestoreDragLeave(event)" ondrop="handleMasterRestoreDrop(event)" onclick="document.getElementById('admin-master-restore-input').click()" class="p-4 rounded-2xl bg-white dark:bg-neutral-900 border-2 border-dashed border-purple-300 dark:border-purple-800 hover:border-purple-600 cursor-pointer transition flex flex-col justify-between gap-3">
+                            <div class="space-y-1.5">
+                                <div class="font-black text-sm text-neutral-900 dark:text-white flex items-center gap-2">
+                                    <span class="w-8 h-8 rounded-xl bg-purple-600/15 text-purple-600 flex items-center justify-center"><i class="fa-solid fa-cloud-arrow-up"></i></span>
+                                    <span>2. Restore Full App & All-Users Data</span>
                                 </div>
-                                <div class="grid grid-cols-2 gap-2">
-                                    <div>
-                                        <label class="block text-[10px] font-bold text-neutral-500 mb-1">Primary Accent</label>
-                                        <input type="color" id="adm-open-primary-color" value="#2453d6" class="w-full h-9 p-0.5 rounded-xl bg-neutral-100 dark:bg-neutral-800 border cursor-pointer">
-                                    </div>
-                                    <div>
-                                        <label class="block text-[10px] font-bold text-neutral-500 mb-1">Secondary Glow</label>
-                                        <input type="color" id="adm-open-secondary-color" value="#1e9e5a" class="w-full h-9 p-0.5 rounded-xl bg-neutral-100 dark:bg-neutral-800 border cursor-pointer">
-                                    </div>
-                                </div>
-                                <div>
-                                    <label class="block text-[10px] font-bold text-neutral-500 mb-1">Theme Mode Preset</label>
-                                    <select id="adm-open-theme-mode" class="w-full p-2 rounded-xl bg-neutral-100 dark:bg-neutral-800 border font-bold">
-                                        <option value="keep">User Choice (Light / Dark)</option>
-                                        <option value="light">Force Crisp Light Mode</option>
-                                        <option value="dark">Force Executive Dark Mode</option>
-                                    </select>
-                                </div>
+                                <p class="text-[11px] text-neutral-500 leading-relaxed">Click here or drag &amp; drop a <strong>NeoKhata_MASTER_FULL_BACKUP.json</strong> file to restore all user accounts, user ledgers, banners, and admin configurations back to Firebase Cloud.</p>
                             </div>
-                            <button type="button" onclick="saveOpeningDesignSection('colors')" class="w-full py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-black text-[11px] shadow-sm transition active:scale-95">
-                                <i class="fa-solid fa-floppy-disk mr-1"></i> Save Brand Colors
-                            </button>
-                        </div>
-
-                        <!-- Card C: Typography & Font Style Customizer -->
-                        <div class="p-4 rounded-2xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 flex flex-col justify-between gap-3">
-                            <div class="space-y-2.5">
-                                <div class="flex items-center justify-between">
-                                    <span class="font-black text-neutral-900 dark:text-white flex items-center gap-1.5"><i class="fa-solid fa-font text-indigo-600"></i> Font & Typography</span>
-                                    <span class="text-[9px] font-mono font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-600">FONTS</span>
-                                </div>
-                                <div>
-                                    <label class="block text-[10px] font-bold text-neutral-500 mb-1">Global Font Family</label>
-                                    <select id="adm-open-font-family" class="w-full p-2 rounded-xl bg-neutral-100 dark:bg-neutral-800 border font-bold">
-                                        <option value="'Inter', sans-serif">Inter (Modern Fintech)</option>
-                                        <option value="system-ui, -apple-system, sans-serif">System Native UI</option>
-                                        <option value="Georgia, serif">Classic Editorial Serif</option>
-                                        <option value="ui-monospace, SFMono-Regular, monospace">Executive Monospace</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-[10px] font-bold text-neutral-500 mb-1">Global Font Scale</label>
-                                    <select id="adm-open-font-scale" class="w-full p-2 rounded-xl bg-neutral-100 dark:bg-neutral-800 border font-bold">
-                                        <option value="15px">Compact (15px)</option>
-                                        <option value="16px" selected>Standard (16px)</option>
-                                        <option value="17.5px">Large Readable (17.5px)</option>
-                                    </select>
-                                </div>
+                            <div class="w-full py-2.5 px-4 rounded-xl bg-purple-600/10 text-purple-700 dark:text-purple-300 font-black text-xs text-center border border-purple-500/20">
+                                <i class="fa-solid fa-upload mr-1.5"></i> Select or Drop Master Backup File (.JSON)
                             </div>
-                            <button type="button" onclick="saveOpeningDesignSection('typography')" class="w-full py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-black text-[11px] shadow-sm transition active:scale-95">
-                                <i class="fa-solid fa-floppy-disk mr-1"></i> Save Font Settings
-                            </button>
-                        </div>
-
-                        <!-- Card D: Card Look, Shape & Glass Design Customizer -->
-                        <div class="p-4 rounded-2xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 flex flex-col justify-between gap-3">
-                            <div class="space-y-2.5">
-                                <div class="flex items-center justify-between">
-                                    <span class="font-black text-neutral-900 dark:text-white flex items-center gap-1.5"><i class="fa-solid fa-wand-sparkles text-emerald-600"></i> Look & UI Design</span>
-                                    <span class="text-[9px] font-mono font-bold px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-600">SURFACE</span>
-                                </div>
-                                <div>
-                                    <label class="block text-[10px] font-bold text-neutral-500 mb-1">Card Corner Roundness</label>
-                                    <select id="adm-open-card-radius" class="w-full p-2 rounded-xl bg-neutral-100 dark:bg-neutral-800 border font-bold">
-                                        <option value="0.75rem">Sharp Pro (12px)</option>
-                                        <option value="1.25rem">Balanced (20px)</option>
-                                        <option value="1.75rem" selected>Soft Modern (28px)</option>
-                                        <option value="2.25rem">Ultra Pill (36px)</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-[10px] font-bold text-neutral-500 mb-1">Card Glass & Shadow Look</label>
-                                    <select id="adm-open-surface-style" class="w-full p-2 rounded-xl bg-neutral-100 dark:bg-neutral-800 border font-bold">
-                                        <option value="glass">Frosted Glassmorphism</option>
-                                        <option value="solid">Crisp Solid High-Contrast</option>
-                                        <option value="elevated">Deep Elevated Shadow</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <button type="button" onclick="saveOpeningDesignSection('design')" class="w-full py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-[11px] shadow-sm transition active:scale-95">
-                                <i class="fa-solid fa-floppy-disk mr-1"></i> Save Look & Design
-                            </button>
                         </div>
                     </div>
                 </div>
 
-                <!-- 1. Complete App Governance & Feature Matrix (All 70 Full-Access Controls) -->
-                <div class="p-5 rounded-3xl bg-white/80 dark:bg-neutral-900/70 border border-neutral-200 dark:border-neutral-800 mb-6 space-y-4">
-                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 pb-3 border-b border-neutral-200 dark:border-neutral-800">
-                        <div>
-                            <span class="px-2.5 py-0.5 rounded-full bg-primary-600 text-white text-[10px] font-black uppercase tracking-wider">70 Full-Access Controls</span>
-                            <h4 class="text-base font-black mt-1 text-neutral-900 dark:text-white">Complete App Governance & Feature Matrix (1–70)</h4>
-                        </div>
-                        <div class="relative w-full md:w-64">
-                            <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-neutral-400 text-xs"></i>
-                            <input type="text" id="admin-70-search" oninput="renderAdmin70ControlsGrid()" placeholder="Search 70 features..." class="w-full pl-8 pr-3 py-2 rounded-xl bg-neutral-100 dark:bg-neutral-800 border text-xs font-semibold">
-                        </div>
+                <!-- 1. Admin Live Telemetry KPI Cards -->
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+                    <div class="p-4 rounded-2xl bg-white/80 dark:bg-neutral-900/80 border border-neutral-200 dark:border-neutral-800">
+                        <span class="text-[10px] font-black uppercase text-neutral-400">Total Users</span>
+                        <div id="admin-stat-users-count" class="text-2xl font-black text-purple-600 mt-1">0</div>
                     </div>
-                    <div id="admin-70-cat-tabs" class="flex items-center gap-1.5 overflow-x-auto pb-1">
-                        <button type="button" data-cat="ALL" onclick="setAdmin70Category('ALL')" class="adm70-tab px-3 py-1.5 rounded-xl text-xs font-extrabold whitespace-nowrap bg-primary-600 text-white shadow-sm">All (70)</button>
-                        <button type="button" data-cat="brand" onclick="setAdmin70Category('brand')" class="adm70-tab px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300">1–10 Brand & UI</button>
-                        <button type="button" data-cat="modules" onclick="setAdmin70Category('modules')" class="adm70-tab px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300">11–20 Modules</button>
-                        <button type="button" data-cat="finance" onclick="setAdmin70Category('finance')" class="adm70-tab px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300">21–30 Finance</button>
-                        <button type="button" data-cat="udhar_milk" onclick="setAdmin70Category('udhar_milk')" class="adm70-tab px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300">31–40 Udhar & Milk</button>
-                        <button type="button" data-cat="shop_split" onclick="setAdmin70Category('shop_split')" class="adm70-tab px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300">41–50 Shop & Split</button>
-                        <button type="button" data-cat="ai_pdf" onclick="setAdmin70Category('ai_pdf')" class="adm70-tab px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300">51–60 AI & PDF</button>
-                        <button type="button" data-cat="security" onclick="setAdmin70Category('security')" class="adm70-tab px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300">61–70 Security</button>
+                    <div class="p-4 rounded-2xl bg-white/80 dark:bg-neutral-900/80 border border-neutral-200 dark:border-neutral-800">
+                        <span class="text-[10px] font-black uppercase text-neutral-400">Global Transactions</span>
+                        <div id="admin-stat-tx-count" class="text-2xl font-black text-primary-600 mt-1">0</div>
                     </div>
-                    <div id="admin-70-controls-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
+                    <div class="p-4 rounded-2xl bg-white/80 dark:bg-neutral-900/80 border border-neutral-200 dark:border-neutral-800">
+                        <span class="text-[10px] font-black uppercase text-neutral-400">Total Ledger Volume</span>
+                        <div id="admin-stat-volume" class="text-2xl font-black text-emerald-600 mt-1">₹0</div>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-white/80 dark:bg-neutral-900/80 border border-neutral-200 dark:border-neutral-800">
+                        <span class="text-[10px] font-black uppercase text-neutral-400">Active Banner Slides</span>
+                        <div id="admin-stat-ads-count" class="text-2xl font-black text-amber-600 mt-1">6</div>
+                    </div>
                 </div>
 
-                <!-- 2. Registered Users & Global Broadcast Notice -->
+                <!-- 2. Header & Footer Branding Studio + Opening Design Studio -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                    <div class="p-5 rounded-3xl bg-white/80 dark:bg-neutral-900/70 border border-neutral-200 dark:border-neutral-800 space-y-3.5">
-                        <div class="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-neutral-200 dark:border-neutral-800">
-                            <div>
-                                <h4 class="text-sm font-black flex items-center gap-2"><i class="fa-solid fa-users-gear text-purple-600"></i> Registered Cloud Users</h4>
-                                <span id="admin-users-total-pill" class="text-[10px] font-bold text-neutral-400">Total Users: 0</span>
-                            </div>
-                            <div class="flex items-center gap-1.5">
-                                <button type="button" onclick="forceAdminCloudReSync()" class="px-2.5 py-1.5 rounded-xl bg-neutral-100 dark:bg-neutral-800 text-[11px] font-bold"><i class="fa-solid fa-rotate"></i> Sync</button>
-                                <button type="button" onclick="openAdminAddUserModal()" class="px-3 py-1.5 rounded-xl bg-purple-600 text-white text-[11px] font-bold"><i class="fa-solid fa-user-plus"></i> Add User</button>
-                            </div>
-                        </div>
-                        <input type="text" id="admin-user-search-input" oninput="renderAdminUsersList()" placeholder="Search users by name, mobile, or email..." class="w-full p-2.5 rounded-xl bg-neutral-100 dark:bg-neutral-800 border text-xs font-semibold">
-                        <div id="admin-users-list" class="space-y-2.5 max-h-72 overflow-y-auto pr-1"></div>
-                    </div>
-
-                    <div class="p-5 rounded-3xl bg-white/80 dark:bg-neutral-900/70 border border-neutral-200 dark:border-neutral-800 space-y-3.5">
+                    <!-- Header & Logo Branding -->
+                    <div class="p-5 rounded-3xl bg-white/85 dark:bg-neutral-900/85 border border-neutral-200 dark:border-neutral-800 space-y-3 text-xs">
                         <div class="flex items-center justify-between pb-2 border-b border-neutral-200 dark:border-neutral-800">
-                            <h4 class="text-sm font-black flex items-center gap-2"><i class="fa-solid fa-bullhorn text-amber-600"></i> Global Broadcast Announcement</h4>
-                            <span class="text-[10px] font-bold text-amber-600">Live Marquee</span>
-                        </div>
-                        <form onsubmit="handleSaveAnnouncement(event)" class="space-y-3 text-xs">
-                            <label class="flex items-center gap-2 font-bold cursor-pointer">
-                                <input type="checkbox" id="admin-announcement-enabled" class="w-4 h-4 accent-primary-600">
-                                <span>Show Announcement Banner Across App</span>
-                            </label>
-                            <div>
-                                <label class="block text-[10px] font-bold text-neutral-500 mb-1">Banner Style</label>
-                                <select id="admin-announcement-type" class="w-full p-2.5 rounded-xl bg-neutral-100 dark:bg-neutral-800 border font-bold">
-                                    <option value="info">Primary Info (Blue)</option>
-                                    <option value="success">Success Update (Emerald)</option>
-                                    <option value="warning">Important Notice (Amber)</option>
-                                    <option value="alert">Urgent Alert (Rose)</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-[10px] font-bold text-neutral-500 mb-1">Announcement Message</label>
-                                <textarea id="admin-announcement-text" rows="3" class="w-full p-2.5 rounded-xl bg-neutral-100 dark:bg-neutral-800 border font-semibold"></textarea>
-                            </div>
-                            <button type="submit" class="px-5 py-2.5 rounded-xl bg-primary-600 hover:bg-primary-700 text-white font-black text-xs shadow-sm">
-                                <i class="fa-solid fa-floppy-disk mr-1"></i> Save Announcement
-                            </button>
-                        </form>
-                    </div>
-                </div>
-
-                <!-- 3. Google AdMob & Adsterra Master Controller -->
-                <div class="p-5 rounded-3xl bg-white/80 dark:bg-neutral-900/70 border border-neutral-200 dark:border-neutral-800 mb-6 space-y-5">
-                    <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-neutral-200 dark:border-neutral-800">
-                        <div>
-                            <span class="px-2.5 py-0.5 rounded-full bg-blue-600 text-white text-[10px] font-black uppercase tracking-wider">Dual Ad Monetization Engine</span>
-                            <h4 class="text-base font-black mt-1 flex items-center gap-2"><i class="fa-solid fa-rectangle-ad text-blue-600"></i> Google AdMob & Adsterra Network Controller</h4>
-                        </div>
-                        <span id="active-ad-network-badge" class="px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 text-[11px] font-black">Both Networks Active</span>
-                    </div>
-
-                    <!-- Clear 3-Mode Selector -->
-                    <div class="space-y-2">
-                        <label class="block text-xs font-extrabold text-neutral-700 dark:text-neutral-300">Choose Which Ad Network Runs on Your Website:</label>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                            <button type="button" onclick="setAdDeliveryMode('admob-only')" id="admode-btn-admob" class="p-4 rounded-2xl border-2 text-left transition space-y-1.5">
-                                <div class="font-black text-xs sm:text-sm flex items-center gap-2"><i class="fa-brands fa-google text-blue-600"></i> 1. Google AdMob Only</div>
-                                <p class="text-[11px] text-neutral-500 leading-relaxed">Only Google AdMob / AdSense ads will display across all enabled app slots.</p>
-                            </button>
-                            <button type="button" onclick="setAdDeliveryMode('custom-only')" id="admode-btn-custom" class="p-4 rounded-2xl border-2 text-left transition space-y-1.5">
-                                <div class="font-black text-xs sm:text-sm flex items-center gap-2"><i class="fa-solid fa-code text-emerald-600"></i> 2. Adsterra Ads Only</div>
-                                <p class="text-[11px] text-neutral-500 leading-relaxed">Only your pasted Adsterra script codes & custom banners will run (Google ads off).</p>
-                            </button>
-                            <button type="button" onclick="setAdDeliveryMode('hybrid')" id="admode-btn-hybrid" class="p-4 rounded-2xl border-2 text-left transition space-y-1.5">
-                                <div class="font-black text-xs sm:text-sm flex items-center gap-2"><i class="fa-solid fa-layer-group text-purple-600"></i> 3. Both (AdMob + Adsterra)</div>
-                                <p class="text-[11px] text-neutral-500 leading-relaxed">Run Google AdMob slots AND Adsterra code banners together for maximum revenue.</p>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Google AdMob / AdSense Section -->
-                    <form onsubmit="handleSaveAdMobConfig(event)" class="p-4 sm:p-5 rounded-2xl bg-blue-50/50 dark:bg-blue-950/20 border border-blue-200/80 dark:border-blue-800/60 space-y-4">
-                        <div class="flex items-center justify-between">
-                            <h5 class="text-xs sm:text-sm font-black text-blue-900 dark:text-blue-200 flex items-center gap-2">
-                                <i class="fa-brands fa-google text-blue-600"></i> Google AdMob / AdSense Settings
-                            </h5>
-                            <span class="text-[10px] font-bold text-blue-600">Google Ads</span>
+                            <h4 class="text-sm font-black flex items-center gap-2"><i class="fa-solid fa-crown text-amber-500"></i> Header, Logo & Sticky Mode</h4>
+                            <span class="text-[10px] font-bold text-primary-600">Live Branding</span>
                         </div>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <div>
-                                <label class="block text-[11px] font-bold text-neutral-600 dark:text-neutral-300 mb-1">Google Publisher ID (ca-pub-...)</label>
-                                <input type="text" id="admin-admob-pub-id" placeholder="ca-pub-9624198207640000" class="w-full p-2.5 rounded-xl bg-white dark:bg-neutral-900 border text-xs font-mono">
+                                <label class="block font-bold mb-1">App Brand Title</label>
+                                <input type="text" id="admin-brand-name-input" value="NeoKhata" class="w-full p-2.5 rounded-xl bg-neutral-100 dark:bg-neutral-800 border font-bold">
                             </div>
                             <div>
-                                <label class="block text-[11px] font-bold text-neutral-600 dark:text-neutral-300 mb-1">Google Ad Unit / Slot ID</label>
-                                <input type="text" id="admin-admob-slot-id" placeholder="1234567890" class="w-full p-2.5 rounded-xl bg-white dark:bg-neutral-900 border text-xs font-mono">
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2.5 text-xs font-bold">
-                            <label class="flex items-center gap-2.5 p-3 rounded-xl bg-white dark:bg-neutral-900 border cursor-pointer"><input type="checkbox" id="admob-place-top" class="w-4 h-4 accent-blue-600 flex-shrink-0"> <span>Top Header</span></label>
-                            <label class="flex items-center gap-2.5 p-3 rounded-xl bg-white dark:bg-neutral-900 border cursor-pointer"><input type="checkbox" id="admob-place-dashboard" class="w-4 h-4 accent-blue-600 flex-shrink-0"> <span>Dashboard Feed</span></label>
-                            <label class="flex items-center gap-2.5 p-3 rounded-xl bg-white dark:bg-neutral-900 border cursor-pointer"><input type="checkbox" id="admob-place-history" class="w-4 h-4 accent-blue-600 flex-shrink-0"> <span>History Feed</span></label>
-                            <label class="flex items-center gap-2.5 p-3 rounded-xl bg-white dark:bg-neutral-900 border cursor-pointer"><input type="checkbox" id="admob-place-grocery" class="w-4 h-4 accent-blue-600 flex-shrink-0"> <span>Shopping Screen</span></label>
-                            <label class="flex items-center gap-2.5 p-3 rounded-xl bg-white dark:bg-neutral-900 border cursor-pointer"><input type="checkbox" id="admob-place-udhar" class="w-4 h-4 accent-blue-600 flex-shrink-0"> <span>Udhar Khata</span></label>
-                            <label class="flex items-center gap-2.5 p-3 rounded-xl bg-white dark:bg-neutral-900 border cursor-pointer"><input type="checkbox" id="admob-place-hub" class="w-4 h-4 accent-blue-600 flex-shrink-0"> <span>Friends Hub</span></label>
-                            <label class="flex items-center gap-2.5 p-3 rounded-xl bg-white dark:bg-neutral-900 border cursor-pointer"><input type="checkbox" id="admob-place-analytics" class="w-4 h-4 accent-blue-600 flex-shrink-0"> <span>Reports & Analytics</span></label>
-                            <label class="flex items-center gap-2.5 p-3 rounded-xl bg-white dark:bg-neutral-900 border cursor-pointer"><input type="checkbox" id="admob-place-bottom" class="w-4 h-4 accent-blue-600 flex-shrink-0"> <span>Sticky Bottom</span></label>
-                        </div>
-                        <button type="submit" class="px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs shadow-sm transition active:scale-95">
-                            <i class="fa-solid fa-floppy-disk mr-1"></i> Save Google AdMob Settings
-                        </button>
-                    </form>
-
-                    <!-- Dedicated Adsterra Ad Code Manager -->
-                    <form onsubmit="handleSaveAdsterraConfig(event)" class="p-4 rounded-2xl bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200/80 dark:border-emerald-800/60 space-y-3.5">
-                        <div class="flex flex-wrap items-center justify-between gap-2">
-                            <div>
-                                <h5 class="text-xs sm:text-sm font-black text-emerald-900 dark:text-emerald-200 flex items-center gap-2">
-                                    <i class="fa-solid fa-code text-emerald-600"></i> Adsterra & Multi-Network Ad Code Manager (Auto-Fluid Sizing)
-                                </h5>
-                                <p class="text-[11px] text-neutral-500 mt-0.5">Paste any <code>&lt;script&gt;</code>, <code>atOptions</code>, Native Banner, or Social Bar tag. Containers automatically resize to match the exact ad dimensions without fixed limits.</p>
-                            </div>
-                            <label class="flex items-center gap-2 text-xs font-extrabold text-emerald-800 dark:text-emerald-300 bg-white dark:bg-neutral-900 px-3 py-1.5 rounded-xl border border-emerald-300 dark:border-emerald-700 cursor-pointer">
-                                <input type="checkbox" id="admin-adsterra-enabled" class="w-4 h-4 accent-emerald-600">
-                                <span>Enable Ad Codes</span>
-                            </label>
-                        </div>
-
-                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 text-xs">
-                            <div>
-                                <div class="flex items-center justify-between mb-1">
-                                    <label class="font-bold text-neutral-700 dark:text-neutral-300">1. Top Banner Ad Code (Auto-Fits Any Size)</label>
-                                    <button type="button" onclick="document.getElementById('admin-adsterra-top-code').value=''" class="text-[10px] text-rose-500 font-bold hover:underline">Clear</button>
-                                </div>
-                                <textarea id="admin-adsterra-top-code" rows="4" placeholder='<script type="text/javascript">atOptions = { "key" : "YOUR_ADSTERRA_KEY", "format" : "iframe", "height" : 90, "width" : 728, "params" : {} };</script><script type="text/javascript" src="//www.highperformanceformat.com/YOUR_KEY/invoke.js"></script>' class="w-full p-2.5 rounded-xl bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 font-mono text-[11px] focus:outline-none focus:border-emerald-500"></textarea>
-                            </div>
-                            <div>
-                                <div class="flex items-center justify-between mb-1">
-                                    <label class="font-bold text-neutral-700 dark:text-neutral-300">2. In-Feed / Native / Social Bar Ad Code (Auto-Fits Any Size)</label>
-                                    <button type="button" onclick="document.getElementById('admin-adsterra-feed-code').value=''" class="text-[10px] text-rose-500 font-bold hover:underline">Clear</button>
-                                </div>
-                                <textarea id="admin-adsterra-feed-code" rows="4" placeholder='<script async="async" data-cfasync="false" src="//pl12345678.highperformanceformat.com/YOUR_NATIVE_KEY/invoke.js"></script><div id="container-YOUR_NATIVE_KEY"></div>' class="w-full p-2.5 rounded-xl bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 font-mono text-[11px] focus:outline-none focus:border-emerald-500"></textarea>
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                            <div>
-                                <label class="block text-[10px] font-bold text-neutral-500 mb-1">Adsterra Direct / Smartlink URL (Optional)</label>
-                                <input type="url" id="admin-adsterra-direct-url" placeholder="https://www.highcpmgate.com/..." class="w-full p-2.5 rounded-xl bg-white dark:bg-neutral-900 border text-xs font-mono">
-                            </div>
-                            <div>
-                                <label class="block text-[10px] font-bold text-neutral-500 mb-1">Ad Container Sizing Mode</label>
-                                <select id="admin-adsterra-top-height" class="w-full p-2.5 rounded-xl bg-white dark:bg-neutral-900 border text-xs font-bold">
-                                    <option value="auto" selected>⚡ 100% Fluid Auto-Size (No Fixed Limit)</option>
-                                    <option value="responsive-fit">📱 Auto-Fit & Scale to Screen Width</option>
+                                <label class="block font-bold mb-1">Header Scroll Mode</label>
+                                <select id="admin-header-sticky-mode" class="w-full p-2.5 rounded-xl bg-neutral-100 dark:bg-neutral-800 border font-bold">
+                                    <option value="sticky">Sticky Top Header</option>
+                                    <option value="scrollable">Scrollable Header</option>
                                 </select>
-                                <input type="hidden" id="admin-adsterra-feed-height" value="auto">
                             </div>
                         </div>
-
-                        <div class="flex flex-wrap items-center justify-between gap-2 pt-1">
-                            <span class="text-[10px] font-semibold text-neutral-500">Zero fixed height/width limits — automatically adapts to 320×50, 728×90, 300×250, Native & Social Bar</span>
-                            <button type="submit" class="px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs shadow-sm transition active:scale-95">
-                                <i class="fa-solid fa-floppy-disk mr-1"></i> Save Adsterra Ad Codes
-                            </button>
+                        <div>
+                            <label class="block font-bold mb-1">Custom Brand Logo URL (Optional)</label>
+                            <input type="url" id="admin-brand-logo-url" placeholder="https://..." class="w-full p-2.5 rounded-xl bg-neutral-100 dark:bg-neutral-800 border font-mono">
                         </div>
+                        <button type="button" onclick="saveHeaderBrandingStudio()" class="w-full py-2.5 rounded-xl bg-primary-600 hover:bg-primary-700 text-white font-black">Apply Header & Logo Branding</button>
+                    </div>
+
+                    <!-- Opening Screen, Colors & Typography Studio -->
+                    <div class="p-5 rounded-3xl bg-white/85 dark:bg-neutral-900/85 border border-neutral-200 dark:border-neutral-800 space-y-3 text-xs">
+                        <div class="flex items-center justify-between pb-2 border-b border-neutral-200 dark:border-neutral-800">
+                            <h4 class="text-sm font-black flex items-center gap-2"><i class="fa-solid fa-palette text-indigo-600"></i> Opening Screen & Theme Studio</h4>
+                            <span class="text-[10px] font-bold text-indigo-600">UI Engine</span>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                                <label class="block font-bold mb-1">Gate Title</label>
+                                <input type="text" id="adm-open-title" value="NeoKhata" class="w-full p-2.5 rounded-xl bg-neutral-100 dark:bg-neutral-800 border font-bold">
+                            </div>
+                            <div>
+                                <label class="block font-bold mb-1">Default Landing Tab</label>
+                                <select id="adm-open-default-tab" class="w-full p-2.5 rounded-xl bg-neutral-100 dark:bg-neutral-800 border font-bold">
+                                    <option value="dashboard">Dashboard</option>
+                                    <option value="udhar">Udhar Khata</option>
+                                    <option value="milk">Milk Ledger</option>
+                                    <option value="vyapari">Vyapari Mandi</option>
+                                    <option value="grocery">Shopping</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block font-bold mb-1">Gate Subtitle</label>
+                            <input type="text" id="adm-open-subtitle" value="Smart Financial OS • Enterprise Cloud Workspace" class="w-full p-2.5 rounded-xl bg-neutral-100 dark:bg-neutral-800 border font-semibold">
+                        </div>
+                        <div class="grid grid-cols-3 gap-2">
+                            <div>
+                                <label class="block font-bold mb-1">Primary Color</label>
+                                <input type="color" id="adm-open-primary-color" value="#2453d6" class="w-full h-9 p-0.5 rounded-xl bg-neutral-100 dark:bg-neutral-800 border">
+                            </div>
+                            <div>
+                                <label class="block font-bold mb-1">Theme Mode</label>
+                                <select id="adm-open-theme-mode" class="w-full p-2 rounded-xl bg-neutral-100 dark:bg-neutral-800 border font-bold">
+                                    <option value="keep">User Choice</option>
+                                    <option value="light">Force Light</option>
+                                    <option value="dark">Force Dark</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block font-bold mb-1">Card Radius</label>
+                                <select id="adm-open-card-radius" class="w-full p-2 rounded-xl bg-neutral-100 dark:bg-neutral-800 border font-bold">
+                                    <option value="1.5rem">Rounded (24px)</option>
+                                    <option value="1rem">Medium (16px)</option>
+                                    <option value="2rem">Extra Pill (32px)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button type="button" onclick="saveOpeningDesignSection('opening')" class="py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-black">Save Opening Gate</button>
+                            <button type="button" onclick="saveOpeningDesignSection('colors')" class="py-2.5 rounded-xl bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 font-black">Save Theme & Colors</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Registered Users Directory & Live Cloud Inspector -->
+                <div class="p-5 rounded-3xl bg-white/85 dark:bg-neutral-900/85 border border-neutral-200 dark:border-neutral-800 mb-6 space-y-4">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-neutral-200 dark:border-neutral-800">
+                        <div>
+                            <h4 class="text-sm font-black flex items-center gap-2"><i class="fa-solid fa-users-gear text-purple-600"></i> Registered Cloud Users & Activity Inspector</h4>
+                            <p class="text-[11px] text-neutral-500 mt-0.5">Click any user card to inspect their live expenses, income, Udhar customers, and shopping lists.</p>
+                        </div>
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <span id="admin-users-total-pill" class="px-3 py-1 rounded-full bg-purple-500/10 text-purple-600 text-xs font-black">Total Users: 0</span>
+                            <button type="button" onclick="forceAdminCloudReSync()" class="px-3 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center gap-1.5"><i class="fa-solid fa-rotate"></i> Force Cloud Sync</button>
+                            <button type="button" onclick="openAdminAddUserModal()" class="px-3 py-2 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold flex items-center gap-1.5"><i class="fa-solid fa-user-plus"></i> Add User</button>
+                        </div>
+                    </div>
+                    <input type="text" id="admin-user-search-input" oninput="renderAdminUsersList()" placeholder="Search users by name, mobile number, or email..." class="w-full p-2.5 rounded-2xl bg-neutral-100 dark:bg-neutral-800 border text-xs font-semibold">
+                    <div id="admin-users-list" class="space-y-2.5 max-h-80 overflow-y-auto pr-1"></div>
+                </div>
+
+                <!-- 4. Sponsored Banner Slides & Global Broadcast Announcement -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                    <!-- Sponsored Banner Carousel Studio -->
+                    <div class="p-5 rounded-3xl bg-white/85 dark:bg-neutral-900/85 border border-neutral-200 dark:border-neutral-800 space-y-3">
+                        <div class="flex items-center justify-between pb-2 border-b border-neutral-200 dark:border-neutral-800">
+                            <h4 class="text-sm font-black flex items-center gap-2"><i class="fa-solid fa-images text-primary-600"></i> Sponsored Banner Slides</h4>
+                            <button type="button" onclick="openAddAdModal()" class="px-3 py-1.5 rounded-xl bg-primary-600 hover:bg-primary-700 text-white text-xs font-bold flex items-center gap-1"><i class="fa-solid fa-plus"></i> Add Slide</button>
+                        </div>
+                        <div id="admin-ads-list" class="space-y-2 max-h-72 overflow-y-auto pr-1"></div>
+                    </div>
+
+                    <!-- Global Live Announcement Broadcaster -->
+                    <form onsubmit="handleSaveAnnouncement(event)" class="p-5 rounded-3xl bg-white/85 dark:bg-neutral-900/85 border border-neutral-200 dark:border-neutral-800 space-y-3 text-xs flex flex-col justify-between">
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between pb-2 border-b border-neutral-200 dark:border-neutral-800">
+                                <h4 class="text-sm font-black flex items-center gap-2"><i class="fa-solid fa-bullhorn text-amber-500"></i> Global Broadcast Announcement</h4>
+                                <label class="flex items-center gap-1.5 font-bold cursor-pointer">
+                                    <input type="checkbox" id="admin-announcement-enabled" class="w-4 h-4 accent-primary-600"> Active
+                                </label>
+                            </div>
+                            <div>
+                                <label class="block font-bold mb-1">Banner Style</label>
+                                <select id="admin-announcement-type" class="w-full p-2.5 rounded-xl bg-neutral-100 dark:bg-neutral-800 border font-bold">
+                                    <option value="info">Royal Blue (Info)</option>
+                                    <option value="success">Emerald Green (Update / Offer)</option>
+                                    <option value="warning">Amber Gold (Notice)</option>
+                                    <option value="alert">Crimson Rose (Urgent Alert)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block font-bold mb-1">Announcement Message (Shown to All Users)</label>
+                                <textarea id="admin-announcement-text" rows="3" placeholder="Enter live announcement message..." class="w-full p-2.5 rounded-xl bg-neutral-100 dark:bg-neutral-800 border font-semibold"></textarea>
+                            </div>
+                        </div>
+                        <button type="submit" class="w-full py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-black">Publish Live Announcement</button>
                     </form>
                 </div>
 
-                <!-- 4. Custom Promo & Adsterra Banner Slides Manager -->
-                <div class="p-5 rounded-2xl bg-white/70 dark:bg-neutral-900/60 border border-neutral-200 dark:border-neutral-800">
-                    <div class="flex flex-wrap justify-between items-center gap-2 mb-4">
+                <!-- 5. Monetization Engine: Google AdMob & Adsterra Ads Control -->
+                <div class="p-5 rounded-3xl bg-white/85 dark:bg-neutral-900/85 border border-neutral-200 dark:border-neutral-800 mb-6 space-y-4 text-xs">
+                    <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-neutral-200 dark:border-neutral-800">
                         <div>
-                            <h4 class="text-sm font-black flex items-center gap-2"><i class="fa-solid fa-images text-primary-600"></i> Custom Promo & Smartlink Slides Manager</h4>
-                            <p class="text-[11px] text-neutral-500 mt-0.5">Fallback or promotional slides shown alongside Adsterra when no raw script tag is active</p>
+                            <h4 class="text-sm font-black flex items-center gap-2"><i class="fa-solid fa-rectangle-ad text-emerald-600"></i> AdMob & Adsterra Monetization Studio</h4>
+                            <p class="text-[11px] text-neutral-500">Switch ad delivery mode and configure live ad slots across sections.</p>
                         </div>
-                        <div class="flex items-center gap-2">
-                            <button type="button" onclick="openAddAdModal()" class="px-3.5 py-2 rounded-xl bg-primary-600 hover:bg-primary-700 text-white font-bold text-xs transition active:scale-95"><i class="fa-solid fa-plus"></i> Add New Slide</button>
-                            <button type="button" onclick="saveSponsoredBannerChanges()" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition shadow-sm active:scale-95"><i class="fa-solid fa-floppy-disk"></i> Save Slides</button>
-                        </div>
+                        <span id="active-ad-network-badge" class="px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 font-black text-[11px]">Both (AdMob + Adsterra) Active</span>
                     </div>
-                    <div id="admin-ads-list" class="space-y-3"></div>
-                </div>
 
-                <!-- 5. Footer Legal & Custom Pages Manager -->
-                <div class="mt-6 p-5 rounded-2xl bg-white/70 dark:bg-neutral-900/60 border border-neutral-200 dark:border-neutral-800 space-y-4">
-                    <div class="flex flex-wrap justify-between items-center gap-2 pb-3 border-b border-neutral-200 dark:border-neutral-800">
-                        <div>
-                            <span class="px-2.5 py-0.5 rounded-full bg-indigo-600 text-white text-[10px] font-black uppercase tracking-wider">Legal & Policy Pages</span>
-                            <h4 class="text-sm font-black mt-1 flex items-center gap-2"><i class="fa-solid fa-link text-indigo-600"></i> Footer Pages & Custom Redirect Links Manager</h4>
-                            <p class="text-[11px] text-neutral-500 mt-0.5">Add legal pages (Privacy Policy, Terms, Disclaimer, Contact Us) with their URLs—they appear live in the app footer and redirect on click.</p>
-                        </div>
-                        <button type="button" onclick="saveFooterCustomLinks()" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition shadow-sm active:scale-95 flex items-center gap-1.5">
-                            <i class="fa-solid fa-floppy-disk"></i> Save Footer Pages
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                        <button type="button" id="admode-btn-admob" onclick="setAdDeliveryMode('admob-only')" class="p-3 rounded-2xl border-2 text-left">
+                            <div class="font-black">Google AdMob / AdSense</div>
+                            <div class="text-[10px] text-neutral-500">Use ca-pub & Slot IDs only</div>
+                        </button>
+                        <button type="button" id="admode-btn-custom" onclick="setAdDeliveryMode('custom-only')" class="p-3 rounded-2xl border-2 text-left">
+                            <div class="font-black">Adsterra Ads Only</div>
+                            <div class="text-[10px] text-neutral-500">Use Adsterra scripts & Smartlink</div>
+                        </button>
+                        <button type="button" id="admode-btn-hybrid" onclick="setAdDeliveryMode('hybrid')" class="p-3 rounded-2xl border-2 text-left">
+                            <div class="font-black">Hybrid (AdMob + Adsterra)</div>
+                            <div class="text-[10px] text-neutral-500">Serve both ad networks seamlessly</div>
                         </button>
                     </div>
 
-                    <!-- Add New Page Name + URL Form -->
-                    <form onsubmit="addFooterCustomLink(event)" class="grid grid-cols-1 sm:grid-cols-12 gap-2.5 text-xs">
-                        <div class="sm:col-span-4">
-                            <label class="block text-[10px] font-bold text-neutral-500 mb-1">Page Name (e.g. Privacy Policy) *</label>
-                            <input type="text" id="admin-footer-page-title" required placeholder="e.g. Privacy Policy" class="w-full p-2.5 rounded-xl bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 font-bold focus:outline-none focus:border-indigo-500">
-                        </div>
-                        <div class="sm:col-span-6">
-                            <label class="block text-[10px] font-bold text-neutral-500 mb-1">Page Redirect Link / URL *</label>
-                            <input type="url" id="admin-footer-page-url" required placeholder="https://example.com/privacy-policy" class="w-full p-2.5 rounded-xl bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 font-mono font-semibold focus:outline-none focus:border-indigo-500">
-                        </div>
-                        <div class="sm:col-span-2 flex items-end">
-                            <button type="submit" class="w-full py-2.5 px-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-black text-xs transition shadow-sm flex items-center justify-center gap-1.5 active:scale-95">
-                                <i class="fa-solid fa-plus"></i> Add Page
-                            </button>
-                        </div>
-                    </form>
-
-                    <!-- Active Footer Pages List (Editable & Removable) -->
-                    <div id="admin-footer-links-list" class="space-y-2"></div>
-
-                    <!-- Social Media Handles Manager (Platform Logo + Profile URL) -->
-                    <div class="pt-4 border-t border-neutral-200 dark:border-neutral-800 space-y-3">
-                        <div class="flex flex-wrap justify-between items-center gap-2">
-                            <div>
-                                <span class="px-2.5 py-0.5 rounded-full bg-pink-600 text-white text-[10px] font-black uppercase tracking-wider">Social Media Handles</span>
-                                <h5 class="text-sm font-black mt-1 flex items-center gap-2"><i class="fa-solid fa-share-nodes text-pink-600"></i> Footer Social Media Logos & Handle URLs</h5>
-                                <p class="text-[11px] text-neutral-500 mt-0.5">Select a social media logo and paste your profile URL—icons appear neatly below Backup & Restore in the footer.</p>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                        <!-- Google AdMob Form -->
+                        <form onsubmit="handleSaveAdMobConfig(event)" class="p-4 rounded-2xl bg-neutral-100/80 dark:bg-neutral-800/70 border space-y-3">
+                            <div class="font-black text-primary-600">Google AdMob / AdSense Credentials</div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                                <div>
+                                    <label class="block font-bold mb-1">Publisher ID (ca-pub-...)</label>
+                                    <input type="text" id="admin-admob-pub-id" placeholder="ca-pub-xxxxxxxxxxxxxxxx" class="w-full p-2 rounded-xl bg-white dark:bg-neutral-900 border font-mono">
+                                </div>
+                                <div>
+                                    <label class="block font-bold mb-1">Ad Slot ID</label>
+                                    <input type="text" id="admin-admob-slot-id" placeholder="1234567890" class="w-full p-2 rounded-xl bg-white dark:bg-neutral-900 border font-mono">
+                                </div>
                             </div>
-                            <button type="button" onclick="saveFooterSocialHandles()" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition shadow-sm active:scale-95 flex items-center gap-1.5">
-                                <i class="fa-solid fa-floppy-disk"></i> Save Social Handles
-                            </button>
-                        </div>
-
-                        <form onsubmit="addFooterSocialHandle(event)" class="grid grid-cols-1 sm:grid-cols-12 gap-2.5 text-xs">
-                            <div class="sm:col-span-4">
-                                <label class="block text-[10px] font-bold text-neutral-500 mb-1">Platform & Real Logo *</label>
-                                <select id="admin-footer-social-platform" class="w-full p-2.5 rounded-xl bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 font-bold focus:outline-none focus:border-pink-500">
-                                    <option value="instagram">Instagram (fa-brands fa-instagram)</option>
-                                    <option value="twitter">X / Twitter (fa-brands fa-x-twitter)</option>
-                                    <option value="youtube">YouTube (fa-brands fa-youtube)</option>
-                                    <option value="facebook">Facebook (fa-brands fa-facebook-f)</option>
-                                    <option value="whatsapp">WhatsApp (fa-brands fa-whatsapp)</option>
-                                    <option value="telegram">Telegram (fa-brands fa-telegram)</option>
-                                    <option value="linkedin">LinkedIn (fa-brands fa-linkedin-in)</option>
-                                    <option value="website">Website (fa-solid fa-globe)</option>
-                                </select>
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
+                                <label class="flex items-center gap-1.5 font-bold"><input type="checkbox" id="admob-place-top" checked> Top</label>
+                                <label class="flex items-center gap-1.5 font-bold"><input type="checkbox" id="admob-place-dashboard" checked> Dashboard</label>
+                                <label class="flex items-center gap-1.5 font-bold"><input type="checkbox" id="admob-place-history" checked> History</label>
+                                <label class="flex items-center gap-1.5 font-bold"><input type="checkbox" id="admob-place-grocery" checked> Shopping</label>
+                                <label class="flex items-center gap-1.5 font-bold"><input type="checkbox" id="admob-place-udhar" checked> Udhar</label>
+                                <label class="flex items-center gap-1.5 font-bold"><input type="checkbox" id="admob-place-hub" checked> Friends</label>
+                                <label class="flex items-center gap-1.5 font-bold"><input type="checkbox" id="admob-place-analytics" checked> Reports</label>
+                                <label class="flex items-center gap-1.5 font-bold"><input type="checkbox" id="admob-place-bottom" checked> Sticky Bottom</label>
                             </div>
-                            <div class="sm:col-span-6">
-                                <label class="block text-[10px] font-bold text-neutral-500 mb-1">Social Handle Profile URL *</label>
-                                <input type="url" id="admin-footer-social-url" required placeholder="https://instagram.com/yourhandle" class="w-full p-2.5 rounded-xl bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 font-mono font-semibold focus:outline-none focus:border-pink-500">
-                            </div>
-                            <div class="sm:col-span-2 flex items-end">
-                                <button type="submit" class="w-full py-2.5 px-3 rounded-xl bg-pink-600 hover:bg-pink-700 text-white font-black text-xs transition shadow-sm flex items-center justify-center gap-1.5 active:scale-95">
-                                    <i class="fa-solid fa-plus"></i> Add Handle
-                                </button>
-                            </div>
+                            <button type="submit" class="w-full py-2.5 rounded-xl bg-primary-600 text-white font-black">Save AdMob Settings</button>
                         </form>
 
-                        <div id="admin-footer-socials-list" class="space-y-2"></div>
+                        <!-- Adsterra Script & Smartlink Form -->
+                        <form onsubmit="handleSaveAdsterraConfig(event)" class="p-4 rounded-2xl bg-neutral-100/80 dark:bg-neutral-800/70 border space-y-3">
+                            <div class="flex items-center justify-between">
+                                <span class="font-black text-emerald-600">Adsterra Banner & Smartlink Engine</span>
+                                <label class="flex items-center gap-1.5 font-bold"><input type="checkbox" id="admin-adsterra-enabled" checked> Enabled</label>
+                            </div>
+                            <div>
+                                <label class="block font-bold mb-1">Top Banner Adsterra Script / HTML</label>
+                                <textarea id="admin-adsterra-top-code" rows="2" placeholder="Paste Adsterra Top Banner script..." class="w-full p-2 rounded-xl bg-white dark:bg-neutral-900 border font-mono text-[11px]"></textarea>
+                            </div>
+                            <div>
+                                <label class="block font-bold mb-1">In-Feed / Native Adsterra Script</label>
+                                <textarea id="admin-adsterra-feed-code" rows="2" placeholder="Paste Adsterra Native/In-Feed script..." class="w-full p-2 rounded-xl bg-white dark:bg-neutral-900 border font-mono text-[11px]"></textarea>
+                            </div>
+                            <div>
+                                <label class="block font-bold mb-1">Adsterra Direct Smartlink URL (Optional)</label>
+                                <input type="url" id="admin-adsterra-direct-url" placeholder="https://www.highperformanceformat.com/..." class="w-full p-2 rounded-xl bg-white dark:bg-neutral-900 border font-mono text-[11px]">
+                            </div>
+                            <button type="submit" class="w-full py-2.5 rounded-xl bg-emerald-600 text-white font-black">Save Adsterra Code</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- 6. Footer Legal Pages & Social Handles Manager -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6 text-xs">
+                    <!-- Footer Legal Pages -->
+                    <div class="p-5 rounded-3xl bg-white/85 dark:bg-neutral-900/85 border border-neutral-200 dark:border-neutral-800 space-y-3">
+                        <div class="flex items-center justify-between pb-2 border-b border-neutral-200 dark:border-neutral-800">
+                            <h4 class="text-sm font-black flex items-center gap-2"><i class="fa-solid fa-scale-balanced text-primary-600"></i> Footer Legal & Policy Pages</h4>
+                            <button type="button" onclick="saveFooterCustomLinks()" class="px-3 py-1 rounded-xl bg-emerald-600 text-white font-bold text-[11px]">Save Links</button>
+                        </div>
+                        <form onsubmit="addFooterCustomLink(event)" class="grid grid-cols-1 sm:grid-cols-12 gap-2">
+                            <input type="text" id="admin-footer-page-title" required placeholder="Page Title (e.g. Refund Policy)" class="sm:col-span-5 p-2 rounded-xl bg-neutral-100 dark:bg-neutral-800 border font-bold">
+                            <input type="url" id="admin-footer-page-url" required placeholder="https://..." class="sm:col-span-5 p-2 rounded-xl bg-neutral-100 dark:bg-neutral-800 border font-mono">
+                            <button type="submit" class="sm:col-span-2 py-2 rounded-xl bg-primary-600 text-white font-black">+ Add</button>
+                        </form>
+                        <div id="admin-footer-links-list" class="space-y-2 max-h-56 overflow-y-auto pr-1"></div>
                     </div>
 
-                    <!-- Header & Footer Branding, Logo and Sticky/Scrollable Header Studio -->
-                    <div class="pt-5 border-t border-neutral-200 dark:border-neutral-800 space-y-3">
-                        <div class="flex flex-wrap justify-between items-center gap-2">
-                            <div>
-                                <span class="px-2.5 py-0.5 rounded-full bg-blue-600 text-white text-[10px] font-black uppercase tracking-wider">Branding & Logo Studio</span>
-                                <h5 class="text-sm font-black mt-1 flex items-center gap-2"><i class="fa-solid fa-image text-blue-600"></i> Header & Footer Logo & Name Studio</h5>
-                                <p class="text-[11px] text-neutral-500 mt-0.5">Change header/footer brand title, logo image URL or initials, and toggle sticky/scrollable header mode.</p>
-                            </div>
-                            <button type="button" onclick="saveHeaderBrandingStudio()" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition shadow-sm active:scale-95 flex items-center gap-1.5">
-                                <i class="fa-solid fa-floppy-disk"></i> Save Branding
-                            </button>
+                    <!-- Footer Social Media Handles -->
+                    <div class="p-5 rounded-3xl bg-white/85 dark:bg-neutral-900/85 border border-neutral-200 dark:border-neutral-800 space-y-3">
+                        <div class="flex items-center justify-between pb-2 border-b border-neutral-200 dark:border-neutral-800">
+                            <h4 class="text-sm font-black flex items-center gap-2"><i class="fa-solid fa-share-nodes text-pink-600"></i> Footer Social Media Handles</h4>
+                            <button type="button" onclick="saveFooterSocialHandles()" class="px-3 py-1 rounded-xl bg-emerald-600 text-white font-bold text-[11px]">Save Socials</button>
                         </div>
-
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
-                            <div>
-                                <label class="block text-[10px] font-bold text-neutral-500 mb-1">App Brand Name</label>
-                                <input type="text" id="admin-brand-name-input" placeholder="NeoKhata" class="w-full p-2.5 rounded-xl bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 font-bold">
-                            </div>
-                            <div>
-                                <label class="block text-[10px] font-bold text-neutral-500 mb-1">Brand Logo Image URL (Optional)</label>
-                                <input type="url" id="admin-brand-logo-url" placeholder="https://.../logo.png" class="w-full p-2.5 rounded-xl bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 font-mono text-[11px]">
-                            </div>
-                            <div>
-                                <label class="block text-[10px] font-bold text-neutral-500 mb-1">Header Position Mode</label>
-                                <select id="admin-header-sticky-mode" class="w-full p-2.5 rounded-xl bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 font-bold">
-                                    <option value="sticky">Sticky Header (Fixed on Scroll)</option>
-                                    <option value="scrollable">Scrollable Header (Moves with Page)</option>
-                                </select>
-                            </div>
-                        </div>
+                        <form onsubmit="addFooterSocialHandle(event)" class="grid grid-cols-1 sm:grid-cols-12 gap-2">
+                            <select id="admin-footer-social-platform" class="sm:col-span-4 p-2 rounded-xl bg-neutral-100 dark:bg-neutral-800 border font-bold">
+                                <option value="instagram">Instagram</option>
+                                <option value="twitter">X (Twitter)</option>
+                                <option value="youtube">YouTube</option>
+                                <option value="facebook">Facebook</option>
+                                <option value="whatsapp">WhatsApp</option>
+                                <option value="telegram">Telegram</option>
+                                <option value="linkedin">LinkedIn</option>
+                                <option value="website">Website</option>
+                            </select>
+                            <input type="url" id="admin-footer-social-url" required placeholder="https://..." class="sm:col-span-6 p-2 rounded-xl bg-neutral-100 dark:bg-neutral-800 border font-mono">
+                            <button type="submit" class="sm:col-span-2 py-2 rounded-xl bg-pink-600 text-white font-black">+ Add</button>
+                        </form>
+                        <div id="admin-footer-socials-list" class="space-y-2 max-h-56 overflow-y-auto pr-1"></div>
                     </div>
+                </div>
+
+                <!-- 7. Master 9-Modules Control Grid -->
+                <div class="p-5 rounded-3xl bg-white/85 dark:bg-neutral-900/85 border border-neutral-200 dark:border-neutral-800 mb-6 space-y-4">
+                    <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-neutral-200 dark:border-neutral-800">
+                        <div>
+                            <h4 class="text-sm font-black flex items-center gap-2"><i class="fa-solid fa-cubes text-primary-600"></i> Master 9-Modules Visibility & Labels Control</h4>
+                            <p class="text-[11px] text-neutral-500">Toggle visibility or rename any of the 9 navigation modules across mobile and desktop.</p>
+                        </div>
+                        <button type="button" onclick="saveMasterModulesControl()" class="px-4 py-2 rounded-xl bg-primary-600 hover:bg-primary-700 text-white text-xs font-black">Save All 9 Modules</button>
+                    </div>
+                    <div id="admin-9-modules-control-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-xs"></div>
+                </div>
+
+                <!-- 8. 70 Full-Access Enterprise Feature Controls Matrix -->
+                <div class="p-5 rounded-3xl bg-white/85 dark:bg-neutral-900/85 border border-neutral-200 dark:border-neutral-800 space-y-4">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-3 border-b border-neutral-200 dark:border-neutral-800">
+                        <div>
+                            <h4 class="text-sm font-black flex items-center gap-2"><i class="fa-solid fa-sliders text-indigo-600"></i> 70 Full-Access Feature & Policy Controls</h4>
+                            <p class="text-[11px] text-neutral-500">Fine-tune every feature, threshold, PDF setting, and security policy live.</p>
+                        </div>
+                        <input type="text" id="admin-70-search" oninput="renderAdmin70ControlsGrid()" placeholder="Search 70 controls (#01 - #70)..." class="w-full md:w-64 p-2 rounded-xl bg-neutral-100 dark:bg-neutral-800 border text-xs font-semibold">
+                    </div>
+                    <div id="admin-70-cat-tabs" class="flex items-center gap-1.5 overflow-x-auto pb-1">
+                        <button type="button" data-cat="ALL" onclick="setAdmin70Category('ALL')" class="adm70-tab px-3 py-1.5 rounded-xl text-xs font-extrabold whitespace-nowrap bg-primary-600 text-white shadow-sm">All (70)</button>
+                        <button type="button" data-cat="brand" onclick="setAdmin70Category('brand')" class="adm70-tab px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap bg-neutral-100 dark:bg-neutral-800">Brand & UI</button>
+                        <button type="button" data-cat="modules" onclick="setAdmin70Category('modules')" class="adm70-tab px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap bg-neutral-100 dark:bg-neutral-800">Modules</button>
+                        <button type="button" data-cat="finance" onclick="setAdmin70Category('finance')" class="adm70-tab px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap bg-neutral-100 dark:bg-neutral-800">Finance Rules</button>
+                        <button type="button" data-cat="udhar_milk" onclick="setAdmin70Category('udhar_milk')" class="adm70-tab px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap bg-neutral-100 dark:bg-neutral-800">Udhar & Milk</button>
+                        <button type="button" data-cat="shop_split" onclick="setAdmin70Category('shop_split')" class="adm70-tab px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap bg-neutral-100 dark:bg-neutral-800">Shop & Split</button>
+                        <button type="button" data-cat="ai_pdf" onclick="setAdmin70Category('ai_pdf')" class="adm70-tab px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap bg-neutral-100 dark:bg-neutral-800">AI & PDF</button>
+                        <button type="button" data-cat="security" onclick="setAdmin70Category('security')" class="adm70-tab px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap bg-neutral-100 dark:bg-neutral-800">Security & Sync</button>
+                    </div>
+                    <div id="admin-70-controls-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
                 </div>
             </div>
         </section>
@@ -7616,7 +7490,6 @@
         function renderSponsoredAdCarousel() {
             const track = document.getElementById('ad-slides-track');
             const banner = document.getElementById('sponsored-ad-banner');
-            const dotsEl = document.getElementById('ad-slides-dots');
             if (!track || !banner) return;
 
             renderAdsterraSlots();
@@ -7629,11 +7502,6 @@
             banner.style.display = 'block';
 
             if (currentAdSlideIndex >= SPONSORED_ADS_LIST.length) currentAdSlideIndex = 0;
-            if (dotsEl) {
-                dotsEl.innerHTML = SPONSORED_ADS_LIST.map((_, idx) => `
-                    <button type="button" onclick="event.stopPropagation(); goToAdSlide(${idx})" aria-label="Slide ${idx + 1}" class="h-1.5 rounded-full transition-all ${idx === currentAdSlideIndex ? 'w-5 bg-white' : 'w-1.5 bg-white/45 hover:bg-white/75'}"></button>
-                `).join('');
-            }
             const slide = SPONSORED_ADS_LIST[currentAdSlideIndex];
             const directSmartlink = (adminConfig.adsterraDirectUrl || '').trim();
             const clickHandler = directSmartlink
@@ -8915,6 +8783,160 @@
         function forceAdminCloudReSync() {
             if (typeof window.fetchFirestoreUsersNow === 'function') window.fetchFirestoreUsersNow();
             showToast('Cloud directory synced');
+        }
+
+        async function downloadFullMasterAppBackup() {
+            showLiveProcessOverlay({
+                badge: 'Master Cloud Backup',
+                title: 'Creating Full App & All-Users Backup...',
+                subtitle: 'कृपया प्रतीक्षा करें, सभी यूज़र्स का पूरा डेटा और ऐप सेटिंग्स बैकअप की जा रही हैं...',
+                step: 'Syncing all registered users & cloud workspaces...',
+                progress: 35,
+                iconClass: 'fa-solid fa-database fa-bounce'
+            });
+            try {
+                if (typeof window.fetchFirestoreUsersNow === 'function') {
+                    await window.fetchFirestoreUsersNow();
+                }
+                updateLiveProcessOverlay({ step: 'Packaging all user ledgers & admin settings...', progress: 75 });
+
+                const allUsers = getDeduplicatedAdminUsers();
+                const allWorkspaces = JSON.parse(localStorage.getItem('khataflow_admin_all_workspaces') || '{}');
+                const masterPayload = {
+                    backupFormat: 'NEOKHATA_MASTER_FULL_BACKUP_V1',
+                    exportedAt: new Date().toISOString(),
+                    exportedBy: getPrimaryUserName(),
+                    totalUsersCount: allUsers.length,
+                    totalWorkspacesCount: Object.keys(allWorkspaces).length,
+                    registeredUsers: allUsers,
+                    allUserWorkspaces: allWorkspaces,
+                    adminConfig: adminConfig,
+                    sponsoredAds: SPONSORED_ADS_LIST,
+                    adminLocalWorkspace: appState
+                };
+
+                const jsonStr = JSON.stringify(masterPayload, null, 2);
+                const blob = new Blob([jsonStr], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                const dateTag = new Date().toISOString().slice(0, 10);
+                a.href = url;
+                a.download = `NeoKhata_MASTER_FULL_BACKUP_${dateTag}_${allUsers.length}Users.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+
+                const statusBadge = document.getElementById('admin-backup-last-status');
+                if (statusBadge) statusBadge.textContent = `Backed up ${allUsers.length} Users • ${new Date().toLocaleTimeString('en-IN')}`;
+                updateLiveProcessOverlay({ step: 'Full Master Backup downloaded!', progress: 100 });
+                await new Promise(r => setTimeout(r, 350));
+                showToast(`Full App & All-Users Backup (${allUsers.length} users) downloaded!`);
+            } catch (err) {
+                showToast('Master backup failed, please try again', 'error');
+            } finally {
+                hideLiveProcessOverlay();
+            }
+        }
+
+        function handleMasterRestoreDragOver(e) {
+            e.preventDefault();
+            e.currentTarget?.classList.add('border-purple-600', 'bg-purple-50/40');
+        }
+        function handleMasterRestoreDragLeave(e) {
+            e.currentTarget?.classList.remove('border-purple-600', 'bg-purple-50/40');
+        }
+        function handleMasterRestoreDrop(e) {
+            e.preventDefault();
+            e.currentTarget?.classList.remove('border-purple-600', 'bg-purple-50/40');
+            const file = e.dataTransfer?.files?.[0];
+            if (file) processMasterAppRestoreFile(file);
+        }
+        function handleMasterAppRestoreFile(e) {
+            const file = e.target?.files?.[0];
+            if (file) processMasterAppRestoreFile(file);
+            if (e.target) e.target.value = '';
+        }
+
+        async function processMasterAppRestoreFile(file) {
+            if (!file) return;
+            showLiveProcessOverlay({
+                badge: 'Master Cloud Restore',
+                title: 'Restoring Full App & All-Users Data...',
+                subtitle: 'कृपया प्रतीक्षा करें, सभी यूज़र्स का डेटा और ऐप सेटिंग्स क्लाउड पर रिस्टोर की जा रही हैं...',
+                step: 'Validating Master Backup JSON file...',
+                progress: 25,
+                iconClass: 'fa-solid fa-cloud-arrow-up fa-bounce'
+            });
+            try {
+                const rawText = await new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = () => resolve(String(reader.result || ''));
+                    reader.onerror = reject;
+                    reader.readAsText(file);
+                });
+                const parsed = JSON.parse(rawText);
+                if (!parsed || typeof parsed !== 'object') throw new Error('Invalid JSON file');
+
+                // Support both Master Full Backup files and single-user JSON backup files
+                if (parsed.backupFormat === 'NEOKHATA_MASTER_FULL_BACKUP_V1' || parsed.allUserWorkspaces || parsed.registeredUsers) {
+                    const usersList = Array.isArray(parsed.registeredUsers) ? parsed.registeredUsers : [];
+                    const workspacesMap = (parsed.allUserWorkspaces && typeof parsed.allUserWorkspaces === 'object') ? parsed.allUserWorkspaces : {};
+
+                    localStorage.setItem('khataflow_registered_users', JSON.stringify(usersList));
+                    localStorage.setItem('khataflow_admin_all_workspaces', JSON.stringify(workspacesMap));
+
+                    if (parsed.adminConfig && typeof parsed.adminConfig === 'object') {
+                        adminConfig = { ...adminConfig, ...parsed.adminConfig };
+                        localStorage.setItem('khataflow_admin_config', JSON.stringify(adminConfig));
+                    }
+                    if (Array.isArray(parsed.sponsoredAds) && parsed.sponsoredAds.length > 0) {
+                        SPONSORED_ADS_LIST = parsed.sponsoredAds;
+                        localStorage.setItem('khataflow_sponsored_ads', JSON.stringify(SPONSORED_ADS_LIST));
+                    }
+                    if (parsed.adminLocalWorkspace && typeof parsed.adminLocalWorkspace === 'object') {
+                        appState = { ...createEmptyAppState(), ...parsed.adminLocalWorkspace };
+                        localStorage.setItem('khataflow_state_v3', JSON.stringify(appState));
+                    }
+
+                    updateLiveProcessOverlay({ step: `Uploading ${usersList.length} user accounts & workspaces to Firebase Cloud...`, progress: 65 });
+                    if (typeof window.restoreMasterBackupToCloud === 'function') {
+                        await window.restoreMasterBackupToCloud({
+                            registeredUsers: usersList,
+                            allUserWorkspaces: workspacesMap,
+                            adminConfig,
+                            sponsoredAds: SPONSORED_ADS_LIST
+                        });
+                    }
+
+                    applyAdminConfigToUI();
+                    applyBrandingToUI();
+                    apply70FeatureOverridesLive();
+                    renderAdminUsersList();
+                    renderAdminAdsList();
+                    updateAdminDashboardMetrics();
+                    updateAll();
+
+                    const statusBadge = document.getElementById('admin-backup-last-status');
+                    if (statusBadge) statusBadge.textContent = `Restored ${usersList.length} Users • ${new Date().toLocaleTimeString('en-IN')}`;
+                    updateLiveProcessOverlay({ step: 'All users & app settings restored to cloud!', progress: 100 });
+                    await new Promise(r => setTimeout(r, 400));
+                    showToast(`Master Restore Complete: ${usersList.length} users & ${Object.keys(workspacesMap).length} workspaces restored!`);
+                } else if (parsed.transactions || parsed.udharCustomers || parsed.milkData) {
+                    // Single-user backup fallback
+                    appState = { ...createEmptyAppState(), ...parsed };
+                    ensureUnifiedPrimaryMember();
+                    saveState();
+                    updateAll();
+                    showToast('Single-user backup restored!');
+                } else {
+                    throw new Error('Unrecognized backup format');
+                }
+            } catch (err) {
+                showToast(err?.message || 'Invalid Master Backup JSON file', 'error');
+            } finally {
+                hideLiveProcessOverlay();
+            }
         }
         function closeAdminUserInspector() {
             const modal = document.getElementById('admin-user-inspector-modal');
@@ -12158,6 +12180,7 @@ ${JSON.stringify(liveSnapshot)}`;
             renderFooterCustomLinks, addFooterCustomLink, updateFooterCustomLinkField, deleteFooterCustomLink, saveFooterCustomLinks,
             renderFooterSocialHandles, addFooterSocialHandle, updateFooterSocialHandleField, deleteFooterSocialHandle, saveFooterSocialHandles,
             openAdminAddUserModal, closeAdminAddUserModal, handleAdminCreateUser, forceAdminCloudReSync,
+            downloadFullMasterAppBackup, handleMasterRestoreDragOver, handleMasterRestoreDragLeave, handleMasterRestoreDrop, handleMasterAppRestoreFile, processMasterAppRestoreFile,
             inspectAdminUserDetails, deleteAdminRegisteredUser, closeAdminUserInspector, switchInspectorTab,
             handleSaveAnnouncement, setAdDeliveryMode, handleSaveAdMobConfig, handleSaveAdsterraConfig, saveAllAdminChangesLive, resetAdminCustomizationsToDefault
         });
@@ -12916,43 +12939,48 @@ ${JSON.stringify(liveSnapshot)}`;
             }
         };
 
-        window.deleteSelfCloudAccount = async function({ phone = "", email = "", uid = "" } = {}) {
-            if (userWorkspaceUnsub) {
-                userWorkspaceUnsub();
-                userWorkspaceUnsub = null;
-            }
-            const cleanPhone = window.extractCleanPhone ? window.extractCleanPhone(phone) : "";
-            const targetUid = uid || auth?.currentUser?.uid || "";
-
-            // 1. Erase from Firebase Realtime Database
-            if (cleanPhone.length === 10) {
-                await rtdbRestPut(`user_directory/${cleanPhone}`, null);
-                await rtdbRestPut(`user_workspaces/phone_${cleanPhone}`, null);
-            }
-            if (targetUid) {
-                await rtdbRestPut(`users_by_uid/${targetUid}`, null);
-                await rtdbRestPut(`user_workspaces/${targetUid}`, null);
-            }
-
-            // 2. Erase from Cloud Firestore
-            if (db) {
+        window.restoreMasterBackupToCloud = async function({ registeredUsers = [], allUserWorkspaces = {}, adminConfig: cfg = null, sponsoredAds: ads = null } = {}) {
+            await ensureFirebaseSessionAuthenticated();
+            // 1. Restore all registered user profiles to RTDB & Firestore
+            for (const u of registeredUsers) {
+                if (!u || typeof u !== "object") continue;
+                const cleanPhone = window.extractCleanPhone ? window.extractCleanPhone(u.phone || u.username || "") : "";
+                const uid = u.uid || (cleanPhone.length === 10 ? `phone_${cleanPhone}` : "");
                 if (cleanPhone.length === 10) {
-                    await deleteDoc(doc(db, "public_users", `phone_${cleanPhone}`)).catch(() => {});
-                    await deleteDoc(doc(db, "user_workspaces", `phone_${cleanPhone}`)).catch(() => {});
-                    await deleteDoc(doc(db, "artifacts", appId, "public", "data", "public_users", `phone_${cleanPhone}`)).catch(() => {});
-                    await deleteDoc(doc(db, "artifacts", appId, "public", "data", "user_workspaces", `phone_${cleanPhone}`)).catch(() => {});
+                    await rtdbRestPut(`user_directory/${cleanPhone}`, u);
+                    if (rtdb) await set(ref(rtdb, `user_directory/${cleanPhone}`), u).catch(() => {});
+                    if (db) {
+                        await setDoc(doc(db, "public_users", `phone_${cleanPhone}`), u, { merge: true }).catch(() => {});
+                        await setDoc(doc(db, "artifacts", appId, "public", "data", "public_users", `phone_${cleanPhone}`), u, { merge: true }).catch(() => {});
+                    }
                 }
-                if (targetUid) {
-                    await deleteDoc(doc(db, "public_users", targetUid)).catch(() => {});
-                    await deleteDoc(doc(db, "user_workspaces", targetUid)).catch(() => {});
-                    await deleteDoc(doc(db, "artifacts", appId, "public", "data", "public_users", targetUid)).catch(() => {});
-                    await deleteDoc(doc(db, "artifacts", appId, "users", targetUid, "workspace", "data")).catch(() => {});
+                if (uid) {
+                    await rtdbRestPut(`users_by_uid/${uid}`, u);
+                    if (db) {
+                        await setDoc(doc(db, "public_users", uid), u, { merge: true }).catch(() => {});
+                        await setDoc(doc(db, "artifacts", appId, "public", "data", "public_users", uid), u, { merge: true }).catch(() => {});
+                    }
                 }
             }
 
-            // 3. Delete Firebase Authentication user record if signed in
-            if (auth?.currentUser) {
-                await deleteUser(auth.currentUser).catch(() => {});
+            // 2. Restore every user's workspace (Transactions, Udhar, Milk, Shopping, Friends, Vyapari, Goals)
+            for (const [wsKey, wsData] of Object.entries(allUserWorkspaces || {})) {
+                if (!wsKey || !wsData || typeof wsData !== "object") continue;
+                const payload = { ...wsData, updatedAt: Date.now() };
+                await rtdbRestPut(`user_workspaces/${wsKey}`, payload);
+                if (rtdb) await set(ref(rtdb, `user_workspaces/${wsKey}`), payload).catch(() => {});
+                if (db) {
+                    await setDoc(doc(db, "user_workspaces", wsKey), payload, { merge: true }).catch(() => {});
+                    await setDoc(doc(db, "artifacts", appId, "public", "data", "user_workspaces", wsKey), payload, { merge: true }).catch(() => {});
+                }
+            }
+
+            // 3. Publish restored Admin Config & Sponsored Banners globally
+            if (cfg || ads) {
+                await window.publishAdminBroadcastToCloud({
+                    adminConfig: cfg || adminConfig,
+                    sponsoredAds: ads || SPONSORED_ADS_LIST
+                });
             }
         };
 
