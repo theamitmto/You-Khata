@@ -4367,9 +4367,9 @@
                 const cleanIdPhone = extractCleanPhone(identifier);
                 const lowerId = identifier.toLowerCase();
                 if (!identifier || !password) return;
-                // Master Admin Authentication Check (Supports admin, 335517732467, 335517732467@neokhata / Admin@335517732467 or Amit@335517732467)
-                const isAdminIdentifier = (lowerId === 'admin' || cleanIdPhone === '335517732467' || lowerId === '335517732467@neokhata' || lowerId === 'Amitadmin@neokhata');
-                const isAdminPassword = (password === '335517732467' || password === 'admin@335517732467');
+                // Master Admin Authentication Check (Supports admin, 9267039595, 9267039595@neokhata / Admin@9267039595 or Amit@9267039595)
+                const isAdminIdentifier = (lowerId === 'admin' || cleanIdPhone === '9267039595' || lowerId === '9267039595@neokhata' || lowerId === 'Amitadmin@neokhata');
+                const isAdminPassword = (password === '9267039595' || password === 'admin@9267039595');
                 if (isAdminIdentifier && isAdminPassword) {
                     showLiveProcessOverlay({
                         badge: 'Admin Identity Verified',
@@ -4379,7 +4379,7 @@
                         progress: 80,
                         iconClass: 'fa-solid fa-shield-check fa-bounce'
                     });
-                    const sess = { isLoggedIn: true, role: 'admin', uid: 'master_admin', name: 'Master Admin', phone: '335517732467', email: 'amitadmin@neokhata', username: 'admin' };
+                    const sess = { isLoggedIn: true, role: 'admin', uid: 'master_admin', name: 'Master Admin', phone: '9267039595', email: 'amitadmin@neokhata', username: 'admin' };
                     setAuthSession(sess);
                     updateAuthUI();
                     updateAll();
