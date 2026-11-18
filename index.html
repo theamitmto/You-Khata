@@ -3231,35 +3231,35 @@
                     <span class="nav-label text-[9.5px] font-extrabold mt-0.5 tracking-tight whitespace-nowrap text-blue-700 dark:text-blue-300">Dashboard</span>
                 </button>
                 <button onclick="switchTab('transactions')" id="nav-btn-transactions" class="nav-tab-btn min-w-[64px] sm:min-w-[74px] flex-shrink-0 snap-start flex flex-col items-center justify-center py-1 px-1.5 rounded-xl transition-all duration-200 group hover:bg-white/40 dark:hover:bg-neutral-800/40 text-neutral-600 dark:text-neutral-300">
-                    <div class="relative w-7 h-7 rounded-lg flex items-center justify-center transition-all bg-sky-500/15 text-sky-600 dark:text-sky-400 group-hover:scale-105"><i class="fa-solid fa-clock-rotate-left text-[11px]"></i></div>
+                    <div class="relative w-7 h-7 rounded-lg flex items-center justify-center transition-all bg-sky-500/15 text-sky-600 dark:text-sky-400 group-hover:scale-105"><i class="fa-solid fa-clock-rotate-left text-[11px]"></i><span id="nav-lock-transactions" class="hidden absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-amber-500 text-white text-[8px] items-center justify-center shadow"><i class="fa-solid fa-lock"></i></span></div>
                     <span class="nav-label text-[9.5px] font-bold mt-0.5 tracking-tight whitespace-nowrap text-neutral-800 dark:text-neutral-200">History</span>
                 </button>
                 <button onclick="switchTab('grocery')" id="nav-btn-grocery" class="nav-tab-btn min-w-[64px] sm:min-w-[74px] flex-shrink-0 snap-start flex flex-col items-center justify-center py-1 px-1.5 rounded-xl transition-all duration-200 group hover:bg-white/40 dark:hover:bg-neutral-800/40 text-neutral-600 dark:text-neutral-300">
-                    <div class="relative w-7 h-7 rounded-lg flex items-center justify-center transition-all bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 group-hover:scale-105"><i class="fa-solid fa-cart-shopping text-[11px]"></i></div>
+                    <div class="relative w-7 h-7 rounded-lg flex items-center justify-center transition-all bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 group-hover:scale-105"><i class="fa-solid fa-cart-shopping text-[11px]"></i><span id="nav-lock-grocery" class="hidden absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-amber-500 text-white text-[8px] items-center justify-center shadow"><i class="fa-solid fa-lock"></i></span></div>
                     <span class="nav-label text-[9.5px] font-bold mt-0.5 tracking-tight whitespace-nowrap text-neutral-800 dark:text-neutral-200">Shopping</span>
                 </button>
                 <button onclick="switchTab('udhar')" id="nav-btn-udhar" class="nav-tab-btn min-w-[64px] sm:min-w-[74px] flex-shrink-0 snap-start flex flex-col items-center justify-center py-1 px-1.5 rounded-xl transition-all duration-200 group hover:bg-white/40 dark:hover:bg-neutral-800/40 text-neutral-600 dark:text-neutral-300">
-                    <div class="relative w-7 h-7 rounded-lg flex items-center justify-center transition-all bg-rose-500/15 text-rose-600 dark:text-rose-400 group-hover:scale-105"><i class="fa-solid fa-book-open text-[11px]"></i></div>
+                    <div class="relative w-7 h-7 rounded-lg flex items-center justify-center transition-all bg-rose-500/15 text-rose-600 dark:text-rose-400 group-hover:scale-105"><i class="fa-solid fa-book-open text-[11px]"></i><span id="nav-lock-udhar" class="hidden absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-amber-500 text-white text-[8px] items-center justify-center shadow"><i class="fa-solid fa-lock"></i></span></div>
                     <span class="nav-label text-[9.5px] font-bold mt-0.5 tracking-tight whitespace-nowrap text-neutral-800 dark:text-neutral-200">Udhar Khata</span>
                 </button>
                 <button onclick="switchTab('milk')" id="nav-btn-milk" class="nav-tab-btn min-w-[64px] sm:min-w-[74px] flex-shrink-0 snap-start flex flex-col items-center justify-center py-1 px-1.5 rounded-xl transition-all duration-200 group hover:bg-white/40 dark:hover:bg-neutral-800/40 text-neutral-600 dark:text-neutral-300" title="Milk Ledger">
-                    <div class="relative w-7 h-7 rounded-lg flex items-center justify-center transition-all bg-cyan-500/15 text-cyan-600 dark:text-cyan-400 group-hover:scale-105"><i class="fa-solid fa-cow text-[11px]"></i></div>
+                    <div class="relative w-7 h-7 rounded-lg flex items-center justify-center transition-all bg-cyan-500/15 text-cyan-600 dark:text-cyan-400 group-hover:scale-105"><i class="fa-solid fa-cow text-[11px]"></i><span id="nav-lock-milk" class="hidden absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-amber-500 text-white text-[8px] items-center justify-center shadow"><i class="fa-solid fa-lock"></i></span></div>
                     <span class="nav-label text-[9.5px] font-bold mt-0.5 tracking-tight whitespace-nowrap text-neutral-800 dark:text-neutral-200">Milk Ledger</span>
                 </button>
                 <button onclick="switchTab('vyapari')" id="nav-btn-vyapari" class="nav-tab-btn min-w-[64px] sm:min-w-[74px] flex-shrink-0 snap-start flex flex-col items-center justify-center py-1 px-1.5 rounded-xl transition-all duration-200 group hover:bg-white/40 dark:hover:bg-neutral-800/40 text-neutral-600 dark:text-neutral-300" title="Vyapari Mandi">
-                    <div class="relative w-7 h-7 rounded-lg flex items-center justify-center transition-all bg-amber-500/15 text-amber-600 dark:text-amber-400 group-hover:scale-105"><i class="fa-solid fa-wheat-awn text-[11px]"></i></div>
+                    <div class="relative w-7 h-7 rounded-lg flex items-center justify-center transition-all bg-amber-500/15 text-amber-600 dark:text-amber-400 group-hover:scale-105"><i class="fa-solid fa-wheat-awn text-[11px]"></i><span id="nav-lock-vyapari" class="hidden absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-amber-500 text-white text-[8px] items-center justify-center shadow"><i class="fa-solid fa-lock"></i></span></div>
                     <span class="nav-label text-[9.5px] font-bold mt-0.5 tracking-tight whitespace-nowrap text-neutral-800 dark:text-neutral-200">Vyapari</span>
                 </button>
                 <button onclick="switchTab('hub')" id="nav-btn-hub" class="nav-tab-btn min-w-[64px] sm:min-w-[74px] flex-shrink-0 snap-start flex flex-col items-center justify-center py-1 px-1.5 rounded-xl transition-all duration-200 group hover:bg-white/40 dark:hover:bg-neutral-800/40 text-neutral-600 dark:text-neutral-300">
-                    <div class="relative w-7 h-7 rounded-lg flex items-center justify-center transition-all bg-purple-500/15 text-purple-600 dark:text-purple-400 group-hover:scale-105"><i class="fa-solid fa-users text-[11px]"></i></div>
+                    <div class="relative w-7 h-7 rounded-lg flex items-center justify-center transition-all bg-purple-500/15 text-purple-600 dark:text-purple-400 group-hover:scale-105"><i class="fa-solid fa-users text-[11px]"></i><span id="nav-lock-hub" class="hidden absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-amber-500 text-white text-[8px] items-center justify-center shadow"><i class="fa-solid fa-lock"></i></span></div>
                     <span class="nav-label text-[9.5px] font-bold mt-0.5 tracking-tight whitespace-nowrap text-neutral-800 dark:text-neutral-200">Friends Split</span>
                 </button>
                 <button onclick="switchTab('analytics')" id="nav-btn-analytics" class="nav-tab-btn min-w-[64px] sm:min-w-[74px] flex-shrink-0 snap-start flex flex-col items-center justify-center py-1 px-1.5 rounded-xl transition-all duration-200 group hover:bg-white/40 dark:hover:bg-neutral-800/40 text-neutral-600 dark:text-neutral-300">
-                    <div class="relative w-7 h-7 rounded-lg flex items-center justify-center transition-all bg-orange-500/15 text-orange-600 dark:text-orange-400 group-hover:scale-105"><i class="fa-solid fa-chart-line text-[11px]"></i></div>
+                    <div class="relative w-7 h-7 rounded-lg flex items-center justify-center transition-all bg-orange-500/15 text-orange-600 dark:text-orange-400 group-hover:scale-105"><i class="fa-solid fa-chart-line text-[11px]"></i><span id="nav-lock-analytics" class="hidden absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-amber-500 text-white text-[8px] items-center justify-center shadow"><i class="fa-solid fa-lock"></i></span></div>
                     <span class="nav-label text-[9.5px] font-bold mt-0.5 tracking-tight whitespace-nowrap text-neutral-800 dark:text-neutral-200">Reports</span>
                 </button>
                 <button onclick="openKhataFlowAiChat()" id="nav-btn-ai" class="nav-tab-btn min-w-[64px] sm:min-w-[74px] flex-shrink-0 snap-start flex flex-col items-center justify-center py-1 px-1.5 rounded-xl transition-all duration-200 group hover:bg-indigo-500/15 text-indigo-600 dark:text-indigo-400" title="NeoKhata AI Assistant">
-                    <div class="relative w-7 h-7 rounded-lg flex items-center justify-center transition-all bg-gradient-to-tr from-indigo-600 via-purple-600 to-pink-500 text-white shadow-xs shadow-indigo-500/25 group-hover:scale-105"><i class="fa-solid fa-robot text-[11px]"></i><span class="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 rounded-full bg-emerald-400 ring-1 ring-white dark:ring-neutral-900"></span></div>
+                    <div class="relative w-7 h-7 rounded-lg flex items-center justify-center transition-all bg-gradient-to-tr from-indigo-600 via-purple-600 to-pink-500 text-white shadow-xs shadow-indigo-500/25 group-hover:scale-105"><i class="fa-solid fa-robot text-[11px]"></i><span id="nav-lock-ai" class="hidden absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-amber-500 text-white text-[8px] items-center justify-center shadow"><i class="fa-solid fa-lock"></i></span><span class="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 rounded-full bg-emerald-400 ring-1 ring-white dark:ring-neutral-900"></span></div>
                     <span class="nav-label text-[9.5px] font-extrabold mt-0.5 tracking-tight whitespace-nowrap text-indigo-700 dark:text-indigo-300">AI Advisor</span>
                 </button>
                 <button onclick="switchTab('admin')" id="nav-btn-admin" class="hidden nav-tab-btn min-w-[64px] sm:min-w-[74px] flex-shrink-0 snap-start flex-col items-center justify-center py-1 px-1.5 rounded-xl transition-all duration-200 group hover:bg-amber-500/15 text-amber-600">
@@ -4181,6 +4181,15 @@
             </div>
 
             <div id="sub-modal-custom-offer-banner" class="hidden p-3 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-800 dark:text-emerald-200 font-bold"></div>
+
+            <!-- Live Subscription Countdown & Feature Access Matrix for User -->
+            <div id="sub-modal-access-breakdown" class="p-3.5 rounded-2xl bg-neutral-100/90 dark:bg-neutral-800/80 border border-neutral-200 dark:border-neutral-700 space-y-2.5">
+                <div class="flex items-center justify-between gap-2">
+                    <span class="text-[10px] font-black uppercase tracking-wider text-neutral-500">Your Plan Countdown &amp; Feature Access</span>
+                    <span id="sub-modal-live-countdown-pill" class="px-2.5 py-0.5 rounded-full bg-primary-600/15 text-primary-700 dark:text-primary-300 font-mono font-black text-[10px]">Free / Demo Mode</span>
+                </div>
+                <div id="sub-modal-feature-status-pills" class="grid grid-cols-2 gap-1.5 text-[10px]"></div>
+            </div>
 
             <div>
                 <label class="block text-[10px] font-black uppercase text-neutral-400 mb-2">1. Select Membership Plan</label>
@@ -9732,6 +9741,12 @@
         }
 
         function openKhataFlowAiChat() {
+            if (!canCurrentUserAccessFeature('ai')) {
+                const status = getFeatureAccessStatus('ai');
+                showToast(status.reason || 'AI Advisor Demo expired! Please subscribe to unlock.', 'error');
+                openSubscriptionUpgradeModal('ai');
+                return;
+            }
             const modal = document.getElementById('khataflow-ai-modal');
             if (!modal) return;
             modal.classList.remove('hidden');
@@ -12181,6 +12196,8 @@ ${JSON.stringify(liveSnapshot)}`;
 
         function switchTab(tabId) {
             if (!canCurrentUserAccessFeature(tabId)) {
+                const status = getFeatureAccessStatus(tabId);
+                showToast(status.reason || `"${tabId.toUpperCase()}" is locked. Please subscribe to unlock!`, 'error');
                 openSubscriptionUpgradeModal(tabId);
                 return;
             }
@@ -12192,13 +12209,8 @@ ${JSON.stringify(liveSnapshot)}`;
 
             document.querySelectorAll('.nav-tab-btn').forEach(btn => {
                 const isTarget = btn.id === `nav-btn-${tabId}`;
-                btn.classList.toggle('bg-blue-50/90', isTarget);
-                btn.classList.toggle('dark:bg-blue-950/50', isTarget);
-                btn.classList.toggle('text-blue-600', isTarget);
-                btn.classList.toggle('dark:text-blue-400', isTarget);
-                if (isTarget) {
-                    btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-                }
+                btn.classList.toggle('bg-blue-500/15', isTarget);
+                btn.classList.toggle('dark:bg-blue-500/20', isTarget);
             });
 
             document.querySelectorAll('.menu-nav-item').forEach(mBtn => {
@@ -12228,6 +12240,147 @@ ${JSON.stringify(liveSnapshot)}`;
                 updateCharts();
             }
             window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function getCurrentUserAccountAgeMs() {
+            const sess = getAuthSession() || {};
+            const users = getDeduplicatedAdminUsers();
+            const ph = extractCleanPhone(sess.phone || appState.userProfile?.phone || '');
+            const matched = users.find(u => (ph && extractCleanPhone(u.phone || '') === ph) || (sess.email && (u.email || '').toLowerCase() === sess.email.toLowerCase()));
+            let createdStr = matched?.createdAt || appState.userProfile?.createdAt;
+            if (!createdStr) {
+                const fallbackKey = `neokhata_trial_start_${getCurrentUserSubKey()}`;
+                createdStr = localStorage.getItem(fallbackKey);
+                if (!createdStr) {
+                    createdStr = new Date().toISOString();
+                    localStorage.setItem(fallbackKey, createdStr);
+                }
+            }
+            const createdTs = new Date(createdStr).getTime();
+            if (isNaN(createdTs)) return 0;
+            return Math.max(0, Date.now() - createdTs);
+        }
+
+        function getCurrentUserAccountAgeDays() {
+            return Math.floor(getCurrentUserAccountAgeMs() / 86400000);
+        }
+
+        function getFeatureCurrentUsageCount(featureKey) {
+            if (featureKey === 'dashboard' || featureKey === 'transactions') return (appState.transactions || []).length;
+            if (featureKey === 'grocery') return (appState.groceryItems || []).length;
+            if (featureKey === 'udhar') return (appState.udharCustomers || []).length;
+            if (featureKey === 'hub') return (appState.splitBills || []).length;
+            if (featureKey === 'milk') return (appState.milkData?.entries || []).length;
+            if (featureKey === 'vyapari') return (appState.vyapariInvoices || []).length;
+            return 0;
+        }
+
+        function getCurrentUserSubKey() {
+            const sess = getAuthSession() || {};
+            const ph = extractCleanPhone(sess.phone || appState.userProfile?.phone || '');
+            if (ph.length === 10) return `phone_${ph}`;
+            return (sess.email || sess.uid || 'guest').toLowerCase();
+        }
+
+        function getUserSubscriptionAccess(userKey = getCurrentUserSubKey()) {
+            const sess = getAuthSession() || {};
+            if (sess.role === 'admin' && userKey === getCurrentUserSubKey()) {
+                return { isPro: true, isVipFree: true, planName: 'Master Admin Unlimited', expiresAt: null, remainingMs: Infinity, remainingDays: 9999, customPrice: 0, assignedPlanId: '' };
+            }
+            const sc = ensureSubscriptionConfig();
+            const ov = sc.userOverrides[userKey] || {};
+            if (ov.vipFree) {
+                return {
+                    isPro: true,
+                    isVipFree: true,
+                    planName: ov.planName || 'VIP Free Access',
+                    expiresAt: null,
+                    remainingMs: Infinity,
+                    remainingDays: 9999,
+                    customPrice: 0,
+                    assignedPlanId: ov.assignedPlanId || ''
+                };
+            }
+            const now = Date.now();
+            const expTs = ov.expiresAt ? new Date(ov.expiresAt).getTime() : 0;
+            const remainingMs = Math.max(0, expTs - now);
+            const activeSub = remainingMs > 0;
+            const remainingDays = activeSub ? Math.ceil(remainingMs / 86400000) : 0;
+            return {
+                isPro: activeSub,
+                isVipFree: false,
+                isExpired: expTs > 0 && !activeSub,
+                planName: activeSub ? (ov.planName || 'Pro Active') : (expTs > 0 ? 'Plan Expired' : 'Free / Demo Plan'),
+                expiresAt: ov.expiresAt || null,
+                remainingMs,
+                remainingDays,
+                customPrice: ov.customPrice !== undefined && ov.customPrice !== '' ? Number(ov.customPrice) : null,
+                assignedPlanId: ov.assignedPlanId || ''
+            };
+        }
+
+        function getFeatureAccessStatus(featureKey) {
+            const sess = getAuthSession() || {};
+            if (!sess.isLoggedIn || sess.role === 'admin') {
+                return { allowed: true, mode: 'admin', label: 'Unlimited', remainingMs: Infinity, reason: '' };
+            }
+            const sub = getUserSubscriptionAccess();
+            if (sub.isPro) {
+                return {
+                    allowed: true,
+                    mode: 'pro',
+                    label: sub.isVipFree ? 'VIP Unlocked' : `${sub.remainingDays}d Left`,
+                    remainingMs: sub.remainingMs,
+                    reason: ''
+                };
+            }
+            const sc = ensureSubscriptionConfig();
+            const rule = sc.featureRules?.[featureKey];
+            const isPaid = rule ? !!rule.isPaid : !!sc.featurePaidMap[featureKey];
+            if (!isPaid) {
+                return { allowed: true, mode: 'free', label: 'Free Forever', remainingMs: Infinity, reason: '' };
+            }
+
+            const freeDays = Number(rule?.freeDays) || 0;
+            const limit = Number(rule?.freeLimit) || 0;
+            const used = getFeatureCurrentUsageCount(featureKey);
+            const ageMs = getCurrentUserAccountAgeMs();
+            const trialTotalMs = freeDays * 86400000;
+            const trialRemainingMs = Math.max(0, trialTotalMs - ageMs);
+
+            if (freeDays > 0 && trialRemainingMs > 0) {
+                if (limit <= 0 || used < limit) {
+                    const daysLeft = Math.ceil(trialRemainingMs / 86400000);
+                    return {
+                        allowed: true,
+                        mode: 'demo',
+                        label: `Demo (${daysLeft}d left)`,
+                        remainingMs: trialRemainingMs,
+                        reason: ''
+                    };
+                }
+                return {
+                    allowed: false,
+                    mode: 'locked',
+                    label: 'Locked (Limit Over)',
+                    remainingMs: 0,
+                    reason: rule?.lockMessage || `"${rule?.label || featureKey}" free demo limit (${limit}) reached! Subscribe to unlock.`
+                };
+            }
+
+            return {
+                allowed: false,
+                mode: 'locked',
+                label: 'Locked (Pro)',
+                remainingMs: 0,
+                reason: rule?.lockMessage || (freeDays > 0
+                    ? `"${rule?.label || featureKey}" ${freeDays}-day free demo has ended! Subscribe to unlock.`
+                    : `"${rule?.label || featureKey}" is a Paid Pro feature. Subscribe to unlock.`)
+            };
+        }
+
+        function canCurrentUserAccessFeature(featureKey) {
+            return getFeatureAccessStatus(featureKey).allowed;
         }
 
         function toggleSideMenu(forceOpen) {
@@ -12892,8 +13045,10 @@ ${JSON.stringify(liveSnapshot)}`;
             if (!adminConfig.subscriptionConfig || typeof adminConfig.subscriptionConfig !== 'object') {
                 adminConfig.subscriptionConfig = {
                     upiId: '6393954985@upi',
+                    merchantLabel: 'NeoKhata Verified Merchant Gateway',
                     freeTxLimit: 25,
                     freeCustLimit: 5,
+                    coupons: [{ code: 'NEOPRO50', discountPct: 50 }],
                     featurePaidMap: {
                         dashboard: false,
                         transactions: false,
@@ -12919,6 +13074,8 @@ ${JSON.stringify(liveSnapshot)}`;
             }
             const sc = adminConfig.subscriptionConfig;
             if (!sc.upiId) sc.upiId = '6393954985@upi';
+            if (!sc.merchantLabel) sc.merchantLabel = 'NeoKhata Verified Merchant Gateway';
+            if (!Array.isArray(sc.coupons)) sc.coupons = [{ code: 'NEOPRO50', discountPct: 50 }];
             if (!sc.featurePaidMap || typeof sc.featurePaidMap !== 'object') sc.featurePaidMap = {};
             if (!sc.featureRules || typeof sc.featureRules !== 'object') sc.featureRules = {};
             if (!Array.isArray(sc.customFeatures)) sc.customFeatures = [];
@@ -12956,85 +13113,6 @@ ${JSON.stringify(liveSnapshot)}`;
             return sc;
         }
 
-        function getCurrentUserAccountAgeDays() {
-            const sess = getAuthSession() || {};
-            const users = getDeduplicatedAdminUsers();
-            const ph = extractCleanPhone(sess.phone || appState.userProfile?.phone || '');
-            const matched = users.find(u => (ph && extractCleanPhone(u.phone || '') === ph) || (sess.email && (u.email || '').toLowerCase() === sess.email.toLowerCase()));
-            const createdStr = matched?.createdAt || appState.userProfile?.createdAt;
-            if (!createdStr) return 0;
-            const createdTs = new Date(createdStr).getTime();
-            if (isNaN(createdTs)) return 0;
-            return Math.max(0, Math.floor((Date.now() - createdTs) / 86400000));
-        }
-
-        function getFeatureCurrentUsageCount(featureKey) {
-            if (featureKey === 'dashboard' || featureKey === 'transactions') return (appState.transactions || []).length;
-            if (featureKey === 'grocery') return (appState.groceryItems || []).length;
-            if (featureKey === 'udhar') return (appState.udharCustomers || []).length;
-            if (featureKey === 'hub') return (appState.splitBills || []).length;
-            if (featureKey === 'milk') return (appState.milkData?.entries || []).length;
-            if (featureKey === 'vyapari') return (appState.vyapariInvoices || []).length;
-            return 0;
-        }
-
-        function getCurrentUserSubKey() {
-            const sess = getAuthSession() || {};
-            const ph = extractCleanPhone(sess.phone || appState.userProfile?.phone || '');
-            if (ph.length === 10) return `phone_${ph}`;
-            return (sess.email || sess.uid || 'guest').toLowerCase();
-        }
-
-        function getUserSubscriptionAccess(userKey = getCurrentUserSubKey()) {
-            const sess = getAuthSession() || {};
-            if (sess.role === 'admin' && userKey === getCurrentUserSubKey()) {
-                return { isPro: true, isVipFree: true, planName: 'Master Admin Unlimited', expiresAt: null, customPrice: 0, assignedPlanId: '' };
-            }
-            const sc = ensureSubscriptionConfig();
-            const ov = sc.userOverrides[userKey] || {};
-            if (ov.vipFree) {
-                return {
-                    isPro: true,
-                    isVipFree: true,
-                    planName: ov.planName || 'VIP Free Access',
-                    expiresAt: null,
-                    customPrice: 0,
-                    assignedPlanId: ov.assignedPlanId || ''
-                };
-            }
-            const now = Date.now();
-            const expTs = ov.expiresAt ? new Date(ov.expiresAt).getTime() : 0;
-            const activeSub = expTs > now;
-            return {
-                isPro: activeSub,
-                isVipFree: false,
-                planName: activeSub ? (ov.planName || 'Pro Active') : 'Free Plan',
-                expiresAt: ov.expiresAt || null,
-                customPrice: ov.customPrice !== undefined && ov.customPrice !== '' ? Number(ov.customPrice) : null,
-                assignedPlanId: ov.assignedPlanId || ''
-            };
-        }
-
-        function canCurrentUserAccessFeature(featureKey) {
-            const sess = getAuthSession() || {};
-            if (!sess.isLoggedIn || sess.role === 'admin') return true;
-            if (getUserSubscriptionAccess().isPro) return true;
-            const sc = ensureSubscriptionConfig();
-            const rule = sc.featureRules?.[featureKey];
-            const isPaid = rule ? !!rule.isPaid : !!sc.featurePaidMap[featureKey];
-            if (!isPaid) return true;
-
-            // Check Free Trial Days allowance for this paid feature
-            const freeDays = Number(rule?.freeDays) || 0;
-            const ageDays = getCurrentUserAccountAgeDays();
-            if (freeDays > 0 && ageDays < freeDays) {
-                const limit = Number(rule?.freeLimit) || 0;
-                const used = getFeatureCurrentUsageCount(featureKey);
-                if (limit <= 0 || used < limit) return true;
-            }
-            return false;
-        }
-
         function checkSubscriptionQuota(kind) {
             const sess = getAuthSession() || {};
             if (!sess.isLoggedIn || sess.role === 'admin') return true;
@@ -13068,21 +13146,96 @@ ${JSON.stringify(liveSnapshot)}`;
             const hdrBtn = document.getElementById('header-sub-badge-btn');
             const hdrTxt = document.getElementById('header-sub-badge-text');
             if (hdrBtn && hdrTxt) {
-                hdrTxt.textContent = access.isVipFree ? 'VIP Pro' : (access.isPro ? 'Pro Active' : 'Go Pro');
+                if (access.isVipFree) {
+                    hdrTxt.textContent = 'VIP Pro • Unlimited';
+                } else if (access.isPro) {
+                    hdrTxt.textContent = `${access.remainingDays}d Left • ${formatLiveCountdown(access.remainingMs)}`;
+                } else {
+                    const sc = ensureSubscriptionConfig();
+                    const paidKeys = Object.keys(sc.featureRules || {}).filter(k => sc.featureRules[k]?.isPaid);
+                    const activeDemos = paidKeys.map(k => getFeatureAccessStatus(k)).filter(s => s.mode === 'demo');
+                    if (activeDemos.length > 0) {
+                        const minDemoMs = Math.min(...activeDemos.map(d => d.remainingMs));
+                        const demoDays = Math.ceil(minDemoMs / 86400000);
+                        hdrTxt.textContent = `Demo: ${demoDays}d Left • Go Pro`;
+                    } else {
+                        hdrTxt.textContent = access.isExpired ? 'Expired • Renew Pro' : 'Go Pro';
+                    }
+                }
                 hdrBtn.className = access.isPro
-                    ? 'px-3 py-2 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white text-xs font-black shadow-md flex items-center gap-1.5 transition active:scale-95'
-                    : 'px-3 py-2 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white text-xs font-black shadow-md shadow-amber-500/25 flex items-center gap-1.5 transition active:scale-95';
+                    ? 'px-3 py-2 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white text-xs font-black shadow-md flex items-center gap-1.5 transition active:scale-95 tabular-nums'
+                    : 'px-3 py-2 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white text-xs font-black shadow-md shadow-amber-500/25 flex items-center gap-1.5 transition active:scale-95 tabular-nums';
             }
+
+            ['transactions', 'grocery', 'udhar', 'milk', 'vyapari', 'hub', 'analytics', 'ai'].forEach(fKey => {
+                const st = getFeatureAccessStatus(fKey);
+                const lockBadge = document.getElementById(`nav-lock-${fKey}`);
+                const navBtn = document.getElementById(`nav-btn-${fKey}`);
+                if (lockBadge) {
+                    lockBadge.classList.toggle('hidden', st.allowed);
+                    lockBadge.classList.toggle('flex', !st.allowed);
+                }
+                if (navBtn) {
+                    navBtn.classList.toggle('opacity-75', !st.allowed);
+                }
+                const menuItem = document.querySelector(`.menu-nav-item[data-menu-tab="${fKey}"]`);
+                if (menuItem) {
+                    let statusTag = menuItem.querySelector('.menu-feature-lock-pill');
+                    if (!statusTag) {
+                        statusTag = document.createElement('span');
+                        statusTag.className = 'menu-feature-lock-pill px-2 py-0.5 rounded-full text-[9px] font-black uppercase mr-1 flex-shrink-0';
+                        const chev = menuItem.querySelector('i.fa-chevron-right');
+                        if (chev && chev.parentElement) chev.parentElement.insertBefore(statusTag, chev);
+                    }
+                    if (!st.allowed) {
+                        statusTag.textContent = '🔒 Locked';
+                        statusTag.className = 'menu-feature-lock-pill px-2 py-0.5 rounded-full text-[9px] font-black uppercase mr-1 flex-shrink-0 bg-amber-500/20 text-amber-700 dark:text-amber-300';
+                    } else if (st.mode === 'demo') {
+                        statusTag.textContent = st.label;
+                        statusTag.className = 'menu-feature-lock-pill px-2 py-0.5 rounded-full text-[9px] font-black uppercase mr-1 flex-shrink-0 bg-indigo-500/15 text-indigo-600 dark:text-indigo-300';
+                    } else {
+                        statusTag.textContent = '';
+                        statusTag.className = 'menu-feature-lock-pill hidden';
+                    }
+                }
+            });
+
             const menuTitle = document.getElementById('menu-sub-plan-title');
             const menuSub = document.getElementById('menu-sub-plan-sub');
             const menuPill = document.getElementById('menu-sub-plan-pill');
-            if (menuTitle) menuTitle.textContent = access.planName;
+            if (menuTitle) {
+                menuTitle.textContent = access.isPro && !access.isVipFree
+                    ? `${access.planName} (${access.remainingDays} Days Left)`
+                    : access.planName;
+            }
             if (menuSub) {
                 menuSub.textContent = access.isVipFree
                     ? 'All Paid Features Unlocked Free by Admin'
-                    : (access.expiresAt ? `Valid till ${new Date(access.expiresAt).toLocaleDateString('en-IN')}` : 'Instant UPI Auto-Verified Membership');
+                    : (access.expiresAt
+                        ? (access.isPro
+                            ? `⏱ Countdown: ${formatLiveCountdown(access.remainingMs)} • Valid till ${new Date(access.expiresAt).toLocaleDateString('en-IN')}`
+                            : `Expired on ${new Date(access.expiresAt).toLocaleDateString('en-IN')} • Tap to Renew`)
+                        : 'Check Free Features, Demo Countdown & Upgrade');
             }
-            if (menuPill) menuPill.textContent = access.isPro ? 'PRO' : 'FREE';
+            if (menuPill) {
+                menuPill.textContent = access.isPro ? `${access.remainingDays}D PRO` : 'FREE';
+            }
+
+            const modalCountdown = document.getElementById('sub-modal-live-countdown-pill');
+            if (modalCountdown) {
+                modalCountdown.textContent = access.isVipFree
+                    ? 'VIP Unlimited'
+                    : (access.isPro ? `⏱ ${access.remainingDays}d Left (${formatLiveCountdown(access.remainingMs)})` : 'Free / Demo Mode');
+            }
+        }
+
+        let subscriptionCountdownInterval = null;
+        function startSubscriptionCountdownTicker() {
+            if (subscriptionCountdownInterval) clearInterval(subscriptionCountdownInterval);
+            updateSubscriptionStatusBadges();
+            subscriptionCountdownInterval = setInterval(() => {
+                updateSubscriptionStatusBadges();
+            }, 1000);
         }
 
         let selectedCheckoutPlanId = '';
@@ -13099,59 +13252,82 @@ ${JSON.stringify(liveSnapshot)}`;
 
             const statusEl = document.getElementById('sub-modal-current-status');
             if (statusEl) {
+                const subText = access.isPro && !access.isVipFree
+                    ? `${access.planName} • ${access.remainingDays} Days Left`
+                    : access.planName;
                 statusEl.textContent = lockedFeature
-                    ? `"${lockedFeature.toUpperCase()}" requires Pro • Current: ${access.planName}`
-                    : `Current Status: ${access.planName}`;
+                    ? `🔒 "${lockedFeature.toUpperCase()}" Locked • Current: ${subText}`
+                    : `Current Status: ${subText}`;
             }
 
             const offerBanner = document.getElementById('sub-modal-custom-offer-banner');
             if (offerBanner) {
                 if (ov.vipFree) {
                     offerBanner.classList.remove('hidden');
-                    offerBanner.textContent = '🎉 Admin has granted you 100% Free VIP Pro Access! All paid features are unlocked.';
-                } else if (ov.customPrice !== undefined && ov.customPrice !== '' && ov.customPrice !== null) {
+                    offerBanner.textContent = '🎉 VIP Free Access is active on your account — all Pro features are unlocked!';
+                } else if (ov.customPrice !== undefined && ov.customPrice !== null && ov.customPrice !== '') {
                     offerBanner.classList.remove('hidden');
-                    offerBanner.textContent = `⭐ Special Admin Offer Assigned For You: ₹${Number(ov.customPrice).toLocaleString('en-IN')}`;
+                    offerBanner.textContent = `⭐ Special Admin Offer: Custom Plan Price ₹${ov.customPrice} assigned to your account!`;
                 } else {
                     offerBanner.classList.add('hidden');
                 }
             }
 
+            const pillsBox = document.getElementById('sub-modal-feature-status-pills');
+            if (pillsBox) {
+                const allCatalog = [...SUBSCRIPTION_FEATURE_CATALOG, ...(sc.customFeatures || [])];
+                pillsBox.innerHTML = allCatalog.map(f => {
+                    const rule = sc.featureRules?.[f.key] || {};
+                    const st = getFeatureAccessStatus(f.key);
+                    const badgeCls = !st.allowed
+                        ? 'bg-rose-500/15 text-rose-700 dark:text-rose-300 border-rose-500/30'
+                        : (st.mode === 'demo'
+                            ? 'bg-indigo-500/15 text-indigo-700 dark:text-indigo-300 border-indigo-500/30'
+                            : 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border-emerald-500/30');
+                    const icon = !st.allowed ? '🔒' : (st.mode === 'demo' ? '⏳' : '✅');
+                    return `
+                        <div class="px-2.5 py-1.5 rounded-xl border ${badgeCls} flex items-center justify-between gap-1.5">
+                            <span class="font-bold truncate">${icon} ${rule.label || f.label}</span>
+                            <span class="font-black text-[9px] uppercase whitespace-nowrap">${st.label}</span>
+                        </div>
+                    `;
+                }).join('');
+            }
+
             const plans = sc.plans || [];
             if (!selectedCheckoutPlanId || !plans.some(p => p.id === selectedCheckoutPlanId)) {
-                const defaultPlan = plans.find(p => p.id === ov.assignedPlanId) || plans[0];
-                if (defaultPlan) {
-                    selectedCheckoutPlanId = defaultPlan.id;
-                    selectedCheckoutPlanName = defaultPlan.name;
-                    selectedCheckoutDays = Number(defaultPlan.days) || 30;
-                    selectedCheckoutAmount = (ov.customPrice !== undefined && ov.customPrice !== '' && ov.customPrice !== null)
+                const defaultPl = plans.find(p => p.id === ov.assignedPlanId) || plans[0];
+                if (defaultPl) {
+                    selectedCheckoutPlanId = defaultPl.id;
+                    selectedCheckoutPlanName = defaultPl.name;
+                    selectedCheckoutDays = Number(defaultPl.days) || 30;
+                    selectedCheckoutAmount = (ov.customPrice !== undefined && ov.customPrice !== null && ov.customPrice !== '')
                         ? Number(ov.customPrice)
-                        : Number(defaultPlan.price);
+                        : Number(defaultPl.price);
                 }
             }
 
-            const grid = document.getElementById('sub-modal-plans-grid');
-            if (grid) {
-                grid.innerHTML = plans.map(pl => {
-                    const hasCustom = ov.customPrice !== undefined && ov.customPrice !== '' && ov.customPrice !== null && (!ov.assignedPlanId || ov.assignedPlanId === pl.id);
-                    const effPrice = hasCustom ? Number(ov.customPrice) : Number(pl.price);
+            const plansGrid = document.getElementById('sub-modal-plans-grid');
+            if (plansGrid) {
+                plansGrid.innerHTML = plans.map(pl => {
                     const isSelected = pl.id === selectedCheckoutPlanId;
+                    const effPrice = (ov.customPrice !== undefined && ov.customPrice !== null && ov.customPrice !== '' && (!ov.assignedPlanId || ov.assignedPlanId === pl.id))
+                        ? Number(ov.customPrice)
+                        : Number(pl.price);
                     return `
-                        <button type="button" onclick="selectCheckoutSubscriptionPlan('${pl.id}', ${effPrice})" class="p-3.5 rounded-2xl border-2 text-left transition ${isSelected ? 'border-primary-600 bg-primary-50/70 dark:bg-primary-950/50 shadow-sm' : 'border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900'}">
-                            <div class="flex items-center justify-between">
+                        <button type="button" onclick="selectSubscriptionCheckoutPlan('${pl.id}')" class="p-3.5 rounded-2xl border-2 text-left transition ${isSelected ? 'border-primary-600 bg-primary-50/80 dark:bg-primary-950/50 shadow-sm' : 'border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900'}">
+                            <div class="flex items-center justify-between gap-1">
                                 <span class="font-black text-neutral-900 dark:text-white">${pl.name}</span>
-                                <span class="px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-700 text-[9px] font-black">${pl.badge || `${pl.days}d`}</span>
+                                <span class="px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-700 dark:text-amber-300 text-[9px] font-black">${pl.badge || `${pl.days}d`}</span>
                             </div>
-                            <div class="text-lg font-black text-primary-600 mt-1">₹${effPrice.toLocaleString('en-IN')} <span class="text-[10px] font-semibold text-neutral-400">/ ${pl.days} days</span></div>
-                            ${pl.desc ? `<div class="text-[10px] text-neutral-500 mt-1 truncate">${pl.desc}</div>` : ''}
+                            <div class="text-lg font-black text-primary-600 mt-1">₹${effPrice} <span class="text-[10px] font-bold text-neutral-400">/ ${pl.days} Days</span></div>
+                            <div class="text-[10px] text-neutral-500 mt-0.5">${pl.desc || 'All Pro features unlocked'}</div>
                         </button>
                     `;
                 }).join('');
             }
 
-            const fb = document.getElementById('sub-verify-feedback-box');
-            if (fb) fb.classList.add('hidden');
-            refreshSubscriptionUpiCheckoutBox();
+            refreshSubscriptionCheckoutQr();
             document.getElementById('subscription-upgrade-modal')?.classList.replace('hidden', 'flex');
         }
 
@@ -13159,60 +13335,52 @@ ${JSON.stringify(liveSnapshot)}`;
             document.getElementById('subscription-upgrade-modal')?.classList.replace('flex', 'hidden');
         }
 
-        function selectCheckoutSubscriptionPlan(planId, effectivePrice) {
+        function selectSubscriptionCheckoutPlan(planId) {
             const sc = ensureSubscriptionConfig();
+            const userKey = getCurrentUserSubKey();
+            const ov = sc.userOverrides[userKey] || {};
             const pl = (sc.plans || []).find(p => p.id === planId);
             if (!pl) return;
             selectedCheckoutPlanId = pl.id;
             selectedCheckoutPlanName = pl.name;
             selectedCheckoutDays = Number(pl.days) || 30;
-            selectedCheckoutAmount = Number(effectivePrice);
+            selectedCheckoutAmount = (ov.customPrice !== undefined && ov.customPrice !== null && ov.customPrice !== '' && (!ov.assignedPlanId || ov.assignedPlanId === pl.id))
+                ? Number(ov.customPrice)
+                : Number(pl.price);
             openSubscriptionUpgradeModal();
-        }
-
-        function getFinalPayableSubscriptionAmount() {
-            const base = Math.max(1, Number(selectedCheckoutAmount) || 199);
-            if (appliedCheckoutDiscountPct > 0) {
-                return Math.max(1, Math.round(base * (1 - appliedCheckoutDiscountPct / 100)));
-            }
-            return base;
         }
 
         function applySubscriptionCheckoutCoupon() {
             const sc = ensureSubscriptionConfig();
             const code = (document.getElementById('sub-checkout-coupon-input')?.value || '').trim().toUpperCase();
             if (!code) return;
-            const found = (sc.coupons || []).find(c => c.code === code);
+            const found = (sc.coupons || []).find(c => (c.code || '').toUpperCase() === code);
             if (!found) {
                 appliedCheckoutDiscountPct = 0;
-                refreshSubscriptionUpiCheckoutBox();
-                showToast('Invalid or expired promo code', 'error');
-                return;
+                showToast('Invalid promo coupon code', 'error');
+            } else {
+                appliedCheckoutDiscountPct = Math.min(100, Math.max(1, Number(found.discountPct) || 0));
+                showToast(`Coupon ${code} applied (${appliedCheckoutDiscountPct}% OFF)!`);
             }
-            appliedCheckoutDiscountPct = Number(found.discountPct) || 0;
-            refreshSubscriptionUpiCheckoutBox();
-            showToast(`Promo "${code}" applied: ${appliedCheckoutDiscountPct}% OFF!`);
+            refreshSubscriptionCheckoutQr();
         }
 
-        function refreshSubscriptionUpiCheckoutBox() {
+        function refreshSubscriptionCheckoutQr() {
             const sc = ensureSubscriptionConfig();
-            // Keep actual UPI ID strictly hidden from user UI, only use internally for QR & deep-link
-            const internalUpiId = (sc.upiId || '6393954985@upi').trim();
-            const merchantDisplay = (sc.merchantLabel || 'NeoKhata Verified Merchant').trim();
-            const finalAmt = getFinalPayableSubscriptionAmount();
-            const amtStr = finalAmt.toFixed(2);
+            const receiverUpi = sc.upiId || '6393954985@upi';
+            const merchantLabel = sc.merchantLabel || 'NeoKhata Verified Merchant Gateway';
+            const finalAmt = Math.max(1, Math.round(selectedCheckoutAmount * (1 - appliedCheckoutDiscountPct / 100)));
 
             if (document.getElementById('sub-checkout-plan-summary')) {
-                document.getElementById('sub-checkout-plan-summary').textContent = `${selectedCheckoutPlanName} (${selectedCheckoutDays} Days): ₹${finalAmt.toLocaleString('en-IN')}${appliedCheckoutDiscountPct > 0 ? ` (${appliedCheckoutDiscountPct}% OFF)` : ''}`;
+                document.getElementById('sub-checkout-plan-summary').textContent = `${selectedCheckoutPlanName} (${selectedCheckoutDays} Days): ₹${finalAmt}`;
             }
             if (document.getElementById('sub-checkout-upi-display')) {
-                document.getElementById('sub-checkout-upi-display').textContent = merchantDisplay;
+                document.getElementById('sub-checkout-upi-display').textContent = merchantLabel;
             }
             if (document.getElementById('sub-checkout-pay-btn-amt')) {
-                document.getElementById('sub-checkout-pay-btn-amt').textContent = `₹${finalAmt.toLocaleString('en-IN')}`;
+                document.getElementById('sub-checkout-pay-btn-amt').textContent = `₹${finalAmt}`;
             }
-            const orderRef = `NKPRO${Date.now().toString().slice(-6)}`;
-            const upiUri = `upi://pay?pa=${encodeURIComponent(internalUpiId)}&pn=${encodeURIComponent(merchantDisplay)}&am=${amtStr}&cu=INR&tr=${orderRef}&tn=${encodeURIComponent(selectedCheckoutPlanName)}`;
+            const upiUri = `upi://pay?pa=${encodeURIComponent(receiverUpi)}&pn=${encodeURIComponent('NeoKhata Pro')}&am=${finalAmt.toFixed(2)}&cu=INR&tn=${encodeURIComponent(selectedCheckoutPlanName)}`;
             const qrImg = document.getElementById('sub-checkout-qr-img');
             if (qrImg) {
                 qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(upiUri)}`;
@@ -13221,329 +13389,65 @@ ${JSON.stringify(liveSnapshot)}`;
 
         function launchSubscriptionUpiApp() {
             const sc = ensureSubscriptionConfig();
-            const internalUpiId = (sc.upiId || '6393954985@upi').trim();
-            const merchantDisplay = (sc.merchantLabel || 'NeoKhata Verified Merchant').trim();
-            const amtStr = getFinalPayableSubscriptionAmount().toFixed(2);
-            window._lastUpiCheckoutLaunchedAt = Date.now();
-            window.location.href = `upi://pay?pa=${encodeURIComponent(internalUpiId)}&pn=${encodeURIComponent(merchantDisplay)}&am=${amtStr}&cu=INR&tn=${encodeURIComponent(selectedCheckoutPlanName)}`;
+            const receiverUpi = sc.upiId || '6393954985@upi';
+            const finalAmt = Math.max(1, Math.round(selectedCheckoutAmount * (1 - appliedCheckoutDiscountPct / 100)));
+            window.location.href = `upi://pay?pa=${encodeURIComponent(receiverUpi)}&pn=${encodeURIComponent('NeoKhata Pro')}&am=${finalAmt.toFixed(2)}&cu=INR&tn=${encodeURIComponent(selectedCheckoutPlanName)}`;
         }
 
         async function submitSubscriptionUtrPayment(e) {
             e.preventDefault();
-            const utrInput = document.getElementById('sub-checkout-utr-input');
-            const fbBox = document.getElementById('sub-verify-feedback-box');
-            const utr = (utrInput?.value || '').trim().toUpperCase();
-            if (!utr) return;
-
+            const utr = (document.getElementById('sub-checkout-utr-input')?.value || '').trim().toUpperCase();
+            const fb = document.getElementById('sub-verify-feedback-box');
             const sc = ensureSubscriptionConfig();
-            const finalAmt = getFinalPayableSubscriptionAmount();
+            const finalAmt = Math.max(1, Math.round(selectedCheckoutAmount * (1 - appliedCheckoutDiscountPct / 100)));
 
-            showLiveProcessOverlay({
-                badge: 'Automated Payment Gateway',
-                title: 'Verifying Your UPI Payment...',
-                subtitle: 'कृपया प्रतीक्षा करें, हम आपके ट्रांज़ैक्शन UTR की ऑटोमैटिक जांच कर रहे हैं...',
-                step: 'Checking UPI settlement & transaction reference...',
-                progress: 45,
-                iconClass: 'fa-solid fa-shield-halved fa-spin'
-            });
+            const isValidFormat = /^[A-Z0-9]{12,22}$/.test(utr) && !/^(\w)\1+$/.test(utr) && utr !== '123456789012';
+            const isDuplicate = (sc.paymentRequests || []).some(r => r.utr === utr && r.status === 'approved');
 
-            await new Promise(r => setTimeout(r, 1100));
-
-            // Automated Verification Rules:
-            // 1. Must be valid 12-digit numeric UPI UTR (or valid 12-22 char alphanumeric bank ref with >= 10 digits)
-            // 2. Reject fake sequential/repeated digits (e.g. 111111111111, 123456789012, 000000000000)
-            // 3. Reject duplicate UTR already used in paymentRequests
-            const digitCount = (utr.match(/\d/g) || []).length;
-            const isRepeated = /^(\d)\1{11,}$/.test(utr);
-            const isSequential = utr === '123456789012' || utr === '012345678901';
-            const isDuplicate = (sc.paymentRequests || []).some(r => String(r.utr || '').toUpperCase() === utr && r.status === 'approved');
-
-            if (utr.length < 12 || digitCount < 10 || isRepeated || isSequential || isDuplicate) {
-                hideLiveProcessOverlay();
-                const failReason = isDuplicate
-                    ? 'यह UTR नंबर पहले ही उपयोग किया जा चुका है। कृपया नया पेमेंट करके सही UTR दर्ज करें।'
-                    : 'Payment Verification Failed! आपका भुगतान प्राप्त नहीं हुआ या UTR नंबर गलत है। कृपया पहले UPI से पेमेंट पूरा करें और दोबारा प्रयास करें।';
-
-                sc.paymentRequests.unshift({
-                    id: `subreq_${Date.now()}`,
-                    userKey: getCurrentUserSubKey(),
-                    userName: getPrimaryUserName(),
-                    userPhone: appState.userProfile?.phone || getAuthSession()?.phone || '',
-                    planId: selectedCheckoutPlanId,
-                    planName: selectedCheckoutPlanName,
-                    amount: finalAmt,
-                    days: selectedCheckoutDays,
-                    utr,
-                    status: 'rejected',
-                    createdAt: new Date().toISOString()
-                });
-                saveAllAdminChangesLive();
-
-                if (fbBox) {
-                    fbBox.classList.remove('hidden');
-                    fbBox.className = 'p-3 rounded-xl bg-rose-500/20 border border-rose-400/40 text-rose-200 font-bold text-[11px] flex items-start gap-2';
-                    fbBox.innerHTML = `<i class="fa-solid fa-circle-xmark text-rose-400 mt-0.5"></i><span>${failReason}</span>`;
+            if (!isValidFormat || isDuplicate) {
+                if (fb) {
+                    fb.className = 'p-2.5 rounded-xl text-[11px] font-bold bg-rose-500/20 text-rose-200 border border-rose-400/40';
+                    fb.textContent = isDuplicate
+                        ? '❌ This UTR reference has already been used. Please complete a fresh payment.'
+                        : '❌ Payment Not Verified — Invalid or unpaid UTR reference. Please complete payment first and enter valid 12-digit UTR.';
                 }
-                showToast('Payment not verified! Please complete UPI payment and retry.', 'error');
+                showToast('Payment Not Verified! Please complete payment & retry.', 'error');
                 return;
             }
 
-            updateLiveProcessOverlay({ step: 'Payment Verified! Activating Pro Plan...', progress: 95 });
-            await new Promise(r => setTimeout(r, 450));
-            hideLiveProcessOverlay();
-
+            const sess = getAuthSession() || {};
             const userKey = getCurrentUserSubKey();
-            const expiresAt = new Date(Date.now() + (selectedCheckoutDays * 86400000)).toISOString();
+            const expIso = new Date(Date.now() + selectedCheckoutDays * 86400000).toISOString();
 
+            sc.userOverrides[userKey] = {
+                ...(sc.userOverrides[userKey] || {}),
+                planName: selectedCheckoutPlanName,
+                assignedPlanId: selectedCheckoutPlanId,
+                expiresAt: expIso
+            };
             sc.paymentRequests.unshift({
                 id: `subreq_${Date.now()}`,
                 userKey,
                 userName: getPrimaryUserName(),
-                userPhone: appState.userProfile?.phone || getAuthSession()?.phone || '',
-                planId: selectedCheckoutPlanId,
+                userPhone: sess.phone || '',
                 planName: selectedCheckoutPlanName,
                 amount: finalAmt,
-                days: selectedCheckoutDays,
                 utr,
                 status: 'approved',
                 createdAt: new Date().toISOString()
             });
 
-            sc.userOverrides[userKey] = {
-                ...(sc.userOverrides[userKey] || {}),
-                vipFree: false,
-                assignedPlanId: selectedCheckoutPlanId,
-                planName: selectedCheckoutPlanName,
-                expiresAt
-            };
-
-            if (utrInput) utrInput.value = '';
-            appliedCheckoutDiscountPct = 0;
-            saveAllAdminChangesLive();
-            updateSubscriptionStatusBadges();
-            closeSubscriptionUpgradeModal();
-            showToast(`Payment Verified! "${selectedCheckoutPlanName}" is now active.`);
-        }
-
-        function addAdminSubscriptionCoupon() {
-            const sc = ensureSubscriptionConfig();
-            const code = (document.getElementById('adm-coupon-code')?.value || '').trim().toUpperCase();
-            const discountPct = Math.min(100, Math.max(1, Number(document.getElementById('adm-coupon-discount')?.value) || 0));
-            if (!code || discountPct <= 0) return;
-            if (!Array.isArray(sc.coupons)) sc.coupons = [];
-            sc.coupons = sc.coupons.filter(c => c.code !== code);
-            sc.coupons.push({ code, discountPct });
-            document.getElementById('adm-coupon-code').value = '';
-            document.getElementById('adm-coupon-discount').value = '';
-            renderAdminSubscriptionStudio();
-            saveAllAdminChangesLive();
-            showToast(`Added promo coupon "${code}" (${discountPct}% OFF)!`);
-        }
-
-        function deleteAdminSubscriptionCoupon(idx) {
-            const sc = ensureSubscriptionConfig();
-            if (!Array.isArray(sc.coupons)) return;
-            sc.coupons.splice(idx, 1);
-            renderAdminSubscriptionStudio();
-            saveAllAdminChangesLive();
-        }
-
-        function bulkApplyGlobalTrialDays() {
-            const sc = ensureSubscriptionConfig();
-            const days = Math.max(0, Number(document.getElementById('adm-bulk-trial-days')?.value) || 0);
-            const allCatalog = [...SUBSCRIPTION_FEATURE_CATALOG, ...(sc.customFeatures || [])];
-            allCatalog.forEach(f => {
-                if (!sc.featureRules[f.key]) sc.featureRules[f.key] = { label: f.label, isPaid: !!f.defaultPaid };
-                sc.featureRules[f.key].freeDays = days;
-            });
-            renderAdminSubscriptionStudio();
-            saveAllAdminChangesLive();
-            showToast(`Applied ${days} Free Trial Days across all features!`);
-        }
-
-        function resetAllSubscriptionFeatureRules() {
-            const sc = ensureSubscriptionConfig();
-            sc.featureRules = {};
-            sc.customFeatures = [];
-            ensureSubscriptionConfig();
-            renderAdminSubscriptionStudio();
-            saveAllAdminChangesLive();
-            showToast('All feature paywall rules reset to defaults');
-        }
-
-        function saveAdminSubscriptionConfig() {
-            const sc = ensureSubscriptionConfig();
-            const upiInp = document.getElementById('adm-sub-upi-id');
-            const labelInp = document.getElementById('adm-sub-merchant-label');
-            const txLimInp = document.getElementById('adm-sub-free-tx-limit');
-            const custLimInp = document.getElementById('adm-sub-free-cust-limit');
-            if (upiInp) sc.upiId = upiInp.value.trim() || '6393954985@upi';
-            if (labelInp) sc.merchantLabel = labelInp.value.trim() || 'NeoKhata Verified Merchant Gateway';
-            if (txLimInp) sc.freeTxLimit = Math.max(1, Number(txLimInp.value) || 25);
-            if (custLimInp) sc.freeCustLimit = Math.max(1, Number(custLimInp.value) || 5);
-            saveAllAdminChangesLive();
-            updateSubscriptionStatusBadges();
-            showToast('Subscription rules & UPI gateway saved live!');
-        }
-
-        function bulkSetAllSubscriptionFeaturesMode(isPaidMode) {
-            const sc = ensureSubscriptionConfig();
-            const allCatalog = [...SUBSCRIPTION_FEATURE_CATALOG, ...(sc.customFeatures || [])];
-            allCatalog.forEach(f => {
-                if (!sc.featureRules[f.key]) sc.featureRules[f.key] = { label: f.label, isPaid: !!isPaidMode };
-                sc.featureRules[f.key].isPaid = !!isPaidMode;
-                sc.featurePaidMap[f.key] = !!isPaidMode;
-            });
-            renderAdminSubscriptionStudio();
-            saveAllAdminChangesLive();
-            showToast(isPaidMode ? 'All features set to PAID (PRO)' : 'All features set to FREE');
-        }
-
-        function addAdminCustomSubscriptionFeature() {
-            const sc = ensureSubscriptionConfig();
-            const labelInp = document.getElementById('adm-new-feat-label');
-            const limInp = document.getElementById('adm-new-feat-limit');
-            const daysInp = document.getElementById('adm-new-feat-days');
-            const label = (labelInp?.value || '').trim();
-            if (!label) { showToast('Enter a feature name first', 'error'); return; }
-            const key = `custom_${label.toLowerCase().replace(/[^a-z0-9]+/g, '_')}_${Date.now().toString().slice(-4)}`;
-            const limit = Math.max(0, Number(limInp?.value) || 5);
-            const days = Math.max(0, Number(daysInp?.value) || 7);
-
-            sc.customFeatures.push({ key, label, defaultPaid: true, defaultLimit: limit, defaultFreeDays: days, unitLabel: 'Uses' });
-            sc.featureRules[key] = {
-                label,
-                unitLabel: 'Uses',
-                isPaid: true,
-                freeLimit: limit,
-                freeDays: days,
-                quotaPeriod: 'lifetime',
-                lockMessage: ''
-            };
-            sc.featurePaidMap[key] = true;
-            if (labelInp) labelInp.value = '';
-            renderAdminSubscriptionStudio();
-            saveAllAdminChangesLive();
-            showToast(`Added custom feature rule "${label}"!`);
-        }
-
-        function deleteAdminCustomSubscriptionFeature(key) {
-            const sc = ensureSubscriptionConfig();
-            sc.customFeatures = (sc.customFeatures || []).filter(f => f.key !== key);
-            delete sc.featureRules[key];
-            delete sc.featurePaidMap[key];
-            renderAdminSubscriptionStudio();
-            saveAllAdminChangesLive();
-            showToast('Custom feature rule removed');
-        }
-
-        function updateAdminFeatureRuleField(key, field, value) {
-            const sc = ensureSubscriptionConfig();
-            if (!sc.featureRules[key]) sc.featureRules[key] = { label: key, isPaid: false, freeLimit: 10, freeDays: 7, quotaPeriod: 'lifetime', lockMessage: '' };
-            if (field === 'isPaid') {
-                sc.featureRules[key].isPaid = !!value;
-                sc.featurePaidMap[key] = !!value;
-            } else if (field === 'freeLimit' || field === 'freeDays') {
-                sc.featureRules[key][field] = Math.max(0, Number(value) || 0);
-            } else {
-                sc.featureRules[key][field] = String(value || '');
-            }
             localStorage.setItem('khataflow_admin_config', JSON.stringify(adminConfig));
-            if (field === 'isPaid') renderAdminSubscriptionStudio();
-        }
-
-        function addAdminSubscriptionPlan(e) {
-            e.preventDefault();
-            const sc = ensureSubscriptionConfig();
-            const name = document.getElementById('adm-new-plan-name')?.value.trim();
-            const price = Math.max(1, Number(document.getElementById('adm-new-plan-price')?.value) || 0);
-            const days = Math.max(1, Number(document.getElementById('adm-new-plan-days')?.value) || 30);
-            const badge = document.getElementById('adm-new-plan-badge')?.value.trim() || 'Pro';
-            if (!name || price <= 0) return;
-
-            sc.plans.push({
-                id: `plan_${Date.now()}`,
-                name,
-                price,
-                days,
-                badge,
-                desc: `${days} Days Pro Membership`
-            });
-            document.getElementById('adm-new-plan-name').value = '';
-            document.getElementById('adm-new-plan-price').value = '';
-            renderAdminSubscriptionStudio();
-            saveAllAdminChangesLive();
-            showToast(`Added subscription plan "${name}" (₹${price})!`);
-        }
-
-        function updateAdminSubscriptionPlanField(idx, field, val) {
-            const sc = ensureSubscriptionConfig();
-            if (!sc.plans[idx]) return;
-            if (field === 'price' || field === 'days') sc.plans[idx][field] = Math.max(1, Number(val) || 1);
-            else sc.plans[idx][field] = String(val || '');
-            localStorage.setItem('khataflow_admin_config', JSON.stringify(adminConfig));
-        }
-
-        function deleteAdminSubscriptionPlan(idx) {
-            const sc = ensureSubscriptionConfig();
-            if (sc.plans.length <= 1) { showToast('At least 1 plan is required', 'error'); return; }
-            sc.plans.splice(idx, 1);
-            renderAdminSubscriptionStudio();
-            saveAllAdminChangesLive();
-        }
-
-        function updateAdminUserSubscriptionOverride(encodedKey, field, val) {
-            const userKey = decodeURIComponent(encodedKey || '');
-            const sc = ensureSubscriptionConfig();
-            if (!sc.userOverrides[userKey]) sc.userOverrides[userKey] = {};
-            const ov = sc.userOverrides[userKey];
-
-            if (field === 'vipFree') {
-                ov.vipFree = !!val;
-                if (ov.vipFree) ov.planName = 'VIP Free Access';
-            } else if (field === 'assignedPlanId') {
-                ov.assignedPlanId = val;
-                const pl = sc.plans.find(p => p.id === val);
-                if (pl) ov.planName = pl.name;
-            } else if (field === 'customPrice') {
-                ov.customPrice = val === '' ? '' : Math.max(0, Number(val) || 0);
-            } else if (field === 'expiresAt') {
-                ov.expiresAt = val ? new Date(`${val}T23:59:59`).toISOString() : '';
-            } else if (field === 'activateNow') {
-                const pl = sc.plans.find(p => p.id === ov.assignedPlanId) || sc.plans[0];
-                const days = Number(pl?.days) || 30;
-                ov.planName = pl?.name || 'Pro Active';
-                ov.expiresAt = new Date(Date.now() + days * 86400000).toISOString();
-            } else if (field === 'revokeNow') {
-                ov.vipFree = false;
-                ov.expiresAt = '';
-                ov.planName = 'Free Plan';
-            }
-            renderAdminSubscriptionStudio();
             saveAllAdminChangesLive();
             updateSubscriptionStatusBadges();
-            showToast('Updated user subscription access!');
-        }
 
-        function handleAdminSubscriptionRequestAction(reqId, action) {
-            const sc = ensureSubscriptionConfig();
-            const req = (sc.paymentRequests || []).find(r => r.id === reqId);
-            if (!req) return;
-            req.status = action;
-            if (action === 'approved') {
-                const days = Number(req.days) || 30;
-                sc.userOverrides[req.userKey] = {
-                    ...(sc.userOverrides[req.userKey] || {}),
-                    vipFree: false,
-                    assignedPlanId: req.planId || '',
-                    planName: req.planName || 'Pro Active',
-                    expiresAt: new Date(Date.now() + days * 86400000).toISOString()
-                };
+            if (fb) {
+                fb.className = 'p-2.5 rounded-xl text-[11px] font-bold bg-emerald-500/20 text-emerald-200 border border-emerald-400/40';
+                fb.textContent = `✅ Payment Verified! ${selectedCheckoutPlanName} (${selectedCheckoutDays} Days) activated immediately.`;
             }
-            renderAdminSubscriptionStudio();
-            saveAllAdminChangesLive();
-            updateSubscriptionStatusBadges();
-            showToast(`Payment request ${action.toUpperCase()}!`);
+            document.getElementById('sub-checkout-utr-input').value = '';
+            showToast(`${selectedCheckoutPlanName} Activated for ${selectedCheckoutDays} Days!`);
+            setTimeout(() => closeSubscriptionUpgradeModal(), 1200);
         }
 
         function renderAdminSubscriptionStudio() {
@@ -13553,60 +13457,52 @@ ${JSON.stringify(liveSnapshot)}`;
             if (document.getElementById('adm-sub-free-tx-limit')) document.getElementById('adm-sub-free-tx-limit').value = sc.freeTxLimit ?? 25;
             if (document.getElementById('adm-sub-free-cust-limit')) document.getElementById('adm-sub-free-cust-limit').value = sc.freeCustLimit ?? 5;
 
-            // Coupons list
             const couponsEl = document.getElementById('admin-sub-coupons-list');
             if (couponsEl) {
-                const coupons = Array.isArray(sc.coupons) ? sc.coupons : [];
-                couponsEl.innerHTML = coupons.map((c, idx) => `
+                couponsEl.innerHTML = (sc.coupons || []).map((c, idx) => `
                     <span class="px-2.5 py-1 rounded-xl bg-purple-500/10 border border-purple-500/25 text-purple-700 dark:text-purple-300 font-mono font-black text-[10px] flex items-center gap-1.5">
                         ${c.code} (${c.discountPct}% OFF)
-                        <button type="button" onclick="deleteAdminSubscriptionCoupon(${idx})" class="text-rose-500 hover:text-rose-700 font-black">×</button>
+                        <button type="button" onclick="deleteAdminSubscriptionCoupon(${idx})" class="text-rose-500 font-black">×</button>
                     </span>
-                `).join('') || '<span class="text-[10px] text-neutral-400">No promo coupons created yet.</span>';
+                `).join('');
             }
 
-            // Feature-Wise Paywall Matrix
-            const featBox = document.getElementById('admin-sub-features-matrix');
-            if (featBox) {
-                const q = (document.getElementById('adm-sub-feat-search')?.value || '').toLowerCase().trim();
-                const allCatalog = [...SUBSCRIPTION_FEATURE_CATALOG, ...(sc.customFeatures || [])];
-                const customKeys = new Set((sc.customFeatures || []).map(c => c.key));
-                const filtered = allCatalog.filter(f => {
-                    const r = sc.featureRules[f.key] || {};
-                    return !q || `${f.key} ${r.label || f.label}`.toLowerCase().includes(q);
-                });
-
-                featBox.innerHTML = filtered.map(f => {
-                    const r = sc.featureRules[f.key] || { label: f.label, isPaid: !!f.defaultPaid, freeLimit: 10, freeDays: 7, quotaPeriod: 'lifetime', lockMessage: '' };
-                    const isCustom = customKeys.has(f.key);
+            const featMatrix = document.getElementById('admin-sub-features-matrix');
+            if (featMatrix) {
+                const fq = (document.getElementById('adm-sub-feat-search')?.value || '').toLowerCase().trim();
+                const allCatalog = [...SUBSCRIPTION_FEATURE_CATALOG, ...(sc.customFeatures || [])].filter(f => !fq || `${f.key} ${f.label}`.toLowerCase().includes(fq));
+                featMatrix.innerHTML = allCatalog.map(f => {
+                    const rule = sc.featureRules[f.key] || {};
+                    const isPaid = !!rule.isPaid;
+                    const isCustom = (sc.customFeatures || []).some(cf => cf.key === f.key);
                     return `
-                        <div class="p-3 rounded-2xl bg-neutral-100/90 dark:bg-neutral-800/90 border ${r.isPaid ? 'border-amber-400/60' : 'border-emerald-400/50'} space-y-2">
-                            <div class="flex items-center justify-between gap-1.5">
-                                <input type="text" value="${String(r.label || f.label).replace(/"/g, '&quot;')}" onchange="updateAdminFeatureRuleField('${f.key}', 'label', this.value)" class="flex-1 min-w-0 px-2 py-1 rounded-lg bg-white dark:bg-neutral-900 border font-black text-xs">
-                                <button type="button" onclick="updateAdminFeatureRuleField('${f.key}', 'isPaid', ${!r.isPaid})" class="px-2.5 py-1 rounded-lg font-black text-[10px] uppercase flex-shrink-0 ${r.isPaid ? 'bg-amber-500 text-white' : 'bg-emerald-600 text-white'}">
-                                    ${r.isPaid ? 'PAID (PRO)' : 'FREE'}
+                        <div class="p-3 rounded-2xl bg-neutral-100/90 dark:bg-neutral-800/90 border border-neutral-200 dark:border-neutral-700 space-y-2">
+                            <div class="flex items-center justify-between gap-2">
+                                <input type="text" value="${String(rule.label || f.label).replace(/"/g, '&quot;')}" onchange="updateAdminFeatureRuleField('${f.key}', 'label', this.value)" class="flex-1 p-1.5 rounded-lg bg-white dark:bg-neutral-900 border font-black text-xs">
+                                <button type="button" onclick="toggleAdminSubscriptionFeature('${f.key}')" class="px-2.5 py-1 rounded-xl text-[10px] font-black uppercase ${isPaid ? 'bg-amber-500 text-white' : 'bg-emerald-500 text-white'}">
+                                    ${isPaid ? 'PAID (PRO)' : 'FREE'}
                                 </button>
-                                ${isCustom ? `<button type="button" onclick="deleteAdminCustomSubscriptionFeature('${f.key}')" class="p-1 text-rose-500" title="Delete Rule"><i class="fa-solid fa-trash"></i></button>` : ''}
+                                ${isCustom ? `<button type="button" onclick="deleteAdminCustomSubscriptionFeature('${f.key}')" class="text-rose-500 p-1"><i class="fa-solid fa-trash"></i></button>` : ''}
                             </div>
                             <div class="grid grid-cols-3 gap-1.5 text-[10px]">
                                 <div>
-                                    <label class="block font-bold text-neutral-400">Free Limit</label>
-                                    <input type="number" min="0" value="${r.freeLimit ?? 10}" onchange="updateAdminFeatureRuleField('${f.key}', 'freeLimit', this.value)" class="w-full p-1.5 rounded-lg bg-white dark:bg-neutral-900 border font-black">
+                                    <label class="block text-neutral-400 font-bold">Free Limit</label>
+                                    <input type="number" min="0" value="${rule.freeLimit ?? 0}" onchange="updateAdminFeatureRuleField('${f.key}', 'freeLimit', this.value)" class="w-full p-1.5 rounded-lg bg-white dark:bg-neutral-900 border font-black">
                                 </div>
                                 <div>
-                                    <label class="block font-bold text-neutral-400">Days Free</label>
-                                    <input type="number" min="0" value="${r.freeDays ?? 7}" onchange="updateAdminFeatureRuleField('${f.key}', 'freeDays', this.value)" class="w-full p-1.5 rounded-lg bg-white dark:bg-neutral-900 border font-black">
+                                    <label class="block text-neutral-400 font-bold">Days Free</label>
+                                    <input type="number" min="0" value="${rule.freeDays ?? 0}" onchange="updateAdminFeatureRuleField('${f.key}', 'freeDays', this.value)" class="w-full p-1.5 rounded-lg bg-white dark:bg-neutral-900 border font-black">
                                 </div>
                                 <div>
-                                    <label class="block font-bold text-neutral-400">Cycle</label>
+                                    <label class="block text-neutral-400 font-bold">Cycle</label>
                                     <select onchange="updateAdminFeatureRuleField('${f.key}', 'quotaPeriod', this.value)" class="w-full p-1.5 rounded-lg bg-white dark:bg-neutral-900 border font-bold">
-                                        <option value="lifetime" ${r.quotaPeriod === 'lifetime' ? 'selected' : ''}>Lifetime</option>
-                                        <option value="monthly" ${r.quotaPeriod === 'monthly' ? 'selected' : ''}>Monthly</option>
-                                        <option value="daily" ${r.quotaPeriod === 'daily' ? 'selected' : ''}>Daily</option>
+                                        <option value="lifetime" ${rule.quotaPeriod === 'lifetime' ? 'selected' : ''}>Lifetime</option>
+                                        <option value="monthly" ${rule.quotaPeriod === 'monthly' ? 'selected' : ''}>Monthly</option>
+                                        <option value="daily" ${rule.quotaPeriod === 'daily' ? 'selected' : ''}>Daily</option>
                                     </select>
                                 </div>
                             </div>
-                            <input type="text" value="${String(r.lockMessage || '').replace(/"/g, '&quot;')}" onchange="updateAdminFeatureRuleField('${f.key}', 'lockMessage', this.value)" placeholder="Custom lock message (optional)..." class="w-full px-2 py-1 rounded-lg bg-white dark:bg-neutral-900 border text-[10px]">
+                            <input type="text" value="${String(rule.lockMessage || '').replace(/"/g, '&quot;')}" onchange="updateAdminFeatureRuleField('${f.key}', 'lockMessage', this.value)" placeholder="Custom lock message..." class="w-full p-1.5 rounded-lg bg-white dark:bg-neutral-900 border text-[10px]">
                         </div>
                     `;
                 }).join('');
@@ -13690,6 +13586,202 @@ ${JSON.stringify(liveSnapshot)}`;
             }
         }
 
+        function saveAdminSubscriptionConfig() {
+            const sc = ensureSubscriptionConfig();
+            const upiVal = document.getElementById('adm-sub-upi-id')?.value.trim();
+            const merchVal = document.getElementById('adm-sub-merchant-label')?.value.trim();
+            const txLim = parseInt(document.getElementById('adm-sub-free-tx-limit')?.value, 10);
+            const custLim = parseInt(document.getElementById('adm-sub-free-cust-limit')?.value, 10);
+            if (upiVal) sc.upiId = upiVal;
+            if (merchVal) sc.merchantLabel = merchVal;
+            if (!isNaN(txLim) && txLim > 0) sc.freeTxLimit = txLim;
+            if (!isNaN(custLim) && custLim > 0) sc.freeCustLimit = custLim;
+            localStorage.setItem('khataflow_admin_config', JSON.stringify(adminConfig));
+            updateSubscriptionStatusBadges();
+            saveAllAdminChangesLive();
+            showToast('Subscription rules & UPI gateway settings saved!');
+        }
+
+        function toggleAdminSubscriptionFeature(fKey) {
+            const sc = ensureSubscriptionConfig();
+            if (!sc.featureRules[fKey]) return;
+            sc.featureRules[fKey].isPaid = !sc.featureRules[fKey].isPaid;
+            sc.featurePaidMap[fKey] = sc.featureRules[fKey].isPaid;
+            localStorage.setItem('khataflow_admin_config', JSON.stringify(adminConfig));
+            renderAdminSubscriptionStudio();
+            updateSubscriptionStatusBadges();
+        }
+
+        function updateAdminFeatureRuleField(fKey, field, val) {
+            const sc = ensureSubscriptionConfig();
+            if (!sc.featureRules[fKey]) return;
+            if (field === 'freeLimit' || field === 'freeDays') sc.featureRules[fKey][field] = Math.max(0, Number(val) || 0);
+            else sc.featureRules[fKey][field] = String(val || '').trim();
+            localStorage.setItem('khataflow_admin_config', JSON.stringify(adminConfig));
+            updateSubscriptionStatusBadges();
+        }
+
+        function bulkSetAllSubscriptionFeaturesMode(isPaid) {
+            const sc = ensureSubscriptionConfig();
+            Object.keys(sc.featureRules).forEach(k => {
+                sc.featureRules[k].isPaid = !!isPaid;
+                sc.featurePaidMap[k] = !!isPaid;
+            });
+            localStorage.setItem('khataflow_admin_config', JSON.stringify(adminConfig));
+            renderAdminSubscriptionStudio();
+            updateSubscriptionStatusBadges();
+            showToast(isPaid ? 'All features set to PAID (PRO)' : 'All features set to FREE');
+        }
+
+        function bulkApplyGlobalTrialDays() {
+            const sc = ensureSubscriptionConfig();
+            const days = Math.max(0, parseInt(document.getElementById('adm-bulk-trial-days')?.value, 10) || 0);
+            Object.keys(sc.featureRules).forEach(k => {
+                sc.featureRules[k].freeDays = days;
+            });
+            localStorage.setItem('khataflow_admin_config', JSON.stringify(adminConfig));
+            renderAdminSubscriptionStudio();
+            updateSubscriptionStatusBadges();
+            showToast(`Applied ${days}-day free trial to all features!`);
+        }
+
+        function resetAllSubscriptionFeatureRules() {
+            const sc = ensureSubscriptionConfig();
+            sc.featureRules = {};
+            sc.featurePaidMap = {};
+            ensureSubscriptionConfig();
+            localStorage.setItem('khataflow_admin_config', JSON.stringify(adminConfig));
+            renderAdminSubscriptionStudio();
+            updateSubscriptionStatusBadges();
+            showToast('Feature paywall rules reset to default');
+        }
+
+        function addAdminCustomSubscriptionFeature() {
+            const sc = ensureSubscriptionConfig();
+            const label = document.getElementById('adm-new-feat-label')?.value.trim();
+            const limit = Math.max(0, parseInt(document.getElementById('adm-new-feat-limit')?.value, 10) || 5);
+            const days = Math.max(0, parseInt(document.getElementById('adm-new-feat-days')?.value, 10) || 7);
+            if (!label) return;
+            const key = `custom_${label.toLowerCase().replace(/[^a-z0-9]+/g, '_')}_${Date.now().toString().slice(-4)}`;
+            sc.customFeatures.push({ key, label, defaultPaid: true, defaultLimit: limit, defaultFreeDays: days, unitLabel: 'Uses' });
+            ensureSubscriptionConfig();
+            document.getElementById('adm-new-feat-label').value = '';
+            localStorage.setItem('khataflow_admin_config', JSON.stringify(adminConfig));
+            renderAdminSubscriptionStudio();
+            showToast(`Added custom feature rule "${label}"`);
+        }
+
+        function deleteAdminCustomSubscriptionFeature(key) {
+            const sc = ensureSubscriptionConfig();
+            sc.customFeatures = (sc.customFeatures || []).filter(f => f.key !== key);
+            delete sc.featureRules[key];
+            delete sc.featurePaidMap[key];
+            localStorage.setItem('khataflow_admin_config', JSON.stringify(adminConfig));
+            renderAdminSubscriptionStudio();
+        }
+
+        function addAdminSubscriptionCoupon() {
+            const sc = ensureSubscriptionConfig();
+            const code = (document.getElementById('adm-coupon-code')?.value || '').trim().toUpperCase();
+            const discountPct = Math.min(100, Math.max(1, parseInt(document.getElementById('adm-coupon-discount')?.value, 10) || 10));
+            if (!code) return;
+            sc.coupons.push({ code, discountPct });
+            document.getElementById('adm-coupon-code').value = '';
+            document.getElementById('adm-coupon-discount').value = '';
+            localStorage.setItem('khataflow_admin_config', JSON.stringify(adminConfig));
+            renderAdminSubscriptionStudio();
+            showToast(`Added promo coupon ${code} (${discountPct}% OFF)`);
+        }
+
+        function deleteAdminSubscriptionCoupon(idx) {
+            const sc = ensureSubscriptionConfig();
+            sc.coupons.splice(idx, 1);
+            localStorage.setItem('khataflow_admin_config', JSON.stringify(adminConfig));
+            renderAdminSubscriptionStudio();
+        }
+
+        function addAdminSubscriptionPlan(e) {
+            e.preventDefault();
+            const sc = ensureSubscriptionConfig();
+            const name = document.getElementById('adm-new-plan-name')?.value.trim();
+            const price = Math.max(1, parseFloat(document.getElementById('adm-new-plan-price')?.value) || 99);
+            const days = Math.max(1, parseInt(document.getElementById('adm-new-plan-days')?.value, 10) || 30);
+            const badge = document.getElementById('adm-new-plan-badge')?.value.trim() || 'Pro';
+            if (!name) return;
+            sc.plans.push({ id: `plan_${Date.now()}`, name, price, days, badge, desc: `${days} days full Pro access` });
+            document.getElementById('adm-new-plan-name').value = '';
+            document.getElementById('adm-new-plan-price').value = '';
+            localStorage.setItem('khataflow_admin_config', JSON.stringify(adminConfig));
+            renderAdminSubscriptionStudio();
+            showToast(`Added plan "${name}" (₹${price})`);
+        }
+
+        function updateAdminSubscriptionPlanField(idx, field, val) {
+            const sc = ensureSubscriptionConfig();
+            if (!sc.plans[idx]) return;
+            if (field === 'price' || field === 'days') sc.plans[idx][field] = Math.max(1, Number(val) || 1);
+            else sc.plans[idx][field] = String(val || '').trim();
+            localStorage.setItem('khataflow_admin_config', JSON.stringify(adminConfig));
+        }
+
+        function deleteAdminSubscriptionPlan(idx) {
+            const sc = ensureSubscriptionConfig();
+            if (sc.plans.length <= 1) { showToast('At least 1 plan is required', 'error'); return; }
+            sc.plans.splice(idx, 1);
+            localStorage.setItem('khataflow_admin_config', JSON.stringify(adminConfig));
+            renderAdminSubscriptionStudio();
+        }
+
+        function updateAdminUserSubscriptionOverride(encKey, field, val) {
+            const uKey = decodeURIComponent(encKey || '');
+            const sc = ensureSubscriptionConfig();
+            if (!sc.userOverrides[uKey]) sc.userOverrides[uKey] = {};
+            const ov = sc.userOverrides[uKey];
+            if (field === 'vipFree') ov.vipFree = !!val;
+            else if (field === 'assignedPlanId') {
+                ov.assignedPlanId = val;
+                const pl = (sc.plans || []).find(p => p.id === val);
+                if (pl) ov.planName = pl.name;
+            } else if (field === 'customPrice') {
+                ov.customPrice = val === '' ? '' : Math.max(0, Number(val) || 0);
+            } else if (field === 'expiresAt') {
+                ov.expiresAt = val ? new Date(`${val}T23:59:59`).toISOString() : '';
+            } else if (field === 'activateNow') {
+                const pl = (sc.plans || []).find(p => p.id === ov.assignedPlanId) || sc.plans[0];
+                const days = Number(pl?.days) || 30;
+                ov.planName = pl?.name || 'Pro Active';
+                ov.expiresAt = new Date(Date.now() + days * 86400000).toISOString();
+            } else if (field === 'revokeNow') {
+                ov.vipFree = false;
+                ov.expiresAt = '';
+            }
+            localStorage.setItem('khataflow_admin_config', JSON.stringify(adminConfig));
+            renderAdminSubscriptionStudio();
+            updateSubscriptionStatusBadges();
+            saveAllAdminChangesLive();
+            showToast('Updated user subscription permissions!');
+        }
+
+        function handleAdminSubscriptionRequestAction(reqId, nextStatus) {
+            const sc = ensureSubscriptionConfig();
+            const req = (sc.paymentRequests || []).find(r => r.id === reqId);
+            if (!req) return;
+            req.status = nextStatus;
+            if (nextStatus === 'approved') {
+                sc.userOverrides[req.userKey] = {
+                    ...(sc.userOverrides[req.userKey] || {}),
+                    planName: req.planName,
+                    expiresAt: new Date(Date.now() + 30 * 86400000).toISOString()
+                };
+            } else {
+                if (sc.userOverrides[req.userKey]) sc.userOverrides[req.userKey].expiresAt = '';
+            }
+            localStorage.setItem('khataflow_admin_config', JSON.stringify(adminConfig));
+            renderAdminSubscriptionStudio();
+            updateSubscriptionStatusBadges();
+            saveAllAdminChangesLive();
+        }
+
         // ================= TOUCH SWIPE SUPPORT & INITIALIZATION =================
         (function initSponsoredBannerSwipe() {
             const banner = document.getElementById('sponsored-ad-banner');
@@ -13723,7 +13815,7 @@ ${JSON.stringify(liveSnapshot)}`;
             apply70FeatureOverridesLive();
             startAdProgressTimer();
             startTargetDeadlineCountdownTicker();
-
+            startSubscriptionCountdownTicker();
             const session = getAuthSession();
             if (session && session.isLoggedIn) {
                 propagateUserProfileAcrossApp();
@@ -13752,12 +13844,14 @@ ${JSON.stringify(liveSnapshot)}`;
         import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
         const firebaseConfig = {
-            apiKey: "AIzaSyDummyKeyForNeoKhataCloudSync",
-            authDomain: "neokhata-financial-os.firebaseapp.com",
-            projectId: "neokhata-financial-os",
-            storageBucket: "neokhata-financial-os.appspot.com",
-            messagingSenderId: "102938475610",
-            appId: "1:102938475610:web:abcdef1234567890"
+            apiKey: "AIzaSyAdjMUN7Efv0Yfui2hLjGXqsyFrihioU7Q",
+            authDomain: "khata-5ad1e.firebaseapp.com",
+            databaseURL: "https://khata-5ad1e-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "khata-5ad1e",
+            storageBucket: "khata-5ad1e.firebasestorage.app",
+            messagingSenderId: "962419820764",
+            appId: "1:962419820764:web:9218506447e7ddcda6cc19",
+            measurementId: "G-HRP1B8K73H"
         };
 
         let db = null;
@@ -13769,7 +13863,13 @@ ${JSON.stringify(liveSnapshot)}`;
             const app = initializeApp(firebaseConfig);
             db = getFirestore(app);
             auth = getAuth(app);
-            signInAnonymously(auth).then(() => { cloudReady = true; }).catch(() => { cloudReady = false; });
+            signInAnonymously(auth).then(() => {
+                cloudReady = true;
+                // Automatically attach real-time multi-device listeners as soon as auth is ready
+                if (typeof window.attachMultiDeviceListeners === 'function') {
+                    window.attachMultiDeviceListeners();
+                }
+            }).catch(() => { cloudReady = false; });
         } catch (e) {
             cloudReady = false;
         }
@@ -13830,7 +13930,6 @@ ${JSON.stringify(liveSnapshot)}`;
             );
 
             if (!matched) {
-                // Auto-create seamless local/cloud profile if user signs in on a fresh browser with valid credentials
                 const fallbackUid = cleanPh.length === 10 ? `phone_${cleanPh}` : `user_${Date.now()}`;
                 const fallbackName = cleanPh.length === 10 ? `User (${cleanPh})` : idStr.split('@')[0];
                 const newRec = {
@@ -13889,7 +13988,7 @@ ${JSON.stringify(liveSnapshot)}`;
                 name: getPrimaryUserName(),
                 phone: extractCleanPhone(appState.userProfile?.phone || getAuthSession()?.phone || ''),
                 email: (appState.userProfile?.email || getAuthSession()?.email || '').toLowerCase(),
-                updatedAt: appState.updatedAt || Date.now()
+                updatedAt: Date.now()
             };
             try {
                 const allWs = JSON.parse(localStorage.getItem('khataflow_admin_all_workspaces') || '{}');
@@ -13906,14 +14005,13 @@ ${JSON.stringify(liveSnapshot)}`;
         window.syncCurrentUserFromCloud = async function(forceOverride = false, silent = false) {
             const wsId = getSessionWorkspaceDocId();
             if (!wsId) return;
-            try {
-                const allWs = JSON.parse(localStorage.getItem('khataflow_admin_all_workspaces') || '{}');
-                if (allWs[wsId]) {
-                    window.mergeCloudDataToState(allWs[wsId], forceOverride);
-                }
-            } catch (e) {}
-
             if (!db || !cloudReady) {
+                try {
+                    const allWs = JSON.parse(localStorage.getItem('khataflow_admin_all_workspaces') || '{}');
+                    if (allWs[wsId]) {
+                        window.mergeCloudDataToState(allWs[wsId], forceOverride);
+                    }
+                } catch (e) {}
                 if (!silent) showToast('Local & Workspace data synced!');
                 return;
             }
@@ -13931,7 +14029,6 @@ ${JSON.stringify(liveSnapshot)}`;
         };
 
         window.fetchFirestoreUsersNow = async function() {
-            // 1. Always merge local users + local workspaces + current session first so data is never empty
             const mergedUsers = getDeduplicatedAdminUsers();
             localStorage.setItem('khataflow_registered_users', JSON.stringify(mergedUsers));
             renderAdminUsersList();
@@ -13964,7 +14061,7 @@ ${JSON.stringify(liveSnapshot)}`;
             const wsId = getSessionWorkspaceDocId();
             if (!wsId || !db || !cloudReady) return;
             try {
-                // Establish real-time live snapshot listener for cross-device synchronization
+                // Real-time listener: instantly catches updates when user logs in on another device or browser
                 activeWsUnsub = onSnapshot(doc(db, 'neokhata_workspaces', wsId), (snap) => {
                     if (snap.exists()) {
                         const remote = snap.data();
