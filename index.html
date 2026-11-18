@@ -13841,6 +13841,7 @@ ${JSON.stringify(liveSnapshot)}`;
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getFirestore, doc, getDoc, setDoc, getDocs, collection, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getDatabase, ref, set, get, update, remove, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
         import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
         const firebaseConfig = {
@@ -13855,38 +13856,106 @@ ${JSON.stringify(liveSnapshot)}`;
         };
 
         let db = null;
+        let rtdb = null;
         let auth = null;
         let cloudReady = false;
         let activeWsUnsub = null;
+        let activeRtdbUnsub = null;
+        let activeUsersRtdbUnsub = null;
+        let activeGlobalRtdbUnsub = null;
+        let pendingWorkspaceSync = false;
 
-        try {
-            const app = initializeApp(firebaseConfig);
-            db = getFirestore(app);
-            auth = getAuth(app);
-            signInAnonymously(auth).then(() => {
+        const CURRENT_DEVICE_ID = (() => {
+            let id = localStorage.getItem('neokhata_device_id');
+            if (!id) {
+                id = `dev_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
+                localStorage.setItem('neokhata_device_id', id);
+            }
+            return id;
+        })();
+
+        function getSessionSafe() {
+            try {
+                if (typeof getAuthSession === 'function') return getAuthSession();
+                return JSON.parse(localStorage.getItem('khataflow_auth_session') || 'null');
+            } catch (e) {
+                return null;
+            }
+        }
+
+        function extractCleanPhoneSafe(val) {
+            if (typeof extractCleanPhone === 'function') return extractCleanPhone(val);
+            return String(val || '').replace(/\D/g, '').slice(-10);
+        }
+
+        function getPrimaryUserNameSafe() {
+            if (typeof getPrimaryUserName === 'function') return getPrimaryUserName();
+            const s = getSessionSafe();
+            return (typeof appState !== 'undefined' && appState.userProfile?.name) || s?.name || 'User';
+        }
+
+        function setCloudSyncIndicator(statusText, isLive = true) {
+            const txtEl = document.getElementById('cloud-sync-text');
+            const dotEl = document.getElementById('cloud-sync-dot');
+            if (txtEl) txtEl.textContent = statusText;
+            if (dotEl) {
+                dotEl.className = isLive
+                    ? 'w-2 h-2 rounded-full bg-emerald-400 animate-pulse'
+                    : 'w-2 h-2 rounded-full bg-amber-400 animate-ping';
+            }
+        }
+
+        const authReadyPromise = (async () => {
+            try {
+                const app = initializeApp(firebaseConfig);
+                rtdb = getDatabase(app);
+                try { db = getFirestore(app); } catch (e) { db = null; }
+                try {
+                    auth = getAuth(app);
+                    await signInAnonymously(auth);
+                } catch (authErr) {
+                    // Realtime Database rules are open (.read: true, .write: true), so RTDB works even if Anonymous Auth is restricted
+                }
                 cloudReady = true;
-                // Automatically attach real-time multi-device listeners as soon as auth is ready
+                setCloudSyncIndicator('RTDB Live Synced', true);
                 if (typeof window.attachMultiDeviceListeners === 'function') {
                     window.attachMultiDeviceListeners();
                 }
-            }).catch(() => { cloudReady = false; });
-        } catch (e) {
-            cloudReady = false;
+                if (pendingWorkspaceSync && typeof window.pushStateToCloud === 'function') {
+                    pendingWorkspaceSync = false;
+                    await window.pushStateToCloud();
+                }
+                return true;
+            } catch (e) {
+                cloudReady = false;
+                setCloudSyncIndicator('Offline Cache', false);
+                return false;
+            }
+        })();
+
+        async function ensureCloudReady() {
+            if (cloudReady && (rtdb || db)) return true;
+            return await authReadyPromise;
         }
 
         function getSessionWorkspaceDocId() {
-            const sess = getAuthSession();
+            const sess = getSessionSafe();
             if (!sess || !sess.isLoggedIn || sess.role === 'admin') return null;
-            const ph = extractCleanPhone(sess.phone || appState.userProfile?.phone || '');
+            const ph = extractCleanPhoneSafe(sess.phone || (typeof appState !== 'undefined' ? appState.userProfile?.phone : '') || '');
             if (ph.length === 10) return `phone_${ph}`;
-            const em = (sess.email || appState.userProfile?.email || '').trim().toLowerCase();
+            const em = (sess.email || (typeof appState !== 'undefined' ? appState.userProfile?.email : '') || '').trim().toLowerCase();
             return em ? `email_${em.replace(/[^a-z0-9]/g, '_')}` : (sess.uid || null);
         }
 
+        function sanitizeForRtdb(obj) {
+            return JSON.parse(JSON.stringify(obj, (k, v) => (v === undefined ? null : v)));
+        }
+
         window.firebaseRegister = async function(email, password, fullName, phone) {
-            const cleanPh = extractCleanPhone(phone);
+            await ensureCloudReady();
+            const cleanPh = extractCleanPhoneSafe(phone);
             const cleanEm = (email || '').trim().toLowerCase();
-            const uid = cleanPh.length === 10 ? `phone_${cleanPh}` : `user_${Date.now()}`;
+            const uid = cleanPh.length === 10 ? `phone_${cleanPh}` : `email_${cleanEm.replace(/[^a-z0-9]/g, '_')}`;
             const userRecord = {
                 uid,
                 primaryUid: uid,
@@ -13898,39 +13967,55 @@ ${JSON.stringify(liveSnapshot)}`;
                 createdAt: new Date().toISOString()
             };
 
-            const regList = getDeduplicatedAdminUsers();
-            if (regList.some(u => (cleanPh && extractCleanPhone(u.phone || '') === cleanPh) || (cleanEm && (u.email || '').toLowerCase() === cleanEm))) {
+            if (rtdb) {
+                try {
+                    const snap = await get(ref(rtdb, 'neokhata_users'));
+                    if (snap.exists()) {
+                        const allCloudUsers = Object.values(snap.val() || {});
+                        const dup = allCloudUsers.find(u =>
+                            (cleanPh.length === 10 && extractCleanPhoneSafe(u.phone || '') === cleanPh) ||
+                            (cleanEm && (u.email || '').toLowerCase() === cleanEm)
+                        );
+                        if (dup) throw new Error('Account with this Mobile or Email already exists. Please Sign In.');
+                    }
+                } catch (err) {
+                    if (err?.message?.includes('already exists')) throw err;
+                }
+            }
+
+            const regList = typeof getDeduplicatedAdminUsers === 'function' ? getDeduplicatedAdminUsers() : [];
+            if (regList.some(u => (cleanPh.length === 10 && extractCleanPhoneSafe(u.phone || '') === cleanPh) || (cleanEm && (u.email || '').toLowerCase() === cleanEm))) {
                 throw new Error('Account with this Mobile or Email already exists. Please Sign In.');
             }
             regList.unshift(userRecord);
             localStorage.setItem('khataflow_registered_users', JSON.stringify(regList));
 
-            if (db && cloudReady) {
-                try {
-                    await setDoc(doc(db, 'neokhata_users', uid), userRecord, { merge: true });
-                } catch (e) {}
+            if (rtdb) {
+                try { await set(ref(rtdb, `neokhata_users/${uid}`), sanitizeForRtdb(userRecord)); } catch (e) {}
+            }
+            if (db) {
+                try { await setDoc(doc(db, 'neokhata_users', uid), userRecord, { merge: true }); } catch (e) {}
             }
             return { user: { uid, email: cleanEm, displayName: fullName, phone: cleanPh } };
         };
 
         window.firebaseLogin = async function(identifier, password) {
+            await ensureCloudReady();
             const idStr = (identifier || '').trim();
-            const cleanPh = extractCleanPhone(idStr);
+            const cleanPh = extractCleanPhoneSafe(idStr);
             const lowerEm = idStr.toLowerCase();
             const pwdHash = btoa(unescape(encodeURIComponent(password)));
 
-            if (db && cloudReady) {
-                try { await window.fetchFirestoreUsersNow(); } catch (e) {}
-            }
+            try { await window.fetchFirestoreUsersNow(); } catch (e) {}
 
-            const regList = getDeduplicatedAdminUsers();
+            const regList = typeof getDeduplicatedAdminUsers === 'function' ? getDeduplicatedAdminUsers() : [];
             const matched = regList.find(u =>
-                (cleanPh.length === 10 && extractCleanPhone(u.phone || '') === cleanPh) ||
+                (cleanPh.length === 10 && extractCleanPhoneSafe(u.phone || '') === cleanPh) ||
                 (lowerEm && (u.email || '').toLowerCase() === lowerEm)
             );
 
             if (!matched) {
-                const fallbackUid = cleanPh.length === 10 ? `phone_${cleanPh}` : `user_${Date.now()}`;
+                const fallbackUid = cleanPh.length === 10 ? `phone_${cleanPh}` : `email_${lowerEm.replace(/[^a-z0-9]/g, '_')}`;
                 const fallbackName = cleanPh.length === 10 ? `User (${cleanPh})` : idStr.split('@')[0];
                 const newRec = {
                     uid: fallbackUid,
@@ -13944,6 +14029,12 @@ ${JSON.stringify(liveSnapshot)}`;
                 };
                 regList.unshift(newRec);
                 localStorage.setItem('khataflow_registered_users', JSON.stringify(regList));
+                if (rtdb) {
+                    try { await set(ref(rtdb, `neokhata_users/${fallbackUid}`), sanitizeForRtdb(newRec)); } catch (e) {}
+                }
+                if (db) {
+                    try { await setDoc(doc(db, 'neokhata_users', fallbackUid), newRec, { merge: true }); } catch (e) {}
+                }
                 return { user: { uid: fallbackUid, email: newRec.email, displayName: fallbackName, phone: cleanPh } };
             }
 
@@ -13951,168 +14042,312 @@ ${JSON.stringify(liveSnapshot)}`;
                 throw new Error('Incorrect password. Please check and try again.');
             }
 
+            const resolvedUid = cleanPh.length === 10 ? `phone_${cleanPh}` : (matched.uid || `email_${lowerEm.replace(/[^a-z0-9]/g, '_')}`);
             return {
                 user: {
-                    uid: matched.uid || `phone_${matched.phone}`,
+                    uid: resolvedUid,
                     email: matched.email || '',
                     displayName: matched.name || 'User',
-                    phone: extractCleanPhone(matched.phone || '')
+                    phone: extractCleanPhoneSafe(matched.phone || cleanPh)
                 }
             };
         };
 
         window.firebaseResetUserPassword = async function(identifier, newPassword) {
-            const cleanPh = extractCleanPhone(identifier);
+            await ensureCloudReady();
+            const cleanPh = extractCleanPhoneSafe(identifier);
             const lowerEm = (identifier || '').trim().toLowerCase();
             const newHash = btoa(unescape(encodeURIComponent(newPassword)));
-            const regList = getDeduplicatedAdminUsers();
+            try { await window.fetchFirestoreUsersNow(); } catch (e) {}
+
+            const regList = typeof getDeduplicatedAdminUsers === 'function' ? getDeduplicatedAdminUsers() : [];
             const idx = regList.findIndex(u =>
-                (cleanPh.length === 10 && extractCleanPhone(u.phone || '') === cleanPh) ||
+                (cleanPh.length === 10 && extractCleanPhoneSafe(u.phone || '') === cleanPh) ||
                 (lowerEm && (u.email || '').toLowerCase() === lowerEm)
             );
             if (idx === -1) throw new Error('No registered account found with this Mobile or Email.');
             regList[idx].passwordHash = newHash;
             localStorage.setItem('khataflow_registered_users', JSON.stringify(regList));
-            if (db && cloudReady) {
-                try {
-                    await setDoc(doc(db, 'neokhata_users', regList[idx].uid), regList[idx], { merge: true });
-                } catch (e) {}
+
+            const targetUid = cleanPh.length === 10 ? `phone_${cleanPh}` : regList[idx].uid;
+            if (rtdb) {
+                try { await update(ref(rtdb, `neokhata_users/${targetUid}`), { passwordHash: newHash }); } catch (e) {}
+            }
+            if (db) {
+                try { await setDoc(doc(db, 'neokhata_users', targetUid), regList[idx], { merge: true }); } catch (e) {}
             }
         };
 
         window.pushStateToCloud = async function() {
             const wsId = getSessionWorkspaceDocId();
-            if (!wsId) return;
-            const payload = {
+            if (!wsId || typeof appState === 'undefined') return;
+
+            const nowTs = Date.now();
+            appState.updatedAt = nowTs;
+            const payload = sanitizeForRtdb({
                 ...appState,
-                name: getPrimaryUserName(),
-                phone: extractCleanPhone(appState.userProfile?.phone || getAuthSession()?.phone || ''),
-                email: (appState.userProfile?.email || getAuthSession()?.email || '').toLowerCase(),
-                updatedAt: Date.now()
-            };
+                name: getPrimaryUserNameSafe(),
+                phone: extractCleanPhoneSafe(appState.userProfile?.phone || getSessionSafe()?.phone || ''),
+                email: (appState.userProfile?.email || getSessionSafe()?.email || '').toLowerCase(),
+                lastWriterDeviceId: CURRENT_DEVICE_ID,
+                updatedAt: nowTs
+            });
+
             try {
                 const allWs = JSON.parse(localStorage.getItem('khataflow_admin_all_workspaces') || '{}');
                 allWs[wsId] = payload;
                 localStorage.setItem('khataflow_admin_all_workspaces', JSON.stringify(allWs));
             } catch (e) {}
 
-            if (!db || !cloudReady) return;
+            if (!cloudReady) {
+                pendingWorkspaceSync = true;
+                await ensureCloudReady();
+            }
+
+            setCloudSyncIndicator('Syncing Live...', false);
             try {
-                await setDoc(doc(db, 'neokhata_workspaces', wsId), payload, { merge: true });
-            } catch (e) {}
+                if (rtdb) {
+                    await set(ref(rtdb, `neokhata_workspaces/${wsId}`), payload);
+                }
+                if (db) {
+                    await setDoc(doc(db, 'neokhata_workspaces', wsId), payload, { merge: true });
+                }
+                setCloudSyncIndicator('RTDB Live Synced', true);
+            } catch (e) {
+                setCloudSyncIndicator('Sync Retry...', false);
+            }
         };
 
         window.syncCurrentUserFromCloud = async function(forceOverride = false, silent = false) {
             const wsId = getSessionWorkspaceDocId();
             if (!wsId) return;
-            if (!db || !cloudReady) {
+            await ensureCloudReady();
+
+            let remote = null;
+            if (rtdb) {
                 try {
-                    const allWs = JSON.parse(localStorage.getItem('khataflow_admin_all_workspaces') || '{}');
-                    if (allWs[wsId]) {
-                        window.mergeCloudDataToState(allWs[wsId], forceOverride);
-                    }
+                    const snap = await get(ref(rtdb, `neokhata_workspaces/${wsId}`));
+                    if (snap.exists()) remote = snap.val();
                 } catch (e) {}
-                if (!silent) showToast('Local & Workspace data synced!');
-                return;
             }
-            try {
-                const snap = await getDoc(doc(db, 'neokhata_workspaces', wsId));
-                if (snap.exists()) {
-                    const remote = snap.data();
+            if (!remote && db) {
+                try {
+                    const snap = await getDoc(doc(db, 'neokhata_workspaces', wsId));
+                    if (snap.exists()) remote = snap.data();
+                } catch (e) {}
+            }
+
+            if (remote && typeof remote === 'object') {
+                if (typeof window.mergeCloudDataToState === 'function') {
                     window.mergeCloudDataToState(remote, forceOverride);
+                }
+                try {
                     const allWs = JSON.parse(localStorage.getItem('khataflow_admin_all_workspaces') || '{}');
                     allWs[wsId] = remote;
                     localStorage.setItem('khataflow_admin_all_workspaces', JSON.stringify(allWs));
-                }
-                if (!silent) showToast('Synced with Firebase Cloud!');
-            } catch (e) {}
+                } catch (e) {}
+            }
+            setCloudSyncIndicator('RTDB Live Synced', true);
+            if (!silent && typeof showToast === 'function') showToast('Live data synced across devices!');
         };
 
         window.fetchFirestoreUsersNow = async function() {
-            const mergedUsers = getDeduplicatedAdminUsers();
-            localStorage.setItem('khataflow_registered_users', JSON.stringify(mergedUsers));
-            renderAdminUsersList();
-            updateAdminDashboardMetrics();
+            const localUsers = typeof getDeduplicatedAdminUsers === 'function' ? getDeduplicatedAdminUsers() : [];
+            await ensureCloudReady();
 
-            if (!db || !cloudReady) return;
-            try {
-                const usersSnap = await getDocs(collection(db, 'neokhata_users'));
-                const cloudUsers = [];
-                usersSnap.forEach(d => cloudUsers.push(d.data()));
+            const cloudUsers = [];
+            const allWs = JSON.parse(localStorage.getItem('khataflow_admin_all_workspaces') || '{}');
 
-                const wsSnap = await getDocs(collection(db, 'neokhata_workspaces'));
-                const allWs = JSON.parse(localStorage.getItem('khataflow_admin_all_workspaces') || '{}');
-                wsSnap.forEach(d => {
-                    allWs[d.id] = d.data();
-                });
-                localStorage.setItem('khataflow_admin_all_workspaces', JSON.stringify(allWs));
+            if (rtdb) {
+                try {
+                    const uSnap = await get(ref(rtdb, 'neokhata_users'));
+                    if (uSnap.exists()) {
+                        Object.values(uSnap.val() || {}).forEach(u => { if (u) cloudUsers.push(u); });
+                    }
+                    const wSnap = await get(ref(rtdb, 'neokhata_workspaces'));
+                    if (wSnap.exists()) {
+                        Object.entries(wSnap.val() || {}).forEach(([k, v]) => {
+                            if (k && v) allWs[k] = v;
+                        });
+                    }
+                } catch (e) {}
+            }
 
-                if (cloudUsers.length > 0) {
-                    const combined = [...cloudUsers, ...mergedUsers];
-                    localStorage.setItem('khataflow_registered_users', JSON.stringify(combined));
-                }
-                renderAdminUsersList();
-                updateAdminDashboardMetrics();
-            } catch (e) {}
+            if (db) {
+                try {
+                    const usersSnap = await getDocs(collection(db, 'neokhata_users'));
+                    usersSnap.forEach(d => cloudUsers.push(d.data()));
+                    const wsSnap = await getDocs(collection(db, 'neokhata_workspaces'));
+                    wsSnap.forEach(d => {
+                        const existingTs = Number(allWs[d.id]?.updatedAt) || 0;
+                        const fsTs = Number(d.data()?.updatedAt) || 0;
+                        if (!allWs[d.id] || fsTs >= existingTs) allWs[d.id] = d.data();
+                    });
+                } catch (e) {}
+            }
+
+            localStorage.setItem('khataflow_admin_all_workspaces', JSON.stringify(allWs));
+            if (cloudUsers.length > 0 || localUsers.length > 0) {
+                localStorage.setItem('khataflow_registered_users', JSON.stringify([...cloudUsers, ...localUsers]));
+            }
+            if (typeof renderAdminUsersList === 'function') renderAdminUsersList();
+            if (typeof updateAdminDashboardMetrics === 'function') updateAdminDashboardMetrics();
         };
 
         window.attachMultiDeviceListeners = function() {
             if (activeWsUnsub) { try { activeWsUnsub(); } catch (e) {} activeWsUnsub = null; }
+            if (activeRtdbUnsub) { try { activeRtdbUnsub(); } catch (e) {} activeRtdbUnsub = null; }
+            if (activeUsersRtdbUnsub) { try { activeUsersRtdbUnsub(); } catch (e) {} activeUsersRtdbUnsub = null; }
+            if (activeGlobalRtdbUnsub) { try { activeGlobalRtdbUnsub(); } catch (e) {} activeGlobalRtdbUnsub = null; }
+
+            const sess = getSessionSafe();
+            if (!sess || !sess.isLoggedIn) return;
+
+            // 1. Live Global Config & Subscription Rules Sync across all devices
+            if (rtdb) {
+                try {
+                    activeGlobalRtdbUnsub = onValue(ref(rtdb, 'neokhata_system/global_config'), (snap) => {
+                        if (!snap.exists()) return;
+                        const data = snap.val() || {};
+                        if (data.adminConfig && typeof adminConfig !== 'undefined') {
+                            adminConfig = { ...adminConfig, ...data.adminConfig };
+                            localStorage.setItem('khataflow_admin_config', JSON.stringify(adminConfig));
+                            if (typeof applyAdminConfigToUI === 'function') applyAdminConfigToUI();
+                            if (typeof apply70FeatureOverridesLive === 'function') apply70FeatureOverridesLive();
+                            if (typeof updateSubscriptionStatusBadges === 'function') updateSubscriptionStatusBadges();
+                        }
+                        if (Array.isArray(data.sponsoredAds) && data.sponsoredAds.length > 0 && typeof SPONSORED_ADS_LIST !== 'undefined') {
+                            SPONSORED_ADS_LIST = data.sponsoredAds;
+                            localStorage.setItem('khataflow_sponsored_ads', JSON.stringify(SPONSORED_ADS_LIST));
+                            if (typeof renderSponsoredAdCarousel === 'function') renderSponsoredAdCarousel();
+                        }
+                    });
+                } catch (e) {}
+            }
+
+            // 2. If Admin is logged in, stream all users & all workspaces in real time
+            if (sess.role === 'admin' && rtdb) {
+                try {
+                    activeUsersRtdbUnsub = onValue(ref(rtdb, 'neokhata_workspaces'), (snap) => {
+                        if (!snap.exists()) return;
+                        const allWs = snap.val() || {};
+                        localStorage.setItem('khataflow_admin_all_workspaces', JSON.stringify(allWs));
+                        if (typeof renderAdminUsersList === 'function') renderAdminUsersList();
+                        if (typeof updateAdminDashboardMetrics === 'function') updateAdminDashboardMetrics();
+                    });
+                } catch (e) {}
+                return;
+            }
+
+            // 3. Real-Time Multi-Device User Workspace Stream (RTDB onValue + Firestore onSnapshot)
             const wsId = getSessionWorkspaceDocId();
-            if (!wsId || !db || !cloudReady) return;
-            try {
-                // Real-time listener: instantly catches updates when user logs in on another device or browser
-                activeWsUnsub = onSnapshot(doc(db, 'neokhata_workspaces', wsId), (snap) => {
-                    if (snap.exists()) {
-                        const remote = snap.data();
+            if (!wsId) return;
+
+            const handleRemoteWorkspaceSnapshot = (remote) => {
+                if (!remote || typeof remote !== 'object') return;
+                const remoteTs = Number(remote.updatedAt) || 0;
+                const localTs = (typeof appState !== 'undefined' ? Number(appState.updatedAt) : 0) || 0;
+                const isFromOtherDevice = remote.lastWriterDeviceId && remote.lastWriterDeviceId !== CURRENT_DEVICE_ID;
+
+                if (isFromOtherDevice || remoteTs > localTs) {
+                    if (typeof window.mergeCloudDataToState === 'function') {
                         window.mergeCloudDataToState(remote, true);
-                        try {
-                            const allWs = JSON.parse(localStorage.getItem('khataflow_admin_all_workspaces') || '{}');
-                            allWs[wsId] = remote;
-                            localStorage.setItem('khataflow_admin_all_workspaces', JSON.stringify(allWs));
-                        } catch (e) {}
                     }
-                });
-            } catch (e) {}
+                    try {
+                        const allWs = JSON.parse(localStorage.getItem('khataflow_admin_all_workspaces') || '{}');
+                        allWs[wsId] = remote;
+                        localStorage.setItem('khataflow_admin_all_workspaces', JSON.stringify(allWs));
+                    } catch (e) {}
+                    setCloudSyncIndicator('RTDB Live Synced', true);
+                }
+            };
+
+            if (rtdb) {
+                try {
+                    activeRtdbUnsub = onValue(ref(rtdb, `neokhata_workspaces/${wsId}`), (snap) => {
+                        if (snap.exists()) handleRemoteWorkspaceSnapshot(snap.val());
+                    });
+                } catch (e) {}
+            }
+
+            if (db) {
+                try {
+                    activeWsUnsub = onSnapshot(doc(db, 'neokhata_workspaces', wsId), (snap) => {
+                        if (snap.exists()) handleRemoteWorkspaceSnapshot(snap.data());
+                    });
+                } catch (e) {}
+            }
         };
 
         window.publishAdminBroadcastToCloud = async function(payload) {
-            if (!db || !cloudReady) return;
-            try {
-                await setDoc(doc(db, 'neokhata_system', 'global_config'), payload, { merge: true });
-            } catch (e) {}
+            await ensureCloudReady();
+            const cleanPayload = sanitizeForRtdb({ ...payload, updatedAt: Date.now() });
+            if (rtdb) {
+                try { await set(ref(rtdb, 'neokhata_system/global_config'), cleanPayload); } catch (e) {}
+            }
+            if (db) {
+                try { await setDoc(doc(db, 'neokhata_system', 'global_config'), cleanPayload, { merge: true }); } catch (e) {}
+            }
         };
 
         window.adminSaveSingleUserToCloud = async function(userObj, wsKey, wsObj) {
-            if (!db || !cloudReady) return;
-            try {
-                if (userObj && userObj.uid) await setDoc(doc(db, 'neokhata_users', userObj.uid), userObj, { merge: true });
-                if (wsKey && wsObj) await setDoc(doc(db, 'neokhata_workspaces', wsKey), wsObj, { merge: true });
-            } catch (e) {}
+            await ensureCloudReady();
+            if (rtdb) {
+                try {
+                    if (userObj && userObj.uid) await set(ref(rtdb, `neokhata_users/${userObj.uid}`), sanitizeForRtdb(userObj));
+                    if (wsKey && wsObj) await set(ref(rtdb, `neokhata_workspaces/${wsKey}`), sanitizeForRtdb({ ...wsObj, lastWriterDeviceId: 'admin_override', updatedAt: Date.now() }));
+                } catch (e) {}
+            }
+            if (db) {
+                try {
+                    if (userObj && userObj.uid) await setDoc(doc(db, 'neokhata_users', userObj.uid), userObj, { merge: true });
+                    if (wsKey && wsObj) await setDoc(doc(db, 'neokhata_workspaces', wsKey), { ...wsObj, lastWriterDeviceId: 'admin_override', updatedAt: Date.now() }, { merge: true });
+                } catch (e) {}
+            }
         };
 
         window.restoreMasterBackupToCloud = async function({ registeredUsers, allUserWorkspaces, adminConfig: cfg, sponsoredAds }) {
-            if (!db || !cloudReady) return;
-            try {
-                for (const u of (registeredUsers || [])) {
-                    if (u && u.uid) await setDoc(doc(db, 'neokhata_users', u.uid), u, { merge: true });
-                }
-                for (const [k, ws] of Object.entries(allUserWorkspaces || {})) {
-                    if (k && ws) await setDoc(doc(db, 'neokhata_workspaces', k), ws, { merge: true });
-                }
-                await setDoc(doc(db, 'neokhata_system', 'global_config'), { adminConfig: cfg, sponsoredAds }, { merge: true });
-            } catch (e) {}
+            await ensureCloudReady();
+            if (rtdb) {
+                try {
+                    for (const u of (registeredUsers || [])) {
+                        if (u && u.uid) await set(ref(rtdb, `neokhata_users/${u.uid}`), sanitizeForRtdb(u));
+                    }
+                    for (const [k, ws] of Object.entries(allUserWorkspaces || {})) {
+                        if (k && ws) await set(ref(rtdb, `neokhata_workspaces/${k}`), sanitizeForRtdb({ ...ws, lastWriterDeviceId: 'master_restore', updatedAt: Date.now() }));
+                    }
+                    await set(ref(rtdb, 'neokhata_system/global_config'), sanitizeForRtdb({ adminConfig: cfg, sponsoredAds, updatedAt: Date.now() }));
+                } catch (e) {}
+            }
+            if (db) {
+                try {
+                    for (const u of (registeredUsers || [])) {
+                        if (u && u.uid) await setDoc(doc(db, 'neokhata_users', u.uid), u, { merge: true });
+                    }
+                    for (const [k, ws] of Object.entries(allUserWorkspaces || {})) {
+                        if (k && ws) await setDoc(doc(db, 'neokhata_workspaces', k), { ...ws, lastWriterDeviceId: 'master_restore', updatedAt: Date.now() }, { merge: true });
+                    }
+                    await setDoc(doc(db, 'neokhata_system', 'global_config'), { adminConfig: cfg, sponsoredAds }, { merge: true });
+                } catch (e) {}
+            }
         };
 
         window.deleteSelfCloudAccount = async function({ phone, email, uid }) {
-            const cleanPh = extractCleanPhone(phone || '');
+            await ensureCloudReady();
+            const cleanPh = extractCleanPhoneSafe(phone || '');
             const wsKey = cleanPh.length === 10 ? `phone_${cleanPh}` : (uid || '');
-            const regList = getDeduplicatedAdminUsers().filter(u => (cleanPh && extractCleanPhone(u.phone || '') !== cleanPh) && u.uid !== uid);
+            const regList = (typeof getDeduplicatedAdminUsers === 'function' ? getDeduplicatedAdminUsers() : []).filter(u => (cleanPh && extractCleanPhoneSafe(u.phone || '') !== cleanPh) && u.uid !== uid);
             localStorage.setItem('khataflow_registered_users', JSON.stringify(regList));
             const allWs = JSON.parse(localStorage.getItem('khataflow_admin_all_workspaces') || '{}');
             if (wsKey) delete allWs[wsKey];
             localStorage.setItem('khataflow_admin_all_workspaces', JSON.stringify(allWs));
-            if (db && cloudReady && wsKey) {
+            if (wsKey && rtdb) {
+                try {
+                    await remove(ref(rtdb, `neokhata_users/${wsKey}`));
+                    await remove(ref(rtdb, `neokhata_workspaces/${wsKey}`));
+                } catch (e) {}
+            }
+            if (wsKey && db) {
                 try {
                     await deleteDoc(doc(db, 'neokhata_users', wsKey));
                     await deleteDoc(doc(db, 'neokhata_workspaces', wsKey));
@@ -14122,7 +14357,20 @@ ${JSON.stringify(liveSnapshot)}`;
 
         window.firebaseLogout = async function() {
             if (activeWsUnsub) { try { activeWsUnsub(); } catch (e) {} activeWsUnsub = null; }
+            if (activeRtdbUnsub) { try { activeRtdbUnsub(); } catch (e) {} activeRtdbUnsub = null; }
+            if (activeUsersRtdbUnsub) { try { activeUsersRtdbUnsub(); } catch (e) {} activeUsersRtdbUnsub = null; }
+            if (activeGlobalRtdbUnsub) { try { activeGlobalRtdbUnsub(); } catch (e) {} activeGlobalRtdbUnsub = null; }
         };
+
+        // Re-attach live listeners & pull fresh data whenever user switches devices or unlocks screen
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible') {
+                const s = getSessionSafe();
+                if (s && s.isLoggedIn && s.role !== 'admin') {
+                    window.syncCurrentUserFromCloud(true, true);
+                }
+            }
+        });
     </script>
 </body>
 </html>
