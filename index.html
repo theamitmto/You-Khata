@@ -384,7 +384,7 @@
             <div class="flex items-center gap-2">
                 <button type="button" onclick="openSubscriptionUpgradeModal()" id="header-sub-badge-btn" class="px-3 py-2 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white text-xs font-black shadow-md shadow-amber-500/25 flex items-center gap-1.5 transition active:scale-95">
                     <i class="fa-solid fa-crown text-[11px]"></i>
-                    <span id="header-sub-badge-text">Go Pro</span>
+                    <span id="header-sub-badge-text">Get Pro</span>
                 </button>
                 <button onclick="toggleSideMenu(true)" class="w-11 h-11 rounded-2xl bg-white/90 hover:bg-white dark:bg-neutral-800/90 dark:hover:bg-neutral-700 transition flex items-center justify-center text-neutral-800 dark:text-neutral-100 shadow-sm border border-neutral-200/80 dark:border-neutral-700/80 active:scale-95 group" title="Open Main Menu">
                     <i class="fa-solid fa-bars text-lg group-hover:scale-110 transition"></i>
@@ -2848,12 +2848,18 @@
                     </div>
 
                     <!-- Incoming UPI Payment Requests Queue -->
-                    <div class="p-4 rounded-2xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 space-y-2.5">
-                        <div class="flex items-center justify-between">
-                            <span class="font-black text-neutral-900 dark:text-white"><i class="fa-solid fa-receipt text-amber-500 mr-1"></i> Automated Payment Verification Ledger &amp; UTR Audit</span>
-                            <span id="admin-sub-requests-count" class="px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-700 font-black text-[10px]">0 Requests</span>
+                    <div class="p-4 rounded-2xl bg-white dark:bg-neutral-900 border border-amber-400/50 dark:border-amber-700/60 space-y-2.5">
+                        <div class="flex flex-wrap items-center justify-between gap-2">
+                            <div>
+                                <span class="font-black text-neutral-900 dark:text-white"><i class="fa-solid fa-bell text-amber-500 mr-1"></i> Incoming UPI Subscription Requests (Admin Approval Required)</span>
+                                <p class="text-[10px] text-neutral-500">Verify the 12-digit UTR in your UPI app (6393954985@upi) and click <strong>Accept &amp; Activate</strong> or <strong>Reject</strong>.</p>
+                            </div>
+                            <div class="flex items-center gap-1.5">
+                                <span id="admin-sub-pending-badge" class="px-2.5 py-0.5 rounded-full bg-amber-500 text-white font-black text-[10px]">0 Pending</span>
+                                <span id="admin-sub-requests-count" class="px-2 py-0.5 rounded-full bg-neutral-200 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 font-black text-[10px]">0 Total</span>
+                            </div>
                         </div>
-                        <div id="admin-sub-payment-requests-list" class="space-y-2 max-h-48 overflow-y-auto pr-1"></div>
+                        <div id="admin-sub-payment-requests-list" class="space-y-2 max-h-64 overflow-y-auto pr-1"></div>
                     </div>
                 </div>
 
@@ -4225,11 +4231,11 @@
                 <!-- Automated Payment Verification Form -->
                 <form onsubmit="submitSubscriptionUtrPayment(event)" class="pt-3 border-t border-white/15 space-y-2 text-left">
                     <div class="flex items-center justify-between">
-                        <label class="text-[10px] font-black uppercase text-amber-300">3. Automated Payment Verification (Enter 12-Digit UTR / Ref No.) *</label>
+                        <label class="text-[10px] font-black uppercase text-amber-300">3. Submit 12-Digit UTR / Transaction Ref No. for Admin Approval *</label>
                     </div>
                     <div class="flex gap-2">
                         <input type="text" id="sub-checkout-utr-input" required minlength="12" maxlength="22" oninput="this.value=this.value.replace(/[^a-zA-Z0-9]/g,'').toUpperCase()" placeholder="Enter 12-digit UTR after paying" class="flex-1 p-2.5 rounded-xl bg-white/10 border border-white/20 text-white placeholder-slate-400 font-mono font-bold focus:outline-none focus:border-emerald-400">
-                        <button type="submit" class="px-4 py-2.5 rounded-xl bg-primary-600 hover:bg-primary-500 text-white font-black whitespace-nowrap shadow-md">Verify &amp; Activate</button>
+                        <button type="submit" class="px-4 py-2.5 rounded-xl bg-primary-600 hover:bg-primary-500 text-white font-black whitespace-nowrap shadow-md">Submit UTR</button>
                     </div>
                     <div id="sub-verify-feedback-box" class="hidden p-2.5 rounded-xl text-[11px] font-bold"></div>
                 </form>
@@ -12306,11 +12312,17 @@ ${JSON.stringify(liveSnapshot)}`;
             const remainingMs = Math.max(0, expTs - now);
             const activeSub = remainingMs > 0;
             const remainingDays = activeSub ? Math.ceil(remainingMs / 86400000) : 0;
+            const pendingReq = (sc.paymentRequests || []).find(r => r.userKey === userKey && r.status === 'pending');
             return {
                 isPro: activeSub,
                 isVipFree: false,
+                isPendingApproval: !activeSub && !!pendingReq,
+                pendingPlanName: pendingReq ? pendingReq.planName : '',
+                pendingUtr: pendingReq ? pendingReq.utr : '',
                 isExpired: expTs > 0 && !activeSub,
-                planName: activeSub ? (ov.planName || 'Pro Active') : (expTs > 0 ? 'Plan Expired' : 'Free / Demo Plan'),
+                planName: activeSub
+                    ? (ov.planName || 'Pro Active')
+                    : (pendingReq ? `Pending Approval (${pendingReq.planName})` : (expTs > 0 ? 'Plan Expired' : 'Free / Demo Plan')),
                 expiresAt: ov.expiresAt || null,
                 remainingMs,
                 remainingDays,
@@ -13146,25 +13158,18 @@ ${JSON.stringify(liveSnapshot)}`;
             const hdrBtn = document.getElementById('header-sub-badge-btn');
             const hdrTxt = document.getElementById('header-sub-badge-text');
             if (hdrBtn && hdrTxt) {
-                if (access.isVipFree) {
-                    hdrTxt.textContent = 'VIP Pro • Unlimited';
-                } else if (access.isPro) {
-                    hdrTxt.textContent = `${access.remainingDays}d Left • ${formatLiveCountdown(access.remainingMs)}`;
+                if (access.isPro) {
+                    hdrTxt.textContent = 'VIP Pro';
+                } else if (access.isPendingApproval) {
+                    hdrTxt.textContent = 'Approval Pending';
                 } else {
-                    const sc = ensureSubscriptionConfig();
-                    const paidKeys = Object.keys(sc.featureRules || {}).filter(k => sc.featureRules[k]?.isPaid);
-                    const activeDemos = paidKeys.map(k => getFeatureAccessStatus(k)).filter(s => s.mode === 'demo');
-                    if (activeDemos.length > 0) {
-                        const minDemoMs = Math.min(...activeDemos.map(d => d.remainingMs));
-                        const demoDays = Math.ceil(minDemoMs / 86400000);
-                        hdrTxt.textContent = `Demo: ${demoDays}d Left • Go Pro`;
-                    } else {
-                        hdrTxt.textContent = access.isExpired ? 'Expired • Renew Pro' : 'Go Pro';
-                    }
+                    hdrTxt.textContent = access.isExpired ? 'Renew Pro' : 'Get Pro';
                 }
                 hdrBtn.className = access.isPro
-                    ? 'px-3 py-2 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white text-xs font-black shadow-md flex items-center gap-1.5 transition active:scale-95 tabular-nums'
-                    : 'px-3 py-2 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white text-xs font-black shadow-md shadow-amber-500/25 flex items-center gap-1.5 transition active:scale-95 tabular-nums';
+                    ? 'px-3.5 py-2 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white text-xs font-black shadow-md shadow-emerald-500/25 flex items-center gap-1.5 transition active:scale-95'
+                    : (access.isPendingApproval
+                        ? 'px-3 py-2 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-xs font-black shadow-md flex items-center gap-1.5 transition active:scale-95'
+                        : 'px-3.5 py-2 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white text-xs font-black shadow-md shadow-amber-500/25 flex items-center gap-1.5 transition active:scale-95');
             }
 
             ['transactions', 'grocery', 'udhar', 'milk', 'vyapari', 'hub', 'analytics', 'ai'].forEach(fKey => {
@@ -13204,21 +13209,23 @@ ${JSON.stringify(liveSnapshot)}`;
             const menuSub = document.getElementById('menu-sub-plan-sub');
             const menuPill = document.getElementById('menu-sub-plan-pill');
             if (menuTitle) {
-                menuTitle.textContent = access.isPro && !access.isVipFree
-                    ? `${access.planName} (${access.remainingDays} Days Left)`
-                    : access.planName;
+                menuTitle.textContent = access.isPro
+                    ? (access.isVipFree ? 'NeoKhata VIP Pro (Unlimited)' : `VIP Pro • ${access.planName}`)
+                    : 'Get NeoKhata Pro Subscription';
             }
             if (menuSub) {
                 menuSub.textContent = access.isVipFree
-                    ? 'All Paid Features Unlocked Free by Admin'
-                    : (access.expiresAt
-                        ? (access.isPro
-                            ? `⏱ Countdown: ${formatLiveCountdown(access.remainingMs)} • Valid till ${new Date(access.expiresAt).toLocaleDateString('en-IN')}`
-                            : `Expired on ${new Date(access.expiresAt).toLocaleDateString('en-IN')} • Tap to Renew`)
-                        : 'Check Free Features, Demo Countdown & Upgrade');
+                    ? 'All Paid Features Unlocked Free • Lifetime VIP'
+                    : (access.isPendingApproval
+                        ? `⏳ UTR ${access.pendingUtr} submitted • Waiting for Admin Approval`
+                        : (access.expiresAt
+                            ? (access.isPro
+                                ? `⏱ Countdown: ${access.remainingDays}d Left (${formatLiveCountdown(access.remainingMs)})`
+                                : `Expired on ${new Date(access.expiresAt).toLocaleDateString('en-IN')} • Tap to Subscribe`)
+                            : 'Subscribe now to unlock all Pro features & unlimited limits'));
             }
             if (menuPill) {
-                menuPill.textContent = access.isPro ? `${access.remainingDays}D PRO` : 'FREE';
+                menuPill.textContent = access.isPro ? (access.isVipFree ? 'VIP PRO' : `${access.remainingDays}D VIP`) : (access.isPendingApproval ? 'PENDING' : 'GET PRO');
             }
 
             const modalCountdown = document.getElementById('sub-modal-live-countdown-pill');
@@ -13402,52 +13409,49 @@ ${JSON.stringify(liveSnapshot)}`;
             const finalAmt = Math.max(1, Math.round(selectedCheckoutAmount * (1 - appliedCheckoutDiscountPct / 100)));
 
             const isValidFormat = /^[A-Z0-9]{12,22}$/.test(utr) && !/^(\w)\1+$/.test(utr) && utr !== '123456789012';
-            const isDuplicate = (sc.paymentRequests || []).some(r => r.utr === utr && r.status === 'approved');
+            const isDuplicate = (sc.paymentRequests || []).some(r => r.utr === utr && (r.status === 'approved' || r.status === 'pending'));
 
             if (!isValidFormat || isDuplicate) {
                 if (fb) {
                     fb.className = 'p-2.5 rounded-xl text-[11px] font-bold bg-rose-500/20 text-rose-200 border border-rose-400/40';
                     fb.textContent = isDuplicate
-                        ? '❌ This UTR reference has already been used. Please complete a fresh payment.'
-                        : '❌ Payment Not Verified — Invalid or unpaid UTR reference. Please complete payment first and enter valid 12-digit UTR.';
+                        ? '❌ This UTR reference is already submitted or used. Please enter a valid new 12-digit UTR.'
+                        : '❌ Invalid UTR format — Please complete UPI payment first and enter your valid 12-digit UTR / Transaction ID.';
                 }
-                showToast('Payment Not Verified! Please complete payment & retry.', 'error');
+                showToast('Please enter a valid 12-digit UTR number!', 'error');
                 return;
             }
 
             const sess = getAuthSession() || {};
             const userKey = getCurrentUserSubKey();
-            const expIso = new Date(Date.now() + selectedCheckoutDays * 86400000).toISOString();
 
-            sc.userOverrides[userKey] = {
-                ...(sc.userOverrides[userKey] || {}),
-                planName: selectedCheckoutPlanName,
-                assignedPlanId: selectedCheckoutPlanId,
-                expiresAt: expIso
-            };
+            // Save as PENDING — strictly requires Admin Panel Accept/Approval before unlocking Pro features
             sc.paymentRequests.unshift({
                 id: `subreq_${Date.now()}`,
                 userKey,
                 userName: getPrimaryUserName(),
-                userPhone: sess.phone || '',
+                userPhone: sess.phone || appState.userProfile?.phone || '',
+                userEmail: sess.email || appState.userProfile?.email || '',
+                planId: selectedCheckoutPlanId,
                 planName: selectedCheckoutPlanName,
+                planDays: Number(selectedCheckoutDays) || 30,
                 amount: finalAmt,
                 utr,
-                status: 'approved',
+                status: 'pending',
                 createdAt: new Date().toISOString()
             });
 
             localStorage.setItem('khataflow_admin_config', JSON.stringify(adminConfig));
             saveAllAdminChangesLive();
             updateSubscriptionStatusBadges();
+            if (typeof renderAdminSubscriptionStudio === 'function') renderAdminSubscriptionStudio();
 
             if (fb) {
-                fb.className = 'p-2.5 rounded-xl text-[11px] font-bold bg-emerald-500/20 text-emerald-200 border border-emerald-400/40';
-                fb.textContent = `✅ Payment Verified! ${selectedCheckoutPlanName} (${selectedCheckoutDays} Days) activated immediately.`;
+                fb.className = 'p-2.5 rounded-xl text-[11px] font-bold bg-amber-500/20 text-amber-200 border border-amber-400/40';
+                fb.textContent = `⏳ UTR (${utr}) submitted for "${selectedCheckoutPlanName}" (₹${finalAmt})! Your plan will automatically unlock as soon as the Admin verifies & approves your payment.`;
             }
             document.getElementById('sub-checkout-utr-input').value = '';
-            showToast(`${selectedCheckoutPlanName} Activated for ${selectedCheckoutDays} Days!`);
-            setTimeout(() => closeSubscriptionUpgradeModal(), 1200);
+            showToast('UTR submitted! Waiting for Admin verification & approval.');
         }
 
         function renderAdminSubscriptionStudio() {
@@ -13534,13 +13538,22 @@ ${JSON.stringify(liveSnapshot)}`;
                     const ph = extractCleanPhone(u.phone || '');
                     const uKey = ph.length === 10 ? `phone_${ph}` : (u.email || u.uid || '').toLowerCase();
                     const ov = sc.userOverrides[uKey] || {};
+                    const uAccess = getUserSubscriptionAccess(uKey);
                     const encKey = encodeURIComponent(uKey);
                     const expVal = ov.expiresAt ? ov.expiresAt.slice(0, 10) : '';
+                    const statusBadge = uAccess.isVipFree
+                        ? '<span class="px-2 py-0.5 rounded-full bg-purple-500/15 text-purple-600 font-black text-[9px]">VIP FREE</span>'
+                        : (uAccess.isPro
+                            ? `<span class="px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-600 font-black text-[9px]">${uAccess.planName} (${uAccess.remainingDays}d)</span>`
+                            : (uAccess.isPendingApproval
+                                ? `<span class="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-700 font-black text-[9px]">⏳ Pending (${uAccess.pendingPlanName})</span>`
+                                : '<span class="px-2 py-0.5 rounded-full bg-neutral-200 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300 font-bold text-[9px]">Free Plan</span>'));
                     return `
                         <div class="p-2.5 rounded-xl bg-neutral-100 dark:bg-neutral-800 border space-y-1.5">
                             <div class="flex items-center justify-between gap-2">
-                                <div class="min-w-0">
-                                    <div class="font-black truncate">${u.name || 'User'} <span class="font-mono text-[10px] text-neutral-400">${ph || u.email || ''}</span></div>
+                                <div class="min-w-0 flex items-center gap-1.5 flex-wrap">
+                                    <span class="font-black truncate">${u.name || 'User'} <span class="font-mono text-[10px] text-neutral-400">${ph || u.email || ''}</span></span>
+                                    ${statusBadge}
                                 </div>
                                 <label class="flex items-center gap-1 font-black text-[10px] text-emerald-600 cursor-pointer flex-shrink-0">
                                     <input type="checkbox" ${ov.vipFree ? 'checked' : ''} onchange="updateAdminUserSubscriptionOverride('${encKey}', 'vipFree', this.checked)" class="accent-emerald-600"> Free VIP
@@ -13563,26 +13576,42 @@ ${JSON.stringify(liveSnapshot)}`;
                 }).join('') || '<div class="text-center py-4 text-neutral-400">No registered users found.</div>';
             }
 
-            // Payment Verification Ledger
-            const reqList = sc.paymentRequests || [];
+            // Payment Verification Ledger (Pending Requests First)
+            const reqList = [...(sc.paymentRequests || [])].sort((a, b) => (a.status === 'pending' ? -1 : 1) - (b.status === 'pending' ? -1 : 1));
+            const pendingCount = reqList.filter(r => r.status === 'pending').length;
+            if (document.getElementById('admin-sub-pending-badge')) {
+                document.getElementById('admin-sub-pending-badge').textContent = `${pendingCount} Pending`;
+            }
             if (document.getElementById('admin-sub-requests-count')) {
-                document.getElementById('admin-sub-requests-count').textContent = `${reqList.length} Requests`;
+                document.getElementById('admin-sub-requests-count').textContent = `${reqList.length} Total`;
             }
             const reqBox = document.getElementById('admin-sub-payment-requests-list');
             if (reqBox) {
-                reqBox.innerHTML = reqList.length ? reqList.map(r => `
-                    <div class="p-2.5 rounded-xl bg-neutral-100 dark:bg-neutral-800 border flex flex-wrap items-center justify-between gap-2 text-[11px]">
-                        <div>
-                            <div class="font-black">${r.userName || 'User'} (${r.userPhone || r.userKey}) • ${r.planName} (₹${r.amount})</div>
-                            <div class="font-mono text-[10px] text-neutral-500">UTR: <strong>${r.utr}</strong> • ${new Date(r.createdAt).toLocaleString('en-IN')}</div>
+                reqBox.innerHTML = reqList.length ? reqList.map(r => {
+                    const isPending = r.status === 'pending';
+                    const isApproved = r.status === 'approved';
+                    const daysLabel = r.planDays ? `${r.planDays} Days` : '30 Days';
+                    return `
+                    <div class="p-3 rounded-xl ${isPending ? 'bg-amber-500/10 border-amber-400/60' : 'bg-neutral-100 dark:bg-neutral-800 border-neutral-200 dark:border-neutral-700'} border flex flex-wrap items-center justify-between gap-2 text-[11px]">
+                        <div class="space-y-0.5">
+                            <div class="font-black text-neutral-900 dark:text-white flex items-center gap-1.5 flex-wrap">
+                                <span>${r.userName || 'User'}</span>
+                                <span class="font-mono text-[10px] text-primary-600">${r.userPhone ? '+91 ' + r.userPhone : (r.userEmail || r.userKey)}</span>
+                                <span class="px-2 py-0.5 rounded-md bg-primary-600/10 text-primary-700 dark:text-primary-300 font-black text-[10px]">${r.planName} (${daysLabel}) • ₹${r.amount}</span>
+                            </div>
+                            <div class="font-mono text-[10px] text-neutral-600 dark:text-neutral-300">
+                                UTR / Ref No: <strong class="px-1.5 py-0.5 rounded bg-white dark:bg-neutral-900 border select-all text-emerald-700 dark:text-emerald-300">${r.utr}</strong> • ${new Date(r.createdAt).toLocaleString('en-IN')}
+                            </div>
                         </div>
-                        <div class="flex items-center gap-1.5">
-                            <span class="px-2 py-0.5 rounded-full font-black text-[9px] uppercase ${r.status === 'approved' ? 'bg-emerald-500/15 text-emerald-600' : 'bg-rose-500/15 text-rose-600'}">${r.status}</span>
-                            ${r.status !== 'approved' ? `<button type="button" onclick="handleAdminSubscriptionRequestAction('${r.id}', 'approved')" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white font-black text-[10px]">Approve</button>` : ''}
-                            ${r.status === 'approved' ? `<button type="button" onclick="handleAdminSubscriptionRequestAction('${r.id}', 'rejected')" class="px-2.5 py-1 rounded-lg bg-rose-600 text-white font-black text-[10px]">Revoke</button>` : ''}
+                        <div class="flex items-center gap-1.5 flex-shrink-0">
+                            <span class="px-2 py-0.5 rounded-full font-black text-[9px] uppercase ${isApproved ? 'bg-emerald-500/15 text-emerald-600' : (isPending ? 'bg-amber-500 text-white animate-pulse' : 'bg-rose-500/15 text-rose-600')}">${r.status}</span>
+                            ${!isApproved ? `<button type="button" onclick="handleAdminSubscriptionRequestAction('${r.id}', 'approved')" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-black text-[10px] shadow-xs flex items-center gap-1"><i class="fa-solid fa-check"></i> Accept &amp; Activate</button>` : ''}
+                            ${isPending ? `<button type="button" onclick="handleAdminSubscriptionRequestAction('${r.id}', 'rejected')" class="px-3 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-700 text-white font-black text-[10px] shadow-xs flex items-center gap-1"><i class="fa-solid fa-xmark"></i> Reject</button>` : ''}
+                            ${isApproved ? `<button type="button" onclick="handleAdminSubscriptionRequestAction('${r.id}', 'rejected')" class="px-2.5 py-1 rounded-lg bg-rose-600 text-white font-black text-[10px]">Revoke</button>` : ''}
                         </div>
                     </div>
-                `).join('') : '<div class="text-center py-4 text-neutral-400">No UPI subscription payment logs yet.</div>';
+                `;
+                }).join('') : '<div class="text-center py-4 text-neutral-400">No UPI subscription requests yet.</div>';
             }
         }
 
@@ -13767,14 +13796,22 @@ ${JSON.stringify(liveSnapshot)}`;
             const req = (sc.paymentRequests || []).find(r => r.id === reqId);
             if (!req) return;
             req.status = nextStatus;
+            req.reviewedAt = new Date().toISOString();
             if (nextStatus === 'approved') {
+                const matchedPlan = (sc.plans || []).find(p => p.id === req.planId || p.name === req.planName);
+                const validDays = Number(req.planDays) || Number(matchedPlan?.days) || 30;
                 sc.userOverrides[req.userKey] = {
                     ...(sc.userOverrides[req.userKey] || {}),
                     planName: req.planName,
-                    expiresAt: new Date(Date.now() + 30 * 86400000).toISOString()
+                    assignedPlanId: req.planId || matchedPlan?.id || '',
+                    expiresAt: new Date(Date.now() + validDays * 86400000).toISOString()
                 };
+                showToast(`Approved UTR ${req.utr} & activated ${req.planName} (${validDays} Days) for ${req.userName}!`);
             } else {
-                if (sc.userOverrides[req.userKey]) sc.userOverrides[req.userKey].expiresAt = '';
+                if (sc.userOverrides[req.userKey]) {
+                    sc.userOverrides[req.userKey].expiresAt = '';
+                }
+                showToast(`Rejected / Revoked request for ${req.userName}`, 'error');
             }
             localStorage.setItem('khataflow_admin_config', JSON.stringify(adminConfig));
             renderAdminSubscriptionStudio();
