@@ -13964,9 +13964,16 @@ ${JSON.stringify(liveSnapshot)}`;
             const wsId = getSessionWorkspaceDocId();
             if (!wsId || !db || !cloudReady) return;
             try {
+                // Establish real-time live snapshot listener for cross-device synchronization
                 activeWsUnsub = onSnapshot(doc(db, 'neokhata_workspaces', wsId), (snap) => {
                     if (snap.exists()) {
-                        window.mergeCloudDataToState(snap.data(), false);
+                        const remote = snap.data();
+                        window.mergeCloudDataToState(remote, true);
+                        try {
+                            const allWs = JSON.parse(localStorage.getItem('khataflow_admin_all_workspaces') || '{}');
+                            allWs[wsId] = remote;
+                            localStorage.setItem('khataflow_admin_all_workspaces', JSON.stringify(allWs));
+                        } catch (e) {}
                     }
                 });
             } catch (e) {}
