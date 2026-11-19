@@ -320,6 +320,14 @@
                     </button>
                 </div>
 
+                <div id="gate-lockout-banner" class="hidden p-3 rounded-2xl bg-rose-500/15 border border-rose-500/40 text-rose-700 dark:text-rose-300 text-xs font-bold text-center space-y-1">
+                    <div class="flex items-center justify-center gap-1.5 font-black uppercase tracking-wider text-[10px] text-rose-600 dark:text-rose-400">
+                        <i class="fa-solid fa-lock"></i> Account Temporarily Locked
+                    </div>
+                    <div id="gate-lockout-timer-text" class="font-mono text-sm font-black"></div>
+                    <div id="gate-lockout-detail-text" class="text-[11px] opacity-90"></div>
+                </div>
+
                 <div id="gate-status-message" class="text-center text-xs pt-1 min-h-[1.5rem] font-medium text-neutral-500 dark:text-neutral-400">
                     Enter your registered credentials to open your account
                 </div>
@@ -883,9 +891,9 @@
                         <div>
                             <label class="block text-[10px] font-extrabold uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-1">Payment Mode</label>
                             <select id="tx-mode" class="w-full p-2.5 rounded-2xl bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 font-bold text-neutral-900 dark:text-white focus:outline-none focus:border-primary-500">
-                                <option value="UPI">UPI</option>
-                                <option value="Cash">Cash</option>
-                                <option value="Bank">Bank</option>
+                                <option value="UPI">📱 UPI</option>
+                                <option value="Cash">💵 Cash</option>
+                                <option value="Bank">🏦 Bank</option>
                             </select>
                         </div>
                         <div>
@@ -894,11 +902,16 @@
                         </div>
                     </div>
 
-                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 pt-1">
-                        <input type="text" id="tx-note" placeholder="Add custom note or merchant details..." class="flex-1 px-4 py-2.5 rounded-2xl bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 font-semibold text-neutral-900 dark:text-white focus:outline-none focus:border-primary-500">
-                        <button type="submit" class="px-6 py-2.5 rounded-2xl bg-primary-600 hover:bg-primary-700 text-white font-black text-xs transition shadow-md shadow-primary-600/25 flex items-center justify-center gap-1.5 active:scale-95 whitespace-nowrap">
-                            <i class="fa-solid fa-check"></i> Add Entry
-                        </button>
+                    <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 items-end">
+                        <div class="sm:col-span-9">
+                            <label class="block text-[10px] font-extrabold uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-1">Description / Note</label>
+                            <input type="text" id="tx-note" placeholder="e.g. Lunch, Milk, Salary, Petrol, Electricity Bill..." class="w-full p-2.5 rounded-2xl bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 font-semibold text-neutral-900 dark:text-white focus:outline-none focus:border-primary-500">
+                        </div>
+                        <div class="sm:col-span-3">
+                            <button type="submit" class="w-full py-2.5 px-4 rounded-2xl bg-gradient-to-r from-primary-600 to-indigo-600 hover:from-primary-700 hover:to-indigo-700 text-white font-black text-xs uppercase tracking-wider transition shadow-md shadow-primary-600/25 flex items-center justify-center gap-1.5 active:scale-95">
+                                <i class="fa-solid fa-circle-plus"></i> Log Entry
+                            </button>
+                        </div>
                     </div>
                 </form>
 
@@ -4061,36 +4074,34 @@
                     </div>
                 </div>
                 <div>
-                    <label class="block font-bold mb-1">Slide Title *</label>
-                    <input type="text" id="adm-slide-title" required class="w-full p-2 rounded-xl bg-neutral-100 dark:bg-neutral-800 border font-bold">
+                    <label class="block font-bold mb-1">Slide Headline *</label>
+                    <input type="text" id="adm-slide-title" required placeholder="e.g. स्मार्ट बही-खाता व उधार प्रबंधन" class="w-full p-2 rounded-xl bg-neutral-100 dark:bg-neutral-800 border font-bold">
                 </div>
                 <div>
-                    <label class="block font-bold mb-1">Subtitle</label>
-                    <input type="text" id="adm-slide-subtitle" class="w-full p-2 rounded-xl bg-neutral-100 dark:bg-neutral-800 border">
+                    <label class="block font-bold mb-1">Subtitle / Description</label>
+                    <input type="text" id="adm-slide-subtitle" placeholder="Short description..." class="w-full p-2 rounded-xl bg-neutral-100 dark:bg-neutral-800 border font-semibold">
                 </div>
                 <div class="grid grid-cols-2 gap-2.5">
                     <div>
-                        <label class="block font-bold mb-1">CTA Button Text</label>
+                        <label class="block font-bold mb-1">Button CTA Text</label>
                         <input type="text" id="adm-slide-cta" value="Explore Now" class="w-full p-2 rounded-xl bg-neutral-100 dark:bg-neutral-800 border font-bold">
                     </div>
                     <div>
-                        <label class="block font-bold mb-1">Gradient Class</label>
+                        <label class="block font-bold mb-1">Gradient Theme</label>
                         <select id="adm-slide-gradient" class="w-full p-2 rounded-xl bg-neutral-100 dark:bg-neutral-800 border font-bold">
                             <option value="from-primary-700 via-primary-600 to-emerald-600">Royal Blue → Emerald</option>
                             <option value="from-rose-600 via-amber-600 to-primary-600">Crimson → Amber</option>
                             <option value="from-indigo-700 via-purple-600 to-primary-600">Indigo → Purple</option>
+                            <option value="from-emerald-700 via-teal-600 to-primary-600">Emerald → Teal</option>
                         </select>
                     </div>
                 </div>
                 <div>
-                    <label class="block font-bold mb-1">Banner Image URL</label>
+                    <label class="block font-bold mb-1">Banner Image URL (Optional)</label>
                     <input type="url" id="adm-slide-image-url" oninput="previewAdminBannerImage(this.value)" placeholder="https://..." class="w-full p-2 rounded-xl bg-neutral-100 dark:bg-neutral-800 border font-mono">
+                    <input type="hidden" id="adm-slide-hires-url" value="">
                 </div>
-                <div>
-                    <label class="block font-bold mb-1">High-Res Image URL (Optional)</label>
-                    <input type="url" id="adm-slide-hires-url" placeholder="https://..." class="w-full p-2 rounded-xl bg-neutral-100 dark:bg-neutral-800 border font-mono">
-                </div>
-                <div id="adm-slide-preview-wrap" class="hidden rounded-xl overflow-hidden border h-24">
+                <div id="adm-slide-preview-wrap" class="hidden rounded-xl overflow-hidden border border-neutral-200 dark:border-neutral-700 h-24">
                     <img id="adm-slide-preview-img" src="" alt="Preview" class="w-full h-full object-cover">
                 </div>
                 <div class="grid grid-cols-2 gap-2 pt-2">
@@ -4101,32 +4112,32 @@
         </div>
     </div>
 
-    <!-- Admin 70-Control Customizer Modal -->
-    <div id="admin-feature-customizer-modal" class="fixed inset-0 z-50 bg-neutral-950/80 backdrop-blur-xl hidden items-center justify-center p-4">
-        <div class="glass-card w-full max-w-md p-6 rounded-[2rem] shadow-2xl relative bg-white/95 dark:bg-neutral-900/95 space-y-4">
+    <!-- Admin 70-Control Feature Customizer Modal -->
+    <div id="admin-feature-customizer-modal" class="fixed inset-0 z-50 bg-neutral-950/80 backdrop-blur-xl hidden items-center justify-center p-4 overflow-y-auto">
+        <div class="glass-card w-full max-w-md p-6 rounded-[2rem] shadow-2xl relative bg-white/95 dark:bg-neutral-900/95 my-auto space-y-4 text-xs">
             <div class="flex items-center justify-between pb-2 border-b">
                 <div>
-                    <span id="afc-code-badge" class="text-[10px] font-mono font-black text-primary-600">CONTROL #01</span>
-                    <h4 id="afc-title" class="text-sm font-black">Control Settings</h4>
+                    <span id="afc-code-badge" class="text-[10px] font-mono font-black text-primary-600 uppercase">CONTROL #01</span>
+                    <h4 id="afc-title" class="text-sm font-black text-neutral-900 dark:text-white">Customize Control</h4>
                 </div>
                 <button type="button" onclick="closeAdminFeatureCustomizer()" class="w-7 h-7 rounded-full bg-neutral-100 dark:bg-neutral-800 text-neutral-400 text-xs flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <div id="afc-dynamic-body" class="space-y-3 text-xs"></div>
+            <div id="afc-dynamic-body" class="space-y-3"></div>
             <div class="grid grid-cols-2 gap-2 pt-2 border-t">
-                <button type="button" onclick="closeAdminFeatureCustomizer()" class="py-2.5 rounded-xl bg-neutral-100 dark:bg-neutral-800 text-xs font-bold">Cancel</button>
-                <button type="button" onclick="saveAdminFeatureCustomizer()" class="py-2.5 rounded-xl bg-primary-600 text-white text-xs font-bold">Save Control</button>
+                <button type="button" onclick="closeAdminFeatureCustomizer()" class="py-2.5 rounded-xl bg-neutral-100 dark:bg-neutral-800 font-bold">Cancel</button>
+                <button type="button" onclick="saveAdminFeatureCustomizer()" class="py-2.5 rounded-xl bg-primary-600 text-white font-black">Save &amp; Publish</button>
             </div>
         </div>
     </div>
 
     <!-- Forgot Password Modal -->
     <div id="forgot-password-modal" class="fixed inset-0 z-[120] bg-neutral-950/85 backdrop-blur-xl hidden items-center justify-center p-4">
-        <div class="glass-card w-full max-w-sm p-6 rounded-[2rem] shadow-2xl relative bg-white/95 dark:bg-neutral-900/95">
-            <div class="flex items-center justify-between mb-4 pb-2 border-b">
+        <div class="glass-card w-full max-w-sm p-6 rounded-[2rem] shadow-2xl relative bg-white/95 dark:bg-neutral-900/95 space-y-3 text-xs">
+            <div class="flex items-center justify-between pb-2 border-b">
                 <h4 class="text-sm font-black flex items-center gap-2"><i class="fa-solid fa-key text-primary-600"></i> Reset Account Password</h4>
                 <button type="button" onclick="closeForgotPasswordModal()" class="w-7 h-7 rounded-full bg-neutral-100 dark:bg-neutral-800 text-neutral-400 text-xs flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <form onsubmit="handleForgotPasswordSubmit(event)" class="space-y-3 text-xs">
+            <form onsubmit="handleForgotPasswordSubmit(event)" class="space-y-3">
                 <div>
                     <label class="block font-bold mb-1">Registered Mobile or Email *</label>
                     <input type="text" id="fp-identifier" required placeholder="9876543210 or email@example.com" class="w-full p-2.5 rounded-xl bg-neutral-100 dark:bg-neutral-800 border font-semibold">
@@ -4149,96 +4160,206 @@
         </div>
     </div>
 
-    <!-- Delete Self Account Modal -->
-    <div id="delete-self-account-modal" class="fixed inset-0 z-[120] bg-neutral-950/85 backdrop-blur-xl hidden items-center justify-center p-4">
-        <div class="glass-card w-full max-w-sm p-6 rounded-[2rem] shadow-2xl relative bg-white/95 dark:bg-neutral-900/95 space-y-4 text-xs">
+    <!-- Permanent Delete Self Account Modal -->
+    <div id="delete-self-account-modal" class="fixed inset-0 z-[130] bg-neutral-950/85 backdrop-blur-xl hidden items-center justify-center p-4">
+        <div class="glass-card w-full max-w-sm p-6 rounded-[2rem] shadow-2xl relative bg-white/95 dark:bg-neutral-900/95 space-y-3 text-xs">
             <div class="flex items-center justify-between pb-2 border-b">
-                <h4 class="text-sm font-black text-rose-600 flex items-center gap-2"><i class="fa-solid fa-triangle-exclamation"></i> Delete Account Permanently</h4>
+                <h4 class="text-sm font-black text-rose-600 flex items-center gap-2"><i class="fa-solid fa-triangle-exclamation"></i> Permanently Delete Account</h4>
                 <button type="button" onclick="closeDeleteSelfAccountModal()" class="w-7 h-7 rounded-full bg-neutral-100 dark:bg-neutral-800 text-neutral-400 text-xs flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <p class="text-neutral-600 dark:text-neutral-300 leading-relaxed">
-                This will permanently erase <strong id="delete-self-account-identity">your account</strong> and all cloud records. Type <strong>DELETE</strong> below to confirm:
-            </p>
+            <p class="text-neutral-600 dark:text-neutral-300">This will permanently erase <strong id="delete-self-account-identity">User</strong> and all transactions, Udhar Khata, Milk Ledger, and cloud records. Type <strong>DELETE</strong> below to confirm:</p>
             <form onsubmit="confirmDeleteSelfAccount(event)" class="space-y-3">
-                <input type="text" id="delete-self-confirm-input" required placeholder="Type DELETE" class="w-full p-2.5 rounded-xl bg-neutral-100 dark:bg-neutral-800 border border-rose-300 font-mono font-black uppercase text-center">
+                <input type="text" id="delete-self-confirm-input" required placeholder="Type DELETE" class="w-full p-2.5 rounded-xl bg-neutral-100 dark:bg-neutral-800 border border-rose-400 font-mono font-black uppercase">
                 <div class="grid grid-cols-2 gap-2">
                     <button type="button" onclick="closeDeleteSelfAccountModal()" class="py-2.5 rounded-xl bg-neutral-100 dark:bg-neutral-800 font-bold">Cancel</button>
-                    <button type="submit" class="py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-black">Erase Forever</button>
+                    <button type="submit" class="py-2.5 rounded-xl bg-rose-600 text-white font-black">Erase Forever</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- User Subscription & Direct UPI Checkout Modal (Masked Merchant ID + Automated Payment Verification) -->
-    <div id="subscription-upgrade-modal" class="fixed inset-0 z-[150] bg-neutral-950/85 backdrop-blur-xl hidden items-center justify-center p-4 overflow-y-auto">
-        <div class="glass-card w-full max-w-lg p-6 rounded-[2rem] shadow-2xl relative bg-white/95 dark:bg-neutral-900/95 my-auto max-h-[92vh] overflow-y-auto space-y-4 text-xs">
+    <!-- User Subscription & Direct UPI Checkout Modal (2-Step Executive Plan Selection -> Dedicated UPI Checkout) -->
+    <div id="subscription-upgrade-modal" class="fixed inset-0 z-[150] bg-neutral-950/85 backdrop-blur-xl hidden items-center justify-center p-3 sm:p-4 overflow-y-auto">
+        <div class="glass-card w-full max-w-xl p-5 sm:p-6 rounded-[2.2rem] shadow-2xl relative bg-white/95 dark:bg-neutral-900/95 border border-neutral-200/90 dark:border-neutral-800 my-auto max-h-[93vh] overflow-y-auto space-y-4 text-xs">
+            <!-- Top Modal Header + Stepper -->
             <div class="flex items-center justify-between pb-3 border-b border-neutral-200 dark:border-neutral-800">
-                <div class="flex items-center gap-2.5">
-                    <span class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-primary-600 via-indigo-600 to-amber-500 text-white flex items-center justify-center text-base shadow-md"><i class="fa-solid fa-crown"></i></span>
+                <div class="flex items-center gap-3">
+                    <span class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-primary-600 via-indigo-600 to-amber-500 text-white flex items-center justify-center text-lg shadow-lg shadow-primary-600/25"><i class="fa-solid fa-crown"></i></span>
                     <div>
-                        <div class="flex items-center gap-1.5">
-                            <h4 class="text-base font-black text-neutral-900 dark:text-white">NeoKhata Pro Membership</h4>
+                        <div class="flex items-center gap-1.5 flex-wrap">
+                            <h4 class="text-base sm:text-lg font-black text-neutral-900 dark:text-white tracking-tight">NeoKhata VIP Pro</h4>
                             <span class="px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 text-[9px] font-black uppercase">256-Bit SSL</span>
                         </div>
-                        <p id="sub-modal-current-status" class="text-[11px] font-bold text-primary-600">Current Status: Free Plan</p>
+                        <p id="sub-modal-current-status" class="text-[11px] font-bold text-primary-600 dark:text-primary-400">Current Status: Free Plan</p>
                     </div>
                 </div>
-                <button type="button" onclick="closeSubscriptionUpgradeModal()" class="w-8 h-8 rounded-full bg-neutral-100 dark:bg-neutral-800 text-neutral-400 text-xs flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
+                <button type="button" onclick="closeSubscriptionUpgradeModal()" class="w-8 h-8 rounded-full bg-neutral-100 hover:bg-neutral-200 dark:bg-neutral-800 text-neutral-500 text-xs flex items-center justify-center transition"><i class="fa-solid fa-xmark"></i></button>
             </div>
 
-            <div id="sub-modal-custom-offer-banner" class="hidden p-3 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-800 dark:text-emerald-200 font-bold"></div>
-
-            <!-- Live Subscription Countdown & Feature Access Matrix for User -->
-            <div id="sub-modal-access-breakdown" class="p-3.5 rounded-2xl bg-neutral-100/90 dark:bg-neutral-800/80 border border-neutral-200 dark:border-neutral-700 space-y-2.5">
-                <div class="flex items-center justify-between gap-2">
-                    <span class="text-[10px] font-black uppercase tracking-wider text-neutral-500">Your Plan Countdown &amp; Feature Access</span>
-                    <span id="sub-modal-live-countdown-pill" class="px-2.5 py-0.5 rounded-full bg-primary-600/15 text-primary-700 dark:text-primary-300 font-mono font-black text-[10px]">Free / Demo Mode</span>
-                </div>
-                <div id="sub-modal-feature-status-pills" class="grid grid-cols-2 gap-1.5 text-[10px]"></div>
-            </div>
-
-            <div>
-                <label class="block text-[10px] font-black uppercase text-neutral-400 mb-2">1. Select Membership Plan</label>
-                <div id="sub-modal-plans-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5"></div>
-            </div>
-
-            <!-- Promo Coupon Code Box -->
-            <div class="flex items-center gap-2">
-                <input type="text" id="sub-checkout-coupon-input" placeholder="Have a Promo / Discount Code?" class="flex-1 p-2.5 rounded-xl bg-neutral-100 dark:bg-neutral-800 border font-mono font-bold uppercase">
-                <button type="button" onclick="applySubscriptionCheckoutCoupon()" class="px-4 py-2.5 rounded-xl bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 font-black">Apply Code</button>
-            </div>
-
-            <div id="sub-modal-upi-checkout-box" class="p-4 rounded-2xl bg-gradient-to-br from-slate-900 via-primary-950 to-slate-900 text-white border border-primary-500/30 space-y-3.5 text-center shadow-xl">
-                <div class="flex items-center justify-between text-left pb-2.5 border-b border-white/10">
-                    <div>
-                        <span class="text-[10px] font-black uppercase text-sky-300 tracking-wider block">2. Secure Instant UPI Checkout</span>
-                        <div class="text-sm font-black text-white mt-0.5" id="sub-checkout-plan-summary">Selected Plan: ₹199</div>
-                    </div>
-                    <span class="px-2.5 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 font-bold text-[10px] flex items-center gap-1">
-                        <i class="fa-solid fa-shield-check"></i> <span id="sub-checkout-upi-display">Verified Merchant</span>
-                    </span>
-                </div>
-
-                <div class="p-3 bg-white rounded-2xl inline-block mx-auto shadow-lg">
-                    <img id="sub-checkout-qr-img" src="" alt="Secure Payment QR" class="w-40 h-40 block rounded-lg">
-                </div>
-                <p class="text-[11px] text-slate-300 font-medium">Scan QR using GPay, PhonePe, Paytm, or BHIM — or tap below to pay directly</p>
-
-                <button type="button" onclick="launchSubscriptionUpiApp()" class="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-black text-xs flex items-center justify-center gap-2 shadow-lg active:scale-95">
-                    <i class="fa-solid fa-lock"></i> Pay Securely via UPI App (<span id="sub-checkout-pay-btn-amt">₹199</span>)
+            <!-- Visual 2-Step Progress Indicator -->
+            <div class="grid grid-cols-2 gap-2 p-1.5 rounded-2xl bg-neutral-100 dark:bg-neutral-800/90 border border-neutral-200/80 dark:border-neutral-700/80">
+                <button type="button" id="sub-step-pill-1" onclick="goToSubscriptionStep(1)" class="py-2 px-3 rounded-xl font-black text-[11px] flex items-center justify-center gap-2 bg-white dark:bg-neutral-900 text-primary-600 dark:text-primary-400 shadow-xs transition">
+                    <span class="w-5 h-5 rounded-full bg-primary-600 text-white text-[10px] flex items-center justify-center font-black">1</span>
+                    <span>Choose Membership Plan</span>
                 </button>
+                <button type="button" id="sub-step-pill-2" onclick="goToSubscriptionStep(2)" class="py-2 px-3 rounded-xl font-bold text-[11px] flex items-center justify-center gap-2 text-neutral-500 dark:text-neutral-400 transition">
+                    <span class="w-5 h-5 rounded-full bg-neutral-300 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-200 text-[10px] flex items-center justify-center font-black">2</span>
+                    <span>Secure UPI Checkout</span>
+                </button>
+            </div>
 
-                <!-- Automated Payment Verification Form -->
-                <form onsubmit="submitSubscriptionUtrPayment(event)" class="pt-3 border-t border-white/15 space-y-2 text-left">
+            <!-- ================= STEP 1: PLAN SELECTION PAGE ================= -->
+            <div id="sub-step-1-plans-page" class="space-y-4 animate-fade-in">
+                <div id="sub-modal-custom-offer-banner" class="hidden p-3 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-800 dark:text-emerald-200 font-bold"></div>
+
+                <!-- Live Subscription Countdown & Feature Access Matrix -->
+                <div id="sub-modal-access-breakdown" class="p-3.5 rounded-2xl bg-neutral-100/90 dark:bg-neutral-800/80 border border-neutral-200 dark:border-neutral-700 space-y-2.5">
+                    <div class="flex items-center justify-between gap-2">
+                        <span class="text-[10px] font-black uppercase tracking-wider text-neutral-500">Your Current Access &amp; Demo Status</span>
+                        <span id="sub-modal-live-countdown-pill" class="px-2.5 py-0.5 rounded-full bg-primary-600/15 text-primary-700 dark:text-primary-300 font-mono font-black text-[10px]">Free / Demo Mode</span>
+                    </div>
+                    <div id="sub-modal-feature-status-pills" class="grid grid-cols-2 gap-1.5 text-[10px]"></div>
+                </div>
+
+                <!-- Interactive Plan Cards -->
+                <div class="space-y-2">
                     <div class="flex items-center justify-between">
-                        <label class="text-[10px] font-black uppercase text-amber-300">3. Submit 12-Digit UTR / Transaction Ref No. for Admin Approval *</label>
+                        <label class="text-[10px] font-black uppercase tracking-wider text-neutral-400">Select a Pro Membership Plan</label>
+                        <span class="text-[10px] font-bold text-emerald-600">Instant Activation after Verification</span>
                     </div>
-                    <div class="flex gap-2">
-                        <input type="text" id="sub-checkout-utr-input" required minlength="12" maxlength="22" oninput="this.value=this.value.replace(/[^a-zA-Z0-9]/g,'').toUpperCase()" placeholder="Enter 12-digit UTR after paying" class="flex-1 p-2.5 rounded-xl bg-white/10 border border-white/20 text-white placeholder-slate-400 font-mono font-bold focus:outline-none focus:border-emerald-400">
-                        <button type="submit" class="px-4 py-2.5 rounded-xl bg-primary-600 hover:bg-primary-500 text-white font-black whitespace-nowrap shadow-md">Submit UTR</button>
+                    <div id="sub-modal-plans-grid" class="grid grid-cols-1 sm:grid-cols-3 gap-2.5"></div>
+                </div>
+
+                <!-- Proceed to Checkout CTA -->
+                <div class="pt-1">
+                    <button type="button" onclick="goToSubscriptionStep(2)" class="w-full py-3.5 px-5 rounded-2xl bg-gradient-to-r from-primary-700 via-primary-600 to-indigo-600 hover:from-primary-800 hover:to-indigo-700 text-white font-black text-xs sm:text-sm tracking-wide shadow-lg shadow-primary-600/30 flex items-center justify-center gap-2 transition active:scale-[0.99]">
+                        <span id="sub-step1-proceed-text">Continue to Secure Checkout</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- ================= STEP 2: DEDICATED PROFESSIONAL UPI CHECKOUT PAGE ================= -->
+            <div id="sub-step-2-checkout-page" class="hidden space-y-4 animate-fade-in">
+                <!-- Back Navigation & Selected Plan Summary Strip -->
+                <div class="flex items-center justify-between gap-2 p-3 rounded-2xl bg-primary-50/80 dark:bg-primary-950/40 border border-primary-200 dark:border-primary-800/70">
+                    <button type="button" onclick="goToSubscriptionStep(1)" class="px-3 py-1.5 rounded-xl bg-white dark:bg-neutral-900 hover:bg-neutral-100 border border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-200 font-extrabold text-[11px] flex items-center gap-1.5 shadow-2xs transition">
+                        <i class="fa-solid fa-arrow-left text-[10px]"></i> Change Plan
+                    </button>
+                    <div class="text-right">
+                        <div class="text-[10px] font-bold uppercase text-neutral-400">Selected Package</div>
+                        <div class="text-xs sm:text-sm font-black text-primary-700 dark:text-primary-300" id="sub-checkout-plan-summary">Monthly Pro (30 Days) • ₹199</div>
                     </div>
-                    <div id="sub-verify-feedback-box" class="hidden p-2.5 rounded-xl text-[11px] font-bold"></div>
-                </form>
+                </div>
+
+                <!-- Auto-Filled User Account Details Card -->
+                <div class="p-3.5 rounded-2xl bg-neutral-100/90 dark:bg-neutral-800/80 border border-neutral-200 dark:border-neutral-700 space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="text-[10px] font-black uppercase tracking-wider text-neutral-500 flex items-center gap-1.5">
+                            <i class="fa-solid fa-user-check text-emerald-600"></i> Subscriber Details (Auto-Filled)
+                        </span>
+                        <span class="px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 text-[9px] font-black uppercase">Verified Account</span>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-[11px]">
+                        <div class="p-2 rounded-xl bg-white dark:bg-neutral-900 border border-neutral-200/80 dark:border-neutral-800">
+                            <span class="text-[9px] font-bold text-neutral-400 block">Account Holder</span>
+                            <strong id="sub-checkout-user-name" class="font-black text-neutral-900 dark:text-white truncate block">User</strong>
+                        </div>
+                        <div class="p-2 rounded-xl bg-white dark:bg-neutral-900 border border-neutral-200/80 dark:border-neutral-800">
+                            <span class="text-[9px] font-bold text-neutral-400 block">Registered Mobile</span>
+                            <strong id="sub-checkout-user-phone" class="font-mono font-black text-neutral-900 dark:text-white truncate block">+91 —</strong>
+                        </div>
+                        <div class="p-2 rounded-xl bg-white dark:bg-neutral-900 border border-neutral-200/80 dark:border-neutral-800">
+                            <span class="text-[9px] font-bold text-neutral-400 block">Email / Workspace ID</span>
+                            <strong id="sub-checkout-user-email" class="font-mono font-bold text-neutral-700 dark:text-neutral-300 truncate block">—</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Professional Promo Coupon & Live Price Breakdown Card -->
+                <div class="p-3.5 rounded-2xl bg-gradient-to-r from-purple-500/10 via-indigo-500/5 to-emerald-500/10 border border-purple-300/60 dark:border-purple-800/60 space-y-2.5">
+                    <div class="flex items-center justify-between">
+                        <span class="text-[10px] font-black uppercase tracking-wider text-purple-700 dark:text-purple-300 flex items-center gap-1.5">
+                            <i class="fa-solid fa-ticket"></i> Promo Code &amp; Order Summary
+                        </span>
+                        <span id="sub-coupon-applied-badge" class="hidden px-2 py-0.5 rounded-full bg-emerald-600 text-white text-[9px] font-black uppercase">Coupon Applied</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="relative flex-1">
+                            <i class="fa-solid fa-tag text-purple-500 absolute left-3 top-1/2 -translate-y-1/2 text-xs"></i>
+                            <input type="text" id="sub-checkout-coupon-input" oninput="this.value=this.value.toUpperCase()" placeholder="Enter Promo Code (e.g. NEOPRO50)" class="w-full pl-8 pr-3 py-2.5 rounded-xl bg-white dark:bg-neutral-900 border border-purple-300/80 dark:border-neutral-700 font-mono font-black uppercase text-xs focus:outline-none focus:border-purple-600">
+                        </div>
+                        <button type="button" onclick="applySubscriptionCheckoutCoupon()" class="px-4 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-black text-xs shadow-sm transition active:scale-95">Apply</button>
+                    </div>
+                    <div id="sub-coupon-status-text" class="hidden text-[10px] font-bold"></div>
+                    <div class="pt-2 border-t border-neutral-200/70 dark:border-neutral-800 flex items-center justify-between text-xs">
+                        <div class="space-y-0.5 text-[11px]">
+                            <div class="text-neutral-500">Plan Price: <strong id="sub-bill-base-amt" class="text-neutral-800 dark:text-neutral-200">₹199</strong></div>
+                            <div id="sub-bill-discount-row" class="hidden text-emerald-600 font-bold">Promo Discount: <strong id="sub-bill-discount-amt">-₹0</strong></div>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-[9px] font-black uppercase text-neutral-400 block">Net Payable</span>
+                            <span id="sub-bill-net-amt" class="text-xl font-black text-primary-600 dark:text-primary-400 tabular-nums">₹199</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- High-Craft QR Code, Download QR & Multiple UPI App Buttons -->
+                <div id="sub-modal-upi-checkout-box" class="p-4 sm:p-5 rounded-3xl bg-gradient-to-br from-slate-900 via-primary-950 to-slate-900 text-white border border-primary-500/35 space-y-4 shadow-xl">
+                    <div class="flex items-center justify-between pb-2.5 border-b border-white/10">
+                        <div>
+                            <span class="text-[10px] font-black uppercase text-sky-300 tracking-wider block">Scan QR or Choose UPI App</span>
+                            <div class="text-xs font-bold text-slate-300 mt-0.5">Instant Pre-Filled Amount • Zero Extra Fee</div>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 font-bold text-[10px] flex items-center gap-1">
+                            <i class="fa-solid fa-shield-check"></i> <span id="sub-checkout-upi-display">Verified Merchant</span>
+                        </span>
+                    </div>
+
+                    <!-- QR Code + Download QR Button -->
+                    <div class="flex flex-col sm:flex-row items-center gap-4">
+                        <div class="flex flex-col items-center gap-2 flex-shrink-0">
+                            <div class="p-3 bg-white rounded-2xl shadow-lg border-2 border-emerald-400/40">
+                                <img id="sub-checkout-qr-img" crossorigin="anonymous" src="" alt="Secure Payment QR" class="w-36 h-36 block rounded-lg">
+                            </div>
+                            <button type="button" onclick="downloadSubscriptionQrCode()" class="w-full py-1.5 px-3 rounded-xl bg-white/15 hover:bg-white/25 border border-white/20 text-white font-extrabold text-[10px] flex items-center justify-center gap-1.5 transition active:scale-95">
+                                <i class="fa-solid fa-download text-emerald-300"></i> Download QR (PNG)
+                            </button>
+                        </div>
+
+                        <!-- Multiple UPI App Launch Buttons -->
+                        <div class="flex-1 w-full space-y-2 text-left">
+                            <span class="text-[10px] font-black uppercase tracking-wider text-slate-300 block">Pay Directly via UPI App (<span id="sub-checkout-pay-btn-amt">₹199</span>):</span>
+                            <div class="grid grid-cols-2 gap-2">
+                                <button type="button" onclick="launchSubscriptionUpiApp('gpay')" class="py-2.5 px-3 rounded-xl bg-white hover:bg-sky-50 text-slate-900 font-black text-[11px] flex items-center justify-center gap-1.5 shadow-sm transition active:scale-95">
+                                    <i class="fa-brands fa-google-pay text-base text-blue-600"></i> Google Pay
+                                </button>
+                                <button type="button" onclick="launchSubscriptionUpiApp('phonepe')" class="py-2.5 px-3 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-black text-[11px] flex items-center justify-center gap-1.5 shadow-sm transition active:scale-95">
+                                    <i class="fa-solid fa-mobile-screen-button"></i> PhonePe
+                                </button>
+                                <button type="button" onclick="launchSubscriptionUpiApp('paytm')" class="py-2.5 px-3 rounded-xl bg-sky-500 hover:bg-sky-400 text-white font-black text-[11px] flex items-center justify-center gap-1.5 shadow-sm transition active:scale-95">
+                                    <i class="fa-solid fa-wallet"></i> Paytm UPI
+                                </button>
+                                <button type="button" onclick="launchSubscriptionUpiApp('any')" class="py-2.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-[11px] flex items-center justify-center gap-1.5 shadow-sm transition active:scale-95">
+                                    <i class="fa-solid fa-building-columns"></i> BHIM / Any UPI
+                                </button>
+                            </div>
+                            <p class="text-[10px] text-slate-400 leading-relaxed pt-0.5">
+                                After completing payment in any UPI app or scanning the QR, enter your 12-digit UTR below for instant Admin verification.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- UTR Verification Submission Form -->
+                    <form onsubmit="submitSubscriptionUtrPayment(event)" class="pt-3 border-t border-white/15 space-y-2 text-left">
+                        <label class="block text-[10px] font-black uppercase text-amber-300">Enter 12-Digit UTR / Transaction Reference No. *</label>
+                        <div class="flex flex-col sm:flex-row gap-2">
+                            <input type="text" id="sub-checkout-utr-input" required minlength="12" maxlength="22" oninput="this.value=this.value.replace(/[^a-zA-Z0-9]/g,'').toUpperCase()" placeholder="e.g. 432198765432" class="flex-1 p-2.5 rounded-xl bg-white/10 border border-white/20 text-white placeholder-slate-400 font-mono font-bold focus:outline-none focus:border-emerald-400">
+                            <button type="submit" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-black whitespace-nowrap shadow-md">Submit UTR for Approval</button>
+                        </div>
+                        <div id="sub-verify-feedback-box" class="hidden p-2.5 rounded-xl text-[11px] font-bold"></div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -4999,11 +5120,127 @@
             document.getElementById('auth-gate-screen')?.classList.remove('hidden');
             document.getElementById('bottom-nav-bar')?.classList.add('hidden');
             refreshAuthCaptcha();
+            startLoginLockoutTicker();
         }
 
         function dismissAuthGate() {
             document.getElementById('auth-gate-screen')?.classList.add('hidden');
             document.getElementById('bottom-nav-bar')?.classList.remove('hidden');
+            if (window._loginLockoutTimer) clearInterval(window._loginLockoutTimer);
+        }
+
+        function getLoginLockoutStorageKey(identifier) {
+            const cleanPh = extractCleanPhone(identifier || '');
+            const cleanId = cleanPh.length === 10 ? `phone_${cleanPh}` : (identifier || 'default').trim().toLowerCase();
+            return `neokhata_login_lock_${cleanId || 'default'}`;
+        }
+
+        function getLoginLockoutState(identifier) {
+            try {
+                const raw = JSON.parse(localStorage.getItem(getLoginLockoutStorageKey(identifier)) || 'null');
+                return raw && typeof raw === 'object' ? raw : { failedAttempts: 0, lockStage: 0, lockedUntil: 0 };
+            } catch (e) {
+                return { failedAttempts: 0, lockStage: 0, lockedUntil: 0 };
+            }
+        }
+
+        function saveLoginLockoutState(identifier, stateObj) {
+            try {
+                localStorage.setItem(getLoginLockoutStorageKey(identifier), JSON.stringify(stateObj));
+            } catch (e) {}
+        }
+
+        function clearLoginLockoutState(identifier) {
+            try {
+                localStorage.removeItem(getLoginLockoutStorageKey(identifier));
+            } catch (e) {}
+        }
+
+        function formatLockoutDuration(ms) {
+            if (ms <= 0) return '00s';
+            const totalSec = Math.ceil(ms / 1000);
+            const hrs = Math.floor(totalSec / 3600);
+            const mins = Math.floor((totalSec % 3600) / 60);
+            const secs = totalSec % 60;
+            const pad = (n) => String(n).padStart(2, '0');
+            return hrs > 0 ? `${hrs}h ${pad(mins)}m ${pad(secs)}s` : `${pad(mins)}m ${pad(secs)}s`;
+        }
+
+        function recordFailedLoginAttempt(identifier) {
+            const st = getLoginLockoutState(identifier);
+            st.failedAttempts = (Number(st.failedAttempts) || 0) + 1;
+            let lockDurationMs = 0;
+            let lockLabel = '';
+
+            if (st.lockStage === 0) {
+                // Stage 0: First 3 wrong attempts -> Lock for 30 Hours
+                if (st.failedAttempts >= 3) {
+                    st.lockStage = 1;
+                    lockDurationMs = 30 * 60 * 60 * 1000; // 30 Hours
+                    lockLabel = '30 Hours';
+                }
+            } else {
+                // Stage >= 1: Every wrong attempt after the 30-hour lock adds +30 minutes progressively (30m, 60m, 90m...)
+                const extraMins = st.lockStage * 30;
+                st.lockStage += 1;
+                lockDurationMs = extraMins * 60 * 1000;
+                lockLabel = `${extraMins} Minutes`;
+            }
+
+            if (lockDurationMs > 0) {
+                st.lockedUntil = Date.now() + lockDurationMs;
+            }
+            saveLoginLockoutState(identifier, st);
+            updateLoginLockoutUI(identifier);
+            return { st, lockDurationMs, lockLabel };
+        }
+
+        function updateLoginLockoutUI(identifierOverride) {
+            const idVal = identifierOverride !== undefined
+                ? identifierOverride
+                : (document.getElementById('gate-input-username')?.value || '');
+            const banner = document.getElementById('gate-lockout-banner');
+            const timerTxt = document.getElementById('gate-lockout-timer-text');
+            const detailTxt = document.getElementById('gate-lockout-detail-text');
+            const submitBtn = document.getElementById('gate-submit-btn');
+
+            if (authGateMode !== 'login' || !idVal.trim()) {
+                banner?.classList.add('hidden');
+                if (submitBtn) submitBtn.disabled = false;
+                return false;
+            }
+
+            const st = getLoginLockoutState(idVal);
+            const remMs = (Number(st.lockedUntil) || 0) - Date.now();
+            if (remMs > 0) {
+                banner?.classList.remove('hidden');
+                if (timerTxt) timerTxt.textContent = `⏱ Locked for ${formatLockoutDuration(remMs)}`;
+                if (detailTxt) {
+                    detailTxt.textContent = st.lockStage === 1
+                        ? '3 गलत पासवर्ड डालने के कारण आपका लॉगिन 30 घंटे के लिए लॉक कर दिया गया है।'
+                        : `दोबारा गलत पासवर्ड डालने के कारण अतिरिक्त +30 मिनट का लॉक लगाया गया है।`;
+                }
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                    submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                }
+                return true;
+            } else {
+                banner?.classList.add('hidden');
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                }
+                return false;
+            }
+        }
+
+        function startLoginLockoutTicker() {
+            if (window._loginLockoutTimer) clearInterval(window._loginLockoutTimer);
+            updateLoginLockoutUI();
+            window._loginLockoutTimer = setInterval(() => {
+                updateLoginLockoutUI();
+            }, 1000);
         }
 
         async function handleAuthGateSubmit(e) {
@@ -5086,10 +5323,19 @@
                 const cleanIdPhone = extractCleanPhone(identifier);
                 const lowerId = identifier.toLowerCase();
                 if (!identifier || !password) return;
+
+                // Enforce active lockout timer check before processing login
+                if (updateLoginLockoutUI(identifier)) {
+                    refreshAuthCaptcha();
+                    showToast('Account is temporarily locked due to incorrect password attempts!', 'error');
+                    return;
+                }
+
                 // Master Admin Authentication Check (Supports admin, 9999999999, admin@neokhata.app / Admin@123 or admin123)
                 const isAdminIdentifier = (lowerId === 'admin' || cleanIdPhone === '9999999999' || lowerId === 'admin@neokhata.app' || lowerId === 'admin@khataflow.app');
                 const isAdminPassword = (password === 'Admin@123' || password === 'admin123');
                 if (isAdminIdentifier && isAdminPassword) {
+                    clearLoginLockoutState(identifier);
                     showLiveProcessOverlay({
                         badge: 'Admin Identity Verified',
                         title: 'Your Identity is Verified, Please Wait...',
@@ -5113,8 +5359,11 @@
                 }
                 if (isAdminIdentifier && !isAdminPassword) {
                     refreshAuthCaptcha();
+                    const { st, lockDurationMs, lockLabel } = recordFailedLoginAttempt(identifier);
                     if (statusEl) {
-                        statusEl.textContent = 'Incorrect Master Admin password.';
+                        statusEl.textContent = lockDurationMs > 0
+                            ? `Incorrect password! Account locked for ${lockLabel}.`
+                            : `Incorrect Master Admin password (${3 - st.failedAttempts} attempt(s) left before 30-hour lock).`;
                         statusEl.className = 'text-center text-xs pt-1 font-bold text-rose-600';
                     }
                     return;
@@ -5132,6 +5381,7 @@
                     const res = typeof window.firebaseLogin === 'function'
                         ? await window.firebaseLogin(identifier, password)
                         : { user: { uid: `user_${identifier}`, email: identifier, displayName: identifier, phone: extractCleanPhone(identifier) } };
+                    clearLoginLockoutState(identifier);
                     updateLiveProcessOverlay({ step: 'Identity Verified! Loading your cloud data sync...', progress: 75 });
                     const u = res.user;
                     const cleanPhone = u.phone || extractCleanPhone(identifier);
@@ -5157,7 +5407,14 @@
                 } catch (err) {
                     hideLiveProcessOverlay();
                     refreshAuthCaptcha();
-                    if (statusEl) { statusEl.textContent = err?.message || 'Sign in failed.'; statusEl.className = 'text-center text-xs pt-1 font-bold text-rose-600'; }
+                    const { st, lockDurationMs, lockLabel } = recordFailedLoginAttempt(identifier);
+                    const remainingTries = Math.max(0, 3 - st.failedAttempts);
+                    if (statusEl) {
+                        statusEl.textContent = lockDurationMs > 0
+                            ? `Incorrect password! Account locked for ${lockLabel}.`
+                            : `${err?.message || 'Incorrect password.'} (${remainingTries} attempt${remainingTries === 1 ? '' : 's'} left before 30-hour lock)`;
+                        statusEl.className = 'text-center text-xs pt-1 font-bold text-rose-600';
+                    }
                 }
             }
         }
@@ -13250,8 +13507,45 @@ ${JSON.stringify(liveSnapshot)}`;
         let selectedCheckoutPlanName = 'Monthly Pro';
         let selectedCheckoutDays = 30;
         let appliedCheckoutDiscountPct = 0;
+        let appliedCheckoutCouponCode = '';
+        let currentSubscriptionModalStep = 1;
 
-        function openSubscriptionUpgradeModal(lockedFeature = '') {
+        function goToSubscriptionStep(stepNum) {
+            currentSubscriptionModalStep = stepNum === 2 ? 2 : 1;
+            const step1El = document.getElementById('sub-step-1-plans-page');
+            const step2El = document.getElementById('sub-step-2-checkout-page');
+            const pill1 = document.getElementById('sub-step-pill-1');
+            const pill2 = document.getElementById('sub-step-pill-2');
+
+            if (step1El) step1El.classList.toggle('hidden', currentSubscriptionModalStep !== 1);
+            if (step2El) step2El.classList.toggle('hidden', currentSubscriptionModalStep !== 2);
+
+            if (pill1 && pill2) {
+                pill1.className = currentSubscriptionModalStep === 1
+                    ? 'py-2 px-3 rounded-xl font-black text-[11px] flex items-center justify-center gap-2 bg-white dark:bg-neutral-900 text-primary-600 dark:text-primary-400 shadow-xs transition'
+                    : 'py-2 px-3 rounded-xl font-bold text-[11px] flex items-center justify-center gap-2 text-neutral-500 dark:text-neutral-400 transition';
+                pill2.className = currentSubscriptionModalStep === 2
+                    ? 'py-2 px-3 rounded-xl font-black text-[11px] flex items-center justify-center gap-2 bg-white dark:bg-neutral-900 text-primary-600 dark:text-primary-400 shadow-xs transition'
+                    : 'py-2 px-3 rounded-xl font-bold text-[11px] flex items-center justify-center gap-2 text-neutral-500 dark:text-neutral-400 transition';
+            }
+
+            if (currentSubscriptionModalStep === 2) {
+                populateSubscriberAutoDetails();
+                refreshSubscriptionCheckoutQr();
+            }
+        }
+
+        function populateSubscriberAutoDetails() {
+            const sess = getAuthSession() || {};
+            const name = getPrimaryUserName();
+            const phone = extractCleanPhone(sess.phone || appState.userProfile?.phone || '');
+            const email = sess.email || appState.userProfile?.email || getCurrentUserSubKey();
+            if (document.getElementById('sub-checkout-user-name')) document.getElementById('sub-checkout-user-name').textContent = name;
+            if (document.getElementById('sub-checkout-user-phone')) document.getElementById('sub-checkout-user-phone').textContent = phone ? `+91 ${phone}` : 'Not Linked';
+            if (document.getElementById('sub-checkout-user-email')) document.getElementById('sub-checkout-user-email').textContent = email;
+        }
+
+        function openSubscriptionUpgradeModal(lockedFeature = '', startStep = 1) {
             const sc = ensureSubscriptionConfig();
             const userKey = getCurrentUserSubKey();
             const access = getUserSubscriptionAccess(userKey);
@@ -13322,19 +13616,30 @@ ${JSON.stringify(liveSnapshot)}`;
                         ? Number(ov.customPrice)
                         : Number(pl.price);
                     return `
-                        <button type="button" onclick="selectSubscriptionCheckoutPlan('${pl.id}')" class="p-3.5 rounded-2xl border-2 text-left transition ${isSelected ? 'border-primary-600 bg-primary-50/80 dark:bg-primary-950/50 shadow-sm' : 'border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900'}">
-                            <div class="flex items-center justify-between gap-1">
-                                <span class="font-black text-neutral-900 dark:text-white">${pl.name}</span>
-                                <span class="px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-700 dark:text-amber-300 text-[9px] font-black">${pl.badge || `${pl.days}d`}</span>
+                        <div onclick="selectSubscriptionCheckoutPlan('${pl.id}', false)" class="p-3.5 rounded-2xl border-2 text-left cursor-pointer transition flex flex-col justify-between gap-2 ${isSelected ? 'border-primary-600 bg-primary-50/90 dark:bg-primary-950/60 shadow-md ring-2 ring-primary-500/20' : 'border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 hover:border-primary-400'}">
+                            <div>
+                                <div class="flex items-center justify-between gap-1">
+                                    <span class="font-black text-neutral-900 dark:text-white">${pl.name}</span>
+                                    <span class="px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-700 dark:text-amber-300 text-[9px] font-black">${pl.badge || `${pl.days}d`}</span>
+                                </div>
+                                <div class="text-xl font-black text-primary-600 mt-1.5">₹${effPrice} <span class="text-[10px] font-bold text-neutral-400">/ ${pl.days}d</span></div>
+                                <div class="text-[10px] text-neutral-500 mt-1 leading-snug">${pl.desc || 'All Pro features unlocked'}</div>
                             </div>
-                            <div class="text-lg font-black text-primary-600 mt-1">₹${effPrice} <span class="text-[10px] font-bold text-neutral-400">/ ${pl.days} Days</span></div>
-                            <div class="text-[10px] text-neutral-500 mt-0.5">${pl.desc || 'All Pro features unlocked'}</div>
-                        </button>
+                            <button type="button" onclick="event.stopPropagation(); selectSubscriptionCheckoutPlan('${pl.id}', true)" class="w-full py-1.5 px-2.5 rounded-xl ${isSelected ? 'bg-primary-600 text-white' : 'bg-neutral-200/80 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-200'} font-black text-[10px] transition">
+                                ${isSelected ? '✓ Selected • Checkout →' : 'Select Plan →'}
+                            </button>
+                        </div>
                     `;
                 }).join('');
             }
 
+            if (document.getElementById('sub-step1-proceed-text')) {
+                document.getElementById('sub-step1-proceed-text').textContent = `Continue with ${selectedCheckoutPlanName} (₹${selectedCheckoutAmount}) →`;
+            }
+
+            populateSubscriberAutoDetails();
             refreshSubscriptionCheckoutQr();
+            goToSubscriptionStep(startStep);
             document.getElementById('subscription-upgrade-modal')?.classList.replace('hidden', 'flex');
         }
 
@@ -13342,7 +13647,7 @@ ${JSON.stringify(liveSnapshot)}`;
             document.getElementById('subscription-upgrade-modal')?.classList.replace('flex', 'hidden');
         }
 
-        function selectSubscriptionCheckoutPlan(planId) {
+        function selectSubscriptionCheckoutPlan(planId, advanceToCheckout = true) {
             const sc = ensureSubscriptionConfig();
             const userKey = getCurrentUserSubKey();
             const ov = sc.userOverrides[userKey] || {};
@@ -13354,19 +13659,43 @@ ${JSON.stringify(liveSnapshot)}`;
             selectedCheckoutAmount = (ov.customPrice !== undefined && ov.customPrice !== null && ov.customPrice !== '' && (!ov.assignedPlanId || ov.assignedPlanId === pl.id))
                 ? Number(ov.customPrice)
                 : Number(pl.price);
-            openSubscriptionUpgradeModal();
+            openSubscriptionUpgradeModal('', advanceToCheckout ? 2 : 1);
         }
 
         function applySubscriptionCheckoutCoupon() {
             const sc = ensureSubscriptionConfig();
             const code = (document.getElementById('sub-checkout-coupon-input')?.value || '').trim().toUpperCase();
-            if (!code) return;
+            const statusEl = document.getElementById('sub-coupon-status-text');
+            const badgeEl = document.getElementById('sub-coupon-applied-badge');
+            if (!code) {
+                appliedCheckoutDiscountPct = 0;
+                appliedCheckoutCouponCode = '';
+                statusEl?.classList.add('hidden');
+                badgeEl?.classList.add('hidden');
+                refreshSubscriptionCheckoutQr();
+                return;
+            }
             const found = (sc.coupons || []).find(c => (c.code || '').toUpperCase() === code);
             if (!found) {
                 appliedCheckoutDiscountPct = 0;
+                appliedCheckoutCouponCode = '';
+                badgeEl?.classList.add('hidden');
+                if (statusEl) {
+                    statusEl.className = 'text-[10px] font-bold text-rose-600';
+                    statusEl.textContent = `❌ Promo code "${code}" is invalid or expired.`;
+                }
                 showToast('Invalid promo coupon code', 'error');
             } else {
                 appliedCheckoutDiscountPct = Math.min(100, Math.max(1, Number(found.discountPct) || 0));
+                appliedCheckoutCouponCode = code;
+                if (badgeEl) {
+                    badgeEl.classList.remove('hidden');
+                    badgeEl.textContent = `${code} • ${appliedCheckoutDiscountPct}% OFF`;
+                }
+                if (statusEl) {
+                    statusEl.className = 'text-[10px] font-bold text-emerald-600';
+                    statusEl.textContent = `✅ Promo code "${code}" applied! You saved ${appliedCheckoutDiscountPct}% on this plan.`;
+                }
                 showToast(`Coupon ${code} applied (${appliedCheckoutDiscountPct}% OFF)!`);
             }
             refreshSubscriptionCheckoutQr();
@@ -13376,10 +13705,12 @@ ${JSON.stringify(liveSnapshot)}`;
             const sc = ensureSubscriptionConfig();
             const receiverUpi = sc.upiId || '6393954985@upi';
             const merchantLabel = sc.merchantLabel || 'NeoKhata Verified Merchant Gateway';
-            const finalAmt = Math.max(1, Math.round(selectedCheckoutAmount * (1 - appliedCheckoutDiscountPct / 100)));
+            const baseAmt = Math.max(1, Math.round(Number(selectedCheckoutAmount) || 199));
+            const discountAmt = Math.round((baseAmt * appliedCheckoutDiscountPct) / 100);
+            const finalAmt = Math.max(1, baseAmt - discountAmt);
 
             if (document.getElementById('sub-checkout-plan-summary')) {
-                document.getElementById('sub-checkout-plan-summary').textContent = `${selectedCheckoutPlanName} (${selectedCheckoutDays} Days): ₹${finalAmt}`;
+                document.getElementById('sub-checkout-plan-summary').textContent = `${selectedCheckoutPlanName} (${selectedCheckoutDays} Days) • ₹${finalAmt}`;
             }
             if (document.getElementById('sub-checkout-upi-display')) {
                 document.getElementById('sub-checkout-upi-display').textContent = merchantLabel;
@@ -13387,10 +13718,69 @@ ${JSON.stringify(liveSnapshot)}`;
             if (document.getElementById('sub-checkout-pay-btn-amt')) {
                 document.getElementById('sub-checkout-pay-btn-amt').textContent = `₹${finalAmt}`;
             }
+            if (document.getElementById('sub-bill-base-amt')) document.getElementById('sub-bill-base-amt').textContent = `₹${baseAmt}`;
+            if (document.getElementById('sub-bill-net-amt')) document.getElementById('sub-bill-net-amt').textContent = `₹${finalAmt}`;
+            const discRow = document.getElementById('sub-bill-discount-row');
+            if (discRow) {
+                discRow.classList.toggle('hidden', discountAmt <= 0);
+                if (document.getElementById('sub-bill-discount-amt')) {
+                    document.getElementById('sub-bill-discount-amt').textContent = `-₹${discountAmt} (${appliedCheckoutCouponCode})`;
+                }
+            }
+
             const upiUri = `upi://pay?pa=${encodeURIComponent(receiverUpi)}&pn=${encodeURIComponent('NeoKhata Pro')}&am=${finalAmt.toFixed(2)}&cu=INR&tn=${encodeURIComponent(selectedCheckoutPlanName)}`;
             const qrImg = document.getElementById('sub-checkout-qr-img');
             if (qrImg) {
-                qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(upiUri)}`;
+                qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=${encodeURIComponent(upiUri)}`;
+            }
+        }
+
+        function downloadSubscriptionQrCode() {
+            const qrImg = document.getElementById('sub-checkout-qr-img');
+            if (!qrImg || !qrImg.src) return;
+            try {
+                const canvas = document.createElement('canvas');
+                canvas.width = 280;
+                canvas.height = 310;
+                const ctx = canvas.getContext('2d');
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(qrImg, 20, 16, 240, 240);
+                ctx.fillStyle = '#0f172a';
+                ctx.font = 'bold 14px Inter, sans-serif';
+                ctx.textAlign = 'center';
+                const netTxt = document.getElementById('sub-bill-net-amt')?.textContent || `₹${selectedCheckoutAmount}`;
+                ctx.fillText(`NeoKhata VIP Pro • ${netTxt}`, 140, 282);
+                const link = document.createElement('a');
+                link.download = `NeoKhata_Pro_Payment_QR.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                showToast('Payment QR Code downloaded!');
+            } catch (e) {
+                window.open(qrImg.src, '_blank');
+                showToast('Opened Payment QR Code');
+            }
+        }
+
+        function launchSubscriptionUpiApp(appHint = 'any') {
+            const sc = ensureSubscriptionConfig();
+            const receiverUpi = sc.upiId || '6393954985@upi';
+            const baseAmt = Math.max(1, Math.round(Number(selectedCheckoutAmount) || 199));
+            const finalAmt = Math.max(1, baseAmt - Math.round((baseAmt * appliedCheckoutDiscountPct) / 100));
+            const params = `pa=${encodeURIComponent(receiverUpi)}&pn=${encodeURIComponent('NeoKhata Pro')}&am=${finalAmt.toFixed(2)}&cu=INR&tn=${encodeURIComponent(selectedCheckoutPlanName)}`;
+
+            const schemeMap = {
+                gpay: `tez://upi/pay?${params}`,
+                phonepe: `phonepe://pay?${params}`,
+                paytm: `paytmmp://pay?${params}`,
+                any: `upi://pay?${params}`
+            };
+            const targetUri = schemeMap[appHint] || schemeMap.any;
+            window.location.href = targetUri;
+            if (appHint !== 'any') {
+                setTimeout(() => {
+                    window.location.href = `upi://pay?${params}`;
+                }, 900);
             }
         }
 
