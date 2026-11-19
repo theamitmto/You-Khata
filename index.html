@@ -3163,6 +3163,50 @@
                     </div>
                     <div id="admin-70-controls-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
                 </div>
+
+                <!-- 9. Login Security, Incorrect Password Lockout & Per-Account Lock Manager -->
+                <div class="p-5 rounded-3xl bg-white/85 dark:bg-neutral-900/85 border border-rose-500/30 mt-6 space-y-4 text-xs">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-neutral-200 dark:border-neutral-800">
+                        <div>
+                            <span class="px-2.5 py-0.5 rounded-full bg-rose-500/15 text-rose-600 dark:text-rose-400 text-[10px] font-black uppercase tracking-wider">Brute-Force &amp; Account Guard</span>
+                            <h4 class="text-sm font-black flex items-center gap-2 mt-1 text-neutral-900 dark:text-white"><i class="fa-solid fa-shield-halved text-rose-600"></i> Login Lockout Policy &amp; Per-Account Lock Controls</h4>
+                            <p class="text-[11px] text-neutral-500">Set max wrong password tries, initial lock duration (Minutes/Hours), progressive step-up minutes, and manually lock/unlock any user account.</p>
+                        </div>
+                        <button type="button" onclick="saveAdminLoginLockoutPolicy()" class="px-4 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-black text-xs shadow-sm flex items-center gap-1.5 self-start sm:self-auto">
+                            <i class="fa-solid fa-floppy-disk"></i> Save Lockout Policy
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 p-3.5 rounded-2xl bg-neutral-100/90 dark:bg-neutral-800/80 border border-neutral-200 dark:border-neutral-700">
+                        <div>
+                            <label class="block text-[10px] font-black uppercase text-neutral-500 mb-1">Max Wrong Attempts *</label>
+                            <input type="number" id="adm-lock-max-attempts" min="1" max="20" value="3" class="w-full p-2.5 rounded-xl bg-white dark:bg-neutral-900 border font-black">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-black uppercase text-neutral-500 mb-1">Initial Lock Value *</label>
+                            <input type="number" id="adm-lock-initial-val" min="1" value="30" class="w-full p-2.5 rounded-xl bg-white dark:bg-neutral-900 border font-black text-rose-600">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-black uppercase text-neutral-500 mb-1">Initial Lock Unit *</label>
+                            <select id="adm-lock-initial-unit" class="w-full p-2.5 rounded-xl bg-white dark:bg-neutral-900 border font-bold">
+                                <option value="hours">Hours (घंटे)</option>
+                                <option value="minutes">Minutes (मिनट)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-black uppercase text-neutral-500 mb-1">Next Wrong Step (+Mins) *</label>
+                            <input type="number" id="adm-lock-step-mins" min="1" value="30" class="w-full p-2.5 rounded-xl bg-white dark:bg-neutral-900 border font-black text-amber-600">
+                        </div>
+                    </div>
+
+                    <div class="space-y-2">
+                        <div class="flex items-center justify-between gap-2">
+                            <span class="font-black text-neutral-800 dark:text-neutral-200"><i class="fa-solid fa-user-lock text-rose-600 mr-1"></i> Per-Account Lock Status &amp; Manual Actions</span>
+                            <input type="text" id="adm-lock-user-search" oninput="renderAdminLoginLockoutStudio()" placeholder="Search user..." class="w-36 p-1.5 rounded-xl bg-neutral-100 dark:bg-neutral-800 border text-[11px] font-bold">
+                        </div>
+                        <div id="admin-login-lockout-users-list" class="space-y-2 max-h-72 overflow-y-auto pr-1"></div>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -5135,12 +5179,29 @@
             return `neokhata_login_lock_${cleanId || 'default'}`;
         }
 
+        function ensureLoginLockoutPolicy() {
+            if (!adminConfig.loginLockoutPolicy || typeof adminConfig.loginLockoutPolicy !== 'object') {
+                adminConfig.loginLockoutPolicy = {
+                    maxAttempts: 3,
+                    initialValue: 30,
+                    initialUnit: 'hours',
+                    stepMinutes: 30
+                };
+            }
+            const p = adminConfig.loginLockoutPolicy;
+            p.maxAttempts = Math.max(1, Number(p.maxAttempts) || 3);
+            p.initialValue = Math.max(1, Number(p.initialValue) || 30);
+            p.initialUnit = p.initialUnit === 'minutes' ? 'minutes' : 'hours';
+            p.stepMinutes = Math.max(1, Number(p.stepMinutes) || 30);
+            return p;
+        }
+
         function getLoginLockoutState(identifier) {
             try {
                 const raw = JSON.parse(localStorage.getItem(getLoginLockoutStorageKey(identifier)) || 'null');
-                return raw && typeof raw === 'object' ? raw : { failedAttempts: 0, lockStage: 0, lockedUntil: 0 };
+                return raw && typeof raw === 'object' ? raw : { failedAttempts: 0, lockStage: 0, lockedUntil: 0, adminLocked: false };
             } catch (e) {
-                return { failedAttempts: 0, lockStage: 0, lockedUntil: 0 };
+                return { failedAttempts: 0, lockStage: 0, lockedUntil: 0, adminLocked: false };
             }
         }
 
@@ -5167,21 +5228,21 @@
         }
 
         function recordFailedLoginAttempt(identifier) {
+            const policy = ensureLoginLockoutPolicy();
             const st = getLoginLockoutState(identifier);
             st.failedAttempts = (Number(st.failedAttempts) || 0) + 1;
             let lockDurationMs = 0;
             let lockLabel = '';
 
             if (st.lockStage === 0) {
-                // Stage 0: First 3 wrong attempts -> Lock for 30 Hours
-                if (st.failedAttempts >= 3) {
+                if (st.failedAttempts >= policy.maxAttempts) {
                     st.lockStage = 1;
-                    lockDurationMs = 30 * 60 * 60 * 1000; // 30 Hours
-                    lockLabel = '30 Hours';
+                    const unitMult = policy.initialUnit === 'minutes' ? (60 * 1000) : (60 * 60 * 1000);
+                    lockDurationMs = policy.initialValue * unitMult;
+                    lockLabel = `${policy.initialValue} ${policy.initialUnit === 'minutes' ? 'Minutes' : 'Hours'}`;
                 }
             } else {
-                // Stage >= 1: Every wrong attempt after the 30-hour lock adds +30 minutes progressively (30m, 60m, 90m...)
-                const extraMins = st.lockStage * 30;
+                const extraMins = st.lockStage * policy.stepMinutes;
                 st.lockStage += 1;
                 lockDurationMs = extraMins * 60 * 1000;
                 lockLabel = `${extraMins} Minutes`;
@@ -5192,7 +5253,7 @@
             }
             saveLoginLockoutState(identifier, st);
             updateLoginLockoutUI(identifier);
-            return { st, lockDurationMs, lockLabel };
+            return { st, lockDurationMs, lockLabel, policy };
         }
 
         function updateLoginLockoutUI(identifierOverride) {
@@ -5210,15 +5271,18 @@
                 return false;
             }
 
+            const policy = ensureLoginLockoutPolicy();
             const st = getLoginLockoutState(idVal);
             const remMs = (Number(st.lockedUntil) || 0) - Date.now();
             if (remMs > 0) {
                 banner?.classList.remove('hidden');
                 if (timerTxt) timerTxt.textContent = `⏱ Locked for ${formatLockoutDuration(remMs)}`;
                 if (detailTxt) {
-                    detailTxt.textContent = st.lockStage === 1
-                        ? '3 गलत पासवर्ड डालने के कारण आपका लॉगिन 30 घंटे के लिए लॉक कर दिया गया है।'
-                        : `दोबारा गलत पासवर्ड डालने के कारण अतिरिक्त +30 मिनट का लॉक लगाया गया है।`;
+                    detailTxt.textContent = st.adminLocked
+                        ? 'यह अकाउंट एडमिन द्वारा अस्थायी रूप से लॉक किया गया है।'
+                        : (st.lockStage === 1
+                            ? `${policy.maxAttempts} गलत पासवर्ड डालने के कारण आपका लॉगिन ${policy.initialValue} ${policy.initialUnit === 'minutes' ? 'मिनट' : 'घंटे'} के लिए लॉक कर दिया गया है।`
+                            : `दोबारा गलत पासवर्ड डालने के कारण अतिरिक्त +${policy.stepMinutes} मिनट का लॉक लगाया गया है।`);
                 }
                 if (submitBtn) {
                     submitBtn.disabled = true;
@@ -5233,6 +5297,84 @@
                 }
                 return false;
             }
+        }
+
+        function renderAdminLoginLockoutStudio() {
+            const policy = ensureLoginLockoutPolicy();
+            if (document.getElementById('adm-lock-max-attempts')) document.getElementById('adm-lock-max-attempts').value = policy.maxAttempts;
+            if (document.getElementById('adm-lock-initial-val')) document.getElementById('adm-lock-initial-val').value = policy.initialValue;
+            if (document.getElementById('adm-lock-initial-unit')) document.getElementById('adm-lock-initial-unit').value = policy.initialUnit;
+            if (document.getElementById('adm-lock-step-mins')) document.getElementById('adm-lock-step-mins').value = policy.stepMinutes;
+
+            const listEl = document.getElementById('admin-login-lockout-users-list');
+            if (!listEl) return;
+            const q = (document.getElementById('adm-lock-user-search')?.value || '').toLowerCase().trim();
+            const users = getDeduplicatedAdminUsers().filter(u => !q || `${u.name || ''} ${u.phone || ''} ${u.email || ''}`.toLowerCase().includes(q));
+            const now = Date.now();
+
+            listEl.innerHTML = users.map((u, idx) => {
+                const ph = extractCleanPhone(u.phone || '');
+                const idKey = ph.length === 10 ? ph : (u.email || u.uid || '');
+                const encId = encodeURIComponent(idKey);
+                const st = getLoginLockoutState(idKey);
+                const remMs = Math.max(0, (Number(st.lockedUntil) || 0) - now);
+                const isLocked = remMs > 0;
+                return `
+                    <div class="p-3 rounded-2xl bg-neutral-100/90 dark:bg-neutral-800/90 border ${isLocked ? 'border-rose-400/70' : 'border-neutral-200 dark:border-neutral-700'} flex flex-wrap items-center justify-between gap-2 text-[11px]">
+                        <div class="min-w-0">
+                            <div class="font-black text-neutral-900 dark:text-white flex items-center gap-1.5 flex-wrap">
+                                <span>${u.name || 'User'}</span>
+                                <span class="font-mono text-[10px] text-neutral-500">${ph ? '+91 ' + ph : (u.email || '')}</span>
+                                ${isLocked
+                                    ? `<span class="px-2 py-0.5 rounded-full bg-rose-600 text-white font-mono font-black text-[9px]">🔒 Locked (${formatLockoutDuration(remMs)})</span>`
+                                    : `<span class="px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-600 font-black text-[9px]">Unlocked (${st.failedAttempts || 0}/${policy.maxAttempts} tries)</span>`}
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-1.5 flex-wrap">
+                            <input type="number" id="adm-manual-lock-val-${idx}" min="1" value="30" class="w-14 p-1 rounded-lg bg-white dark:bg-neutral-900 border font-black text-center">
+                            <select id="adm-manual-lock-unit-${idx}" class="p-1 rounded-lg bg-white dark:bg-neutral-900 border font-bold">
+                                <option value="minutes">Mins</option>
+                                <option value="hours">Hrs</option>
+                            </select>
+                            <button type="button" onclick="adminManualLockAccount('${encId}', ${idx})" class="px-2.5 py-1 rounded-lg bg-rose-600 hover:bg-rose-700 text-white font-black text-[10px]">Lock Account</button>
+                            <button type="button" onclick="adminManualUnlockAccount('${encId}')" class="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-black text-[10px]">Unlock / Reset</button>
+                        </div>
+                    </div>
+                `;
+            }).join('') || '<div class="text-center py-4 text-neutral-400">No registered user accounts found.</div>';
+        }
+
+        function saveAdminLoginLockoutPolicy() {
+            const p = ensureLoginLockoutPolicy();
+            p.maxAttempts = Math.max(1, parseInt(document.getElementById('adm-lock-max-attempts')?.value, 10) || 3);
+            p.initialValue = Math.max(1, parseInt(document.getElementById('adm-lock-initial-val')?.value, 10) || 30);
+            p.initialUnit = document.getElementById('adm-lock-initial-unit')?.value === 'minutes' ? 'minutes' : 'hours';
+            p.stepMinutes = Math.max(1, parseInt(document.getElementById('adm-lock-step-mins')?.value, 10) || 30);
+            localStorage.setItem('khataflow_admin_config', JSON.stringify(adminConfig));
+            renderAdminLoginLockoutStudio();
+            saveAllAdminChangesLive();
+            showToast(`Login Lockout Policy saved (${p.maxAttempts} tries → ${p.initialValue} ${p.initialUnit}, +${p.stepMinutes}m step)!`);
+        }
+
+        function adminManualLockAccount(encId, idx) {
+            const idKey = decodeURIComponent(encId || '');
+            const val = Math.max(1, parseInt(document.getElementById(`adm-manual-lock-val-${idx}`)?.value, 10) || 30);
+            const unit = document.getElementById(`adm-manual-lock-unit-${idx}`)?.value === 'hours' ? 'hours' : 'minutes';
+            const durMs = val * (unit === 'hours' ? 3600000 : 60000);
+            const st = getLoginLockoutState(idKey);
+            st.lockedUntil = Date.now() + durMs;
+            st.adminLocked = true;
+            st.lockStage = Math.max(1, st.lockStage || 1);
+            saveLoginLockoutState(idKey, st);
+            renderAdminLoginLockoutStudio();
+            showToast(`Account "${idKey}" locked for ${val} ${unit}!`);
+        }
+
+        function adminManualUnlockAccount(encId) {
+            const idKey = decodeURIComponent(encId || '');
+            clearLoginLockoutState(idKey);
+            renderAdminLoginLockoutStudio();
+            showToast(`Account "${idKey}" unlocked & failed attempts reset!`);
         }
 
         function startLoginLockoutTicker() {
@@ -5359,11 +5501,12 @@
                 }
                 if (isAdminIdentifier && !isAdminPassword) {
                     refreshAuthCaptcha();
-                    const { st, lockDurationMs, lockLabel } = recordFailedLoginAttempt(identifier);
+                    const { st, lockDurationMs, lockLabel, policy } = recordFailedLoginAttempt(identifier);
+                    const leftTries = Math.max(0, policy.maxAttempts - st.failedAttempts);
                     if (statusEl) {
                         statusEl.textContent = lockDurationMs > 0
                             ? `Incorrect password! Account locked for ${lockLabel}.`
-                            : `Incorrect Master Admin password (${3 - st.failedAttempts} attempt(s) left before 30-hour lock).`;
+                            : `Incorrect Master Admin password (${leftTries} attempt(s) left before ${policy.initialValue}-${policy.initialUnit} lock).`;
                         statusEl.className = 'text-center text-xs pt-1 font-bold text-rose-600';
                     }
                     return;
@@ -5407,12 +5550,12 @@
                 } catch (err) {
                     hideLiveProcessOverlay();
                     refreshAuthCaptcha();
-                    const { st, lockDurationMs, lockLabel } = recordFailedLoginAttempt(identifier);
-                    const remainingTries = Math.max(0, 3 - st.failedAttempts);
+                    const { st, lockDurationMs, lockLabel, policy } = recordFailedLoginAttempt(identifier);
+                    const remainingTries = Math.max(0, policy.maxAttempts - st.failedAttempts);
                     if (statusEl) {
                         statusEl.textContent = lockDurationMs > 0
                             ? `Incorrect password! Account locked for ${lockLabel}.`
-                            : `${err?.message || 'Incorrect password.'} (${remainingTries} attempt${remainingTries === 1 ? '' : 's'} left before 30-hour lock)`;
+                            : `${err?.message || 'Incorrect password.'} (${remainingTries} attempt${remainingTries === 1 ? '' : 's'} left before ${policy.initialValue}-${policy.initialUnit} lock)`;
                         statusEl.className = 'text-center text-xs pt-1 font-bold text-rose-600';
                     }
                 }
@@ -12486,6 +12629,7 @@ ${JSON.stringify(liveSnapshot)}`;
             if (tabId === 'admin') {
                 updateAdminDashboardMetrics();
                 renderAdminSubscriptionStudio();
+                renderAdminLoginLockoutStudio();
                 renderAdmin9ModulesGrid();
                 renderAdmin70ControlsGrid();
                 renderAdminUsersList();
