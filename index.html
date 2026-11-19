@@ -248,6 +248,20 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Date of Birth (DOB) & Live Automatic Age Calculator (18+ Only) -->
+                    <div>
+                        <label class="block text-xs font-bold text-neutral-700 dark:text-neutral-300 mb-1 flex items-center justify-between">
+                            <span class="flex items-center gap-1.5"><i class="fa-solid fa-cake-candles text-primary-600 text-[11px]"></i> Date of Birth (जन्मतिथि • 18+ Only)</span>
+                            <span id="gate-age-display-badge" class="text-[10px] font-black px-2 py-0.5 rounded-full bg-neutral-200/80 dark:bg-neutral-800 text-neutral-500">Enter DOB</span>
+                        </label>
+                        <div class="flex items-center gap-2">
+                            <input type="date" id="gate-input-dob" onchange="handleGateDobChange(this.value)" oninput="handleGateDobChange(this.value)" class="flex-1 px-3.5 py-2.5 rounded-2xl bg-neutral-100/90 dark:bg-neutral-800/90 border border-neutral-300 dark:border-neutral-700 text-xs sm:text-sm font-bold focus:outline-none focus:border-primary-500 transition">
+                            <div id="gate-age-box" class="px-3 py-2.5 rounded-2xl bg-neutral-100 dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 text-xs font-black text-neutral-600 dark:text-neutral-300 whitespace-nowrap">
+                                Age: — Yrs
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div id="gate-login-identifier-container">
@@ -311,6 +325,16 @@
                         </button>
                         <input type="text" id="gate-input-captcha" required maxlength="6" autocomplete="off" oninput="this.value=this.value.toUpperCase().replace(/[^A-Z0-9]/g,'')" placeholder="Enter code" class="w-full min-w-0 px-3 py-2 rounded-xl bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 text-xs sm:text-sm font-mono font-black uppercase tracking-widest focus:outline-none focus:border-primary-500">
                     </div>
+                </div>
+
+                <!-- Mandatory Terms & Conditions Agreement Checkbox (Sign Up Mode) -->
+                <div id="gate-terms-wrapper" class="hidden p-3 rounded-2xl bg-primary-50/70 dark:bg-primary-950/30 border border-primary-200 dark:border-primary-800/70">
+                    <label class="flex items-start gap-2.5 cursor-pointer text-[11px] font-bold text-neutral-700 dark:text-neutral-200 leading-snug">
+                        <input type="checkbox" id="gate-input-terms" class="mt-0.5 w-4 h-4 rounded accent-primary-600 flex-shrink-0 cursor-pointer">
+                        <span>
+                            हम आपकी <a href="https://neokhata.app/terms" target="_blank" rel="noopener noreferrer" class="text-primary-600 dark:text-primary-400 underline font-black">नियम और शर्तों (Terms &amp; Conditions)</a> तथा <a href="https://neokhata.app/privacy-policy" target="_blank" rel="noopener noreferrer" class="text-primary-600 dark:text-primary-400 underline font-black">Privacy Policy</a> से सहमत हैं। <span class="text-error-500 font-black">*</span>
+                        </span>
+                    </label>
                 </div>
 
                 <div class="pt-1">
@@ -1160,7 +1184,7 @@
                     <div class="flex flex-wrap items-center justify-between gap-2">
                         <div class="flex items-center gap-2">
                             <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 text-[10px] font-black uppercase">1,300+ Kirana Catalog</span>
-                            <span class="text-xs font-bold text-neutral-600 dark:text-neutral-300">Tap any item to add instantly</span>
+                            <span class="text-xs font-bold text-neutral-600 dark:text-neutral-300">Tap item to choose Qty &amp; Unit</span>
                         </div>
                         <div class="flex items-center gap-1.5">
                             <button type="button" onclick="scrollProductSlider(-260)" class="w-7 h-7 rounded-xl bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 text-xs flex items-center justify-center hover:border-primary-500"><i class="fa-solid fa-chevron-left"></i></button>
@@ -1185,33 +1209,40 @@
                 </div>
 
                 <!-- Add Item Form with Live Search Autocomplete -->
-                <form onsubmit="addGroceryItem(event)" class="relative mb-6">
+                <form onsubmit="addGroceryItem(event)" id="grocery-add-form" class="relative mb-6">
                     <div class="grid grid-cols-1 sm:grid-cols-12 gap-2.5">
-                        <div class="sm:col-span-6 relative">
+                        <div class="sm:col-span-6 relative" id="grocery-search-wrapper">
                             <input type="text" id="grocery-name" onfocus="openKiranaDropdown()" oninput="filterKiranaDropdown(this.value)" onkeydown="handleKiranaKeydown(event)" autocomplete="off" required placeholder="Search or type item (e.g. Atta, Basmati Rice, Mustard Oil)..." class="w-full p-3 pr-9 rounded-2xl bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 text-xs font-semibold focus:outline-none focus:border-primary-500">
                             <button type="button" id="grocery-clear-btn" onclick="clearKiranaInput()" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600 text-xs"><i class="fa-solid fa-xmark"></i></button>
-                            <div id="custom-kirana-dropdown" class="hidden absolute left-0 right-0 top-full mt-1.5 z-30 rounded-2xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 shadow-xl p-2 max-h-60 overflow-y-auto">
+                            <div id="custom-kirana-dropdown" class="hidden absolute left-0 right-0 top-full mt-1.5 z-30 rounded-2xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 shadow-2xl p-2 max-h-56 overflow-y-auto">
                                 <div class="flex items-center justify-between px-2 py-1 text-[10px] font-bold text-neutral-400 border-b border-neutral-100 dark:border-neutral-800 mb-1">
                                     <span>Catalog Suggestions</span>
-                                    <span id="dropdown-match-count">0 items</span>
+                                    <div class="flex items-center gap-2">
+                                        <span id="dropdown-match-count">0 items</span>
+                                        <button type="button" onclick="closeKiranaDropdown()" class="w-5 h-5 rounded-full bg-neutral-100 dark:bg-neutral-800 hover:bg-rose-500 hover:text-white text-neutral-500 flex items-center justify-center text-[10px] transition" title="Close Suggestions">
+                                            <i class="fa-solid fa-xmark"></i>
+                                        </button>
+                                    </div>
                                 </div>
                                 <div id="kirana-dropdown-items" class="space-y-1"></div>
                             </div>
                         </div>
-                        <div class="sm:col-span-2">
-                            <input type="number" id="grocery-qty" step="any" min="0.01" placeholder="Qty (1)" class="w-full p-3 rounded-2xl bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 text-xs font-bold focus:outline-none focus:border-primary-500">
+                        <div class="grid grid-cols-2 sm:col-span-4 gap-2.5">
+                            <div>
+                                <input type="number" id="grocery-qty" step="any" min="0.01" value="1" placeholder="Qty (1)" class="w-full p-3 rounded-2xl bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 text-xs font-bold focus:outline-none focus:border-primary-500">
+                            </div>
+                            <div>
+                                <select id="grocery-unit" class="w-full p-3 rounded-2xl bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 text-xs font-bold focus:outline-none focus:border-primary-500">
+                                    <option value="Kg">Kilogram (Kg)</option>
+                                    <option value="Grams (gm)">Gram (gm)</option>
+                                    <option value="Packets">Packet</option>
+                                    <option value="Pieces (pcs)">Piece (pcs)</option>
+                                    <option value="Litre (L)">Litre (L)</option>
+                                </select>
+                            </div>
                         </div>
                         <div class="sm:col-span-2">
-                            <select id="grocery-unit" class="w-full p-3 rounded-2xl bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 text-xs font-bold focus:outline-none focus:border-primary-500">
-                                <option value="Kg">Kg</option>
-                                <option value="Grams (gm)">Grams (gm)</option>
-                                <option value="Packets">Packets</option>
-                                <option value="Pieces (pcs)">Pieces (pcs)</option>
-                                <option value="Litre (L)">Litre (L)</option>
-                            </select>
-                        </div>
-                        <div class="sm:col-span-2">
-                            <button type="submit" class="w-full h-full py-3 px-4 rounded-2xl bg-primary-600 hover:bg-primary-700 text-white font-black text-xs transition shadow-md flex items-center justify-center gap-1.5 active:scale-95">
+                            <button type="submit" id="grocery-submit-btn" class="w-full h-full py-3 px-4 rounded-2xl bg-primary-600 hover:bg-primary-700 text-white font-black text-xs transition shadow-md flex items-center justify-center gap-1.5 active:scale-95">
                                 <i class="fa-solid fa-plus"></i> Add Item
                             </button>
                         </div>
@@ -1219,44 +1250,66 @@
                 </form>
 
                 <!-- Two-Column Checklist & Live Bill Calculator -->
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
                     <!-- Left: Shopping Checklist -->
-                    <div class="p-4 rounded-2xl bg-neutral-100/70 dark:bg-neutral-900/60 border border-neutral-200 dark:border-neutral-800 space-y-3">
-                        <div class="flex items-center justify-between">
-                            <h4 class="text-sm font-black flex items-center gap-2 text-neutral-900 dark:text-white">
-                                <i class="fa-solid fa-list-check text-primary-600"></i> Checklist (<span id="grocery-pending-count">0</span> Pending)
-                            </h4>
-                            <button type="button" onclick="clearCheckedGrocery()" class="text-[11px] font-bold text-rose-600 hover:underline">Clear Checked</button>
+                    <div id="grocery-checklist-card" class="p-3.5 sm:p-5 rounded-3xl bg-neutral-100/80 dark:bg-neutral-900/70 border border-neutral-200 dark:border-neutral-800 space-y-3">
+                        <div class="flex items-center justify-between gap-2 pb-2.5 border-b border-neutral-200/80 dark:border-neutral-800">
+                            <div class="flex items-center gap-2 min-w-0">
+                                <span class="w-8 h-8 rounded-xl bg-primary-600/10 text-primary-600 flex items-center justify-center text-xs flex-shrink-0">
+                                    <i class="fa-solid fa-list-check"></i>
+                                </span>
+                                <div class="min-w-0">
+                                    <h4 class="text-xs sm:text-sm font-black text-neutral-900 dark:text-white truncate">
+                                        Checklist (<span id="grocery-pending-count">0</span> Pending)
+                                    </h4>
+                                    <p class="text-[10px] text-neutral-500 truncate">Tick item to move to Billing Counter</p>
+                                </div>
+                            </div>
+                            <button type="button" onclick="clearCheckedGrocery()" class="px-2.5 py-1.5 rounded-xl bg-rose-500/10 hover:bg-rose-600 text-rose-600 hover:text-white text-[10px] font-extrabold transition flex-shrink-0">
+                                Clear Checked
+                            </button>
                         </div>
-                        <div id="grocery-checklist" class="space-y-2 max-h-80 overflow-y-auto pr-1"></div>
+                        <div id="grocery-checklist" class="space-y-2.5 max-h-80 overflow-y-auto pr-0.5"></div>
                     </div>
 
-                    <!-- Right: Checked Items Pricing & Tax Invoice Generator -->
-                    <div class="p-4 rounded-2xl bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200/80 dark:border-emerald-800/60 space-y-3 flex flex-col justify-between">
+                    <!-- Right: Checked Items Pricing & Tax Invoice Generator (Billing Counter) -->
+                    <div id="grocery-billing-counter-card" class="p-3.5 sm:p-5 rounded-3xl bg-gradient-to-b from-emerald-50/70 to-teal-50/40 dark:from-emerald-950/25 dark:to-neutral-900/70 border border-emerald-200/90 dark:border-emerald-800/60 space-y-3.5 flex flex-col justify-between transition-all">
                         <div class="space-y-3">
-                            <div class="flex items-center justify-between">
-                                <h4 class="text-sm font-black flex items-center gap-2 text-neutral-900 dark:text-white">
-                                    <i class="fa-solid fa-receipt text-emerald-600"></i> Checked Items Bill & QR
-                                </h4>
-                                <span id="grocery-bill-total" class="text-lg font-black text-emerald-600">₹0</span>
+                            <div class="flex items-center justify-between gap-2 pb-2.5 border-b border-emerald-200/70 dark:border-emerald-800/50">
+                                <div class="flex items-center gap-2 min-w-0">
+                                    <span class="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center text-xs shadow-xs flex-shrink-0">
+                                        <i class="fa-solid fa-receipt"></i>
+                                    </span>
+                                    <div class="min-w-0">
+                                        <h4 class="text-xs sm:text-sm font-black text-neutral-900 dark:text-white truncate">Checked Items Bill &amp; QR</h4>
+                                        <p class="text-[10px] text-neutral-500 truncate">Edit Qty, Unit or Rate (₹) live</p>
+                                    </div>
+                                </div>
+                                <div class="text-right flex-shrink-0">
+                                    <span class="text-[9px] font-black uppercase tracking-wider text-emerald-700/70 dark:text-emerald-300/70 block">Grand Total</span>
+                                    <span id="grocery-bill-total" class="text-lg sm:text-xl font-black text-emerald-600 tabular-nums">₹0</span>
+                                </div>
                             </div>
-                            <p class="text-[10px] text-neutral-500">Adjust quantity, unit, or market price (₹) anytime — totals update live.</p>
-                            <div id="grocery-pricing-list" class="space-y-2 max-h-60 overflow-y-auto pr-1"></div>
+                            <div id="grocery-pricing-list" class="space-y-2.5 max-h-72 overflow-y-auto pr-0.5"></div>
                         </div>
 
-                        <div class="pt-3 border-t border-emerald-200/70 dark:border-emerald-800/60 space-y-2.5">
-                            <div class="flex items-center justify-between gap-2 text-xs">
-                                <div class="flex items-center gap-1.5 flex-1">
-                                    <span class="font-bold text-neutral-500">Store UPI:</span>
-                                    <input type="tel" id="grocery-merchant-phone" maxlength="10" oninput="handlePhoneUpiInput(this.value)" placeholder="10-digit mobile" class="w-28 px-2.5 py-1.5 rounded-xl bg-white dark:bg-neutral-900 border text-xs font-bold">
-                                    <span id="formatted-preview-upi" class="text-[11px] font-mono font-bold text-primary-600 truncate">@upi</span>
+                        <div class="pt-3 border-t border-emerald-200/70 dark:border-emerald-800/60 space-y-3">
+                            <!-- Mobile-Optimized Store UPI Row -->
+                            <div class="p-2.5 rounded-2xl bg-white/90 dark:bg-neutral-900/90 border border-emerald-200/80 dark:border-neutral-800 flex items-center justify-between gap-2 text-xs">
+                                <span class="font-extrabold text-neutral-600 dark:text-neutral-300 text-[11px] whitespace-nowrap">Store UPI:</span>
+                                <div class="flex items-center flex-1 min-w-0 rounded-xl bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 overflow-hidden">
+                                    <input type="tel" id="grocery-merchant-phone" maxlength="10" oninput="handlePhoneUpiInput(this.value)" placeholder="10-digit mobile" class="w-full min-w-0 px-2.5 py-1.5 bg-transparent text-xs font-mono font-black focus:outline-none">
+                                    <span id="formatted-preview-upi" class="px-2 py-1.5 text-[10px] font-mono font-black text-primary-600 bg-primary-500/10 border-l border-neutral-200 dark:border-neutral-700 whitespace-nowrap">@upi</span>
                                 </div>
-                                <span id="upi-valid-badge" class="text-[10px] font-bold text-neutral-400">Optional</span>
+                                <span id="upi-valid-badge" class="text-[10px] font-black text-neutral-400 whitespace-nowrap">Optional</span>
                             </div>
 
-                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                                <button type="button" onclick="openGroceryCounterQrModal()" class="py-2.5 px-3 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-black text-xs transition shadow-sm flex items-center justify-center gap-1.5 active:scale-95">
+                                    <i class="fa-solid fa-qrcode"></i> Pay QR
+                                </button>
                                 <button type="button" onclick="addGroceryBillToDashboard()" class="py-2.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs transition shadow-sm flex items-center justify-center gap-1.5 active:scale-95">
-                                    <i class="fa-solid fa-plus-circle"></i> Add to History
+                                    <i class="fa-solid fa-plus-circle"></i> Add History
                                 </button>
                                 <button type="button" onclick="downloadGroceryBill('pdf')" class="py-2.5 px-3 rounded-xl bg-primary-600 hover:bg-primary-700 text-white font-black text-xs transition shadow-sm flex items-center justify-center gap-1.5 active:scale-95">
                                     <i class="fa-solid fa-file-pdf"></i> Bill PDF
@@ -2876,6 +2929,60 @@
                     </div>
                 </div>
 
+                <!-- Master Login Lockout, Bypass & Per-User Timer Control Studio -->
+                <div class="p-5 rounded-3xl bg-gradient-to-br from-rose-500/10 via-white/95 to-indigo-500/10 dark:from-rose-950/40 dark:via-neutral-900/90 dark:to-indigo-950/40 border border-rose-500/35 mb-6 space-y-4 shadow-sm text-xs">
+                    <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-3 pb-3 border-b border-neutral-200/80 dark:border-neutral-800">
+                        <div>
+                            <span class="px-2.5 py-0.5 rounded-full bg-rose-600 text-white text-[10px] font-black uppercase tracking-wider">Login Security &amp; Lockout Control</span>
+                            <h4 class="text-base font-black mt-1 text-neutral-900 dark:text-white flex items-center gap-2">
+                                <i class="fa-solid fa-shield-halved text-rose-600"></i> Incorrect Password Lockout Policy, Bypass &amp; Timer Reset Studio
+                            </h4>
+                            <p class="text-[11px] text-neutral-500 mt-0.5">Configure wrong-password lock thresholds, grant instant Login Bypass to specific users, reset active lockout timers, or apply custom lock durations.</p>
+                        </div>
+                        <button type="button" onclick="saveAdminLockoutPolicyConfig()" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-rose-600 to-indigo-600 hover:from-rose-700 hover:to-indigo-700 text-white font-black text-xs shadow-md flex items-center gap-1.5">
+                            <i class="fa-solid fa-floppy-disk"></i> Save Lockout Policy
+                        </button>
+                    </div>
+
+                    <!-- Global Lockout Policy Parameters -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 p-4 rounded-2xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800">
+                        <div>
+                            <label class="block text-[10px] font-black uppercase text-neutral-500 mb-1">Max Wrong Attempts Allowed *</label>
+                            <input type="number" id="adm-lock-max-attempts" min="1" max="20" value="3" class="w-full p-2.5 rounded-xl bg-neutral-100 dark:bg-neutral-800 border font-black text-rose-600">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-black uppercase text-neutral-500 mb-1">Initial Lock Duration *</label>
+                            <input type="number" id="adm-lock-initial-val" min="1" value="30" class="w-full p-2.5 rounded-xl bg-neutral-100 dark:bg-neutral-800 border font-black">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-black uppercase text-neutral-500 mb-1">Initial Duration Unit *</label>
+                            <select id="adm-lock-initial-unit" class="w-full p-2.5 rounded-xl bg-neutral-100 dark:bg-neutral-800 border font-black">
+                                <option value="hours" selected>Hours (घंटे)</option>
+                                <option value="minutes">Minutes (मिनट)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-black uppercase text-neutral-500 mb-1">Extra Lock After Re-Fail (Mins)</label>
+                            <input type="number" id="adm-lock-progressive-mins" min="1" value="30" class="w-full p-2.5 rounded-xl bg-neutral-100 dark:bg-neutral-800 border font-black text-indigo-600">
+                        </div>
+                    </div>
+
+                    <!-- Per-User Lockout Bypass, Reset Timer & Custom Lock Controls -->
+                    <div class="p-4 rounded-2xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 space-y-3">
+                        <div class="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-neutral-200/70 dark:border-neutral-800">
+                            <div>
+                                <span class="font-black text-neutral-900 dark:text-white"><i class="fa-solid fa-user-lock text-indigo-600 mr-1"></i> Per-User Lockout Bypass, Early Login Allow &amp; Timer Reset</span>
+                                <p class="text-[10px] text-neutral-400">Toggle <strong>Bypass ON</strong> to allow immediate login before timer expires, click <strong>Reset Timer</strong> to clear locks, or set custom lock minutes.</p>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <input type="text" id="adm-lock-user-search" oninput="renderAdminLockoutStudio()" placeholder="Search user..." class="w-36 p-1.5 rounded-lg bg-neutral-100 dark:bg-neutral-800 border text-[10px] font-bold">
+                                <button type="button" onclick="resetAllUsersLoginLockouts()" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-[10px]">Reset All Timers</button>
+                            </div>
+                        </div>
+                        <div id="admin-lockout-users-list" class="space-y-2 max-h-72 overflow-y-auto pr-1"></div>
+                    </div>
+                </div>
+
                 <!-- 2. Header & Footer Branding Studio + Opening Design Studio -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                     <!-- Header & Logo Branding -->
@@ -3162,50 +3269,6 @@
                         <button type="button" data-cat="security" onclick="setAdmin70Category('security')" class="adm70-tab px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap bg-neutral-100 dark:bg-neutral-800">Security & Sync</button>
                     </div>
                     <div id="admin-70-controls-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
-                </div>
-
-                <!-- 9. Login Security, Incorrect Password Lockout & Per-Account Lock Manager -->
-                <div class="p-5 rounded-3xl bg-white/85 dark:bg-neutral-900/85 border border-rose-500/30 mt-6 space-y-4 text-xs">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-neutral-200 dark:border-neutral-800">
-                        <div>
-                            <span class="px-2.5 py-0.5 rounded-full bg-rose-500/15 text-rose-600 dark:text-rose-400 text-[10px] font-black uppercase tracking-wider">Brute-Force &amp; Account Guard</span>
-                            <h4 class="text-sm font-black flex items-center gap-2 mt-1 text-neutral-900 dark:text-white"><i class="fa-solid fa-shield-halved text-rose-600"></i> Login Lockout Policy &amp; Per-Account Lock Controls</h4>
-                            <p class="text-[11px] text-neutral-500">Set max wrong password tries, initial lock duration (Minutes/Hours), progressive step-up minutes, and manually lock/unlock any user account.</p>
-                        </div>
-                        <button type="button" onclick="saveAdminLoginLockoutPolicy()" class="px-4 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-black text-xs shadow-sm flex items-center gap-1.5 self-start sm:self-auto">
-                            <i class="fa-solid fa-floppy-disk"></i> Save Lockout Policy
-                        </button>
-                    </div>
-
-                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 p-3.5 rounded-2xl bg-neutral-100/90 dark:bg-neutral-800/80 border border-neutral-200 dark:border-neutral-700">
-                        <div>
-                            <label class="block text-[10px] font-black uppercase text-neutral-500 mb-1">Max Wrong Attempts *</label>
-                            <input type="number" id="adm-lock-max-attempts" min="1" max="20" value="3" class="w-full p-2.5 rounded-xl bg-white dark:bg-neutral-900 border font-black">
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-black uppercase text-neutral-500 mb-1">Initial Lock Value *</label>
-                            <input type="number" id="adm-lock-initial-val" min="1" value="30" class="w-full p-2.5 rounded-xl bg-white dark:bg-neutral-900 border font-black text-rose-600">
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-black uppercase text-neutral-500 mb-1">Initial Lock Unit *</label>
-                            <select id="adm-lock-initial-unit" class="w-full p-2.5 rounded-xl bg-white dark:bg-neutral-900 border font-bold">
-                                <option value="hours">Hours (घंटे)</option>
-                                <option value="minutes">Minutes (मिनट)</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-black uppercase text-neutral-500 mb-1">Next Wrong Step (+Mins) *</label>
-                            <input type="number" id="adm-lock-step-mins" min="1" value="30" class="w-full p-2.5 rounded-xl bg-white dark:bg-neutral-900 border font-black text-amber-600">
-                        </div>
-                    </div>
-
-                    <div class="space-y-2">
-                        <div class="flex items-center justify-between gap-2">
-                            <span class="font-black text-neutral-800 dark:text-neutral-200"><i class="fa-solid fa-user-lock text-rose-600 mr-1"></i> Per-Account Lock Status &amp; Manual Actions</span>
-                            <input type="text" id="adm-lock-user-search" oninput="renderAdminLoginLockoutStudio()" placeholder="Search user..." class="w-36 p-1.5 rounded-xl bg-neutral-100 dark:bg-neutral-800 border text-[11px] font-bold">
-                        </div>
-                        <div id="admin-login-lockout-users-list" class="space-y-2 max-h-72 overflow-y-auto pr-1"></div>
-                    </div>
                 </div>
             </div>
         </section>
@@ -4730,6 +4793,7 @@
 
         let activeSliderCat = 'ALL';
         let sliderVisibleLimit = 48;
+        let pendingCatalogDraft = null;
 
         function filterSliderCategory(cat) {
             activeSliderCat = cat;
@@ -4808,35 +4872,61 @@
             ` : '');
         }
         function quickAddCatalogProduct(name, unit, price) {
-            if (!Array.isArray(appState.groceryItems)) appState.groceryItems = [];
             const catalogItem = KIRANA_CATALOG.find(c => c.name === name);
             const unitRate = catalogItem ? getCatalogEffectivePrice(catalogItem) : Math.max(0, Number(price) || 0);
-            appState.groceryItems.unshift({
-                id: `groc_${Date.now()}_${Math.random().toString(36).slice(2, 5)}`,
+            prepareCatalogItemForSelection(name, unit, unitRate);
+        }
+        function prepareCatalogItemForSelection(name, unit, unitRate) {
+            pendingCatalogDraft = {
                 name,
-                qty: 1,
-                unit,
-                unitPrice: unitRate,
-                price: unitRate,
-                checked: true
-            });
-            saveState();
-            renderGrocery();
-            showToast(`Added ${name} (₹${unitRate}) — customize Qty or Price anytime!`);
+                unit: unit || 'Kg',
+                unitRate: Math.max(0, Number(unitRate) || 0)
+            };
+            const nameInp = document.getElementById('grocery-name');
+            const qtyInp = document.getElementById('grocery-qty');
+            const unitSel = document.getElementById('grocery-unit');
+            const clearBtn = document.getElementById('grocery-clear-btn');
+            if (nameInp) nameInp.value = name;
+            if (qtyInp && (!qtyInp.value || Number(qtyInp.value) <= 0)) qtyInp.value = '1';
+            if (unitSel && unit) unitSel.value = unit;
+            if (clearBtn) clearBtn.classList.remove('hidden');
+            closeKiranaDropdown();
+
+            const formEl = document.getElementById('grocery-add-form');
+            if (formEl) {
+                formEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+            if (qtyInp) {
+                setTimeout(() => {
+                    qtyInp.focus();
+                    qtyInp.select();
+                }, 180);
+            }
+            showToast(`Selected "${name}" — choose Qty & Unit, then tap "+ Add Item"`);
         }
         function openKiranaDropdown() { filterKiranaDropdown(document.getElementById('grocery-name')?.value || ''); }
         function closeKiranaDropdown() { document.getElementById('custom-kirana-dropdown')?.classList.add('hidden'); }
         function clearKiranaInput() {
+            pendingCatalogDraft = null;
             const inp = document.getElementById('grocery-name');
+            const qtyInp = document.getElementById('grocery-qty');
             if (inp) inp.value = '';
+            if (qtyInp) qtyInp.value = '1';
+            document.getElementById('grocery-clear-btn')?.classList.add('hidden');
             closeKiranaDropdown();
         }
         function filterKiranaDropdown(val) {
             const dd = document.getElementById('custom-kirana-dropdown');
             const box = document.getElementById('kirana-dropdown-items');
+            const clearBtn = document.getElementById('grocery-clear-btn');
+            if (clearBtn) clearBtn.classList.toggle('hidden', !(val || '').trim());
             if (!dd || !box) return;
             const q = (val || '').toLowerCase().trim();
-            const matches = KIRANA_CATALOG.filter(x => !q || x.name.toLowerCase().includes(q) || x.cat.toLowerCase().includes(q));
+            if (!q) {
+                closeKiranaDropdown();
+                return;
+            }
+            const matches = KIRANA_CATALOG.filter(x => x.name.toLowerCase().includes(q) || x.cat.toLowerCase().includes(q));
             if (document.getElementById('dropdown-match-count')) {
                 document.getElementById('dropdown-match-count').textContent = `${matches.length} / ${KIRANA_CATALOG.length} items`;
             }
@@ -4856,25 +4946,28 @@
                     </div>
                 </div>
             `;
-            }).join('') || '<div class="text-center py-3 text-xs text-neutral-400">No catalog match — click "+ Add Item" to add custom item</div>';
+            }).join('') || '<div class="text-center py-3 text-xs text-neutral-400">No catalog match — close or tap "+ Add Item" to add custom item</div>';
         }
         function selectKiranaItem(name, unit, price) {
-            document.getElementById('grocery-name').value = name;
-            document.getElementById('grocery-unit').value = unit;
-            closeKiranaDropdown();
-            quickAddCatalogProduct(name, unit, price);
-            document.getElementById('grocery-name').value = '';
+            prepareCatalogItemForSelection(name, unit, price);
         }
         function handleKiranaKeydown(e) { if (e.key === 'Escape') closeKiranaDropdown(); }
 
         function addGroceryItem(e) {
             e.preventDefault();
+            closeKiranaDropdown();
             const name = document.getElementById('grocery-name')?.value.trim();
             const qty = Math.max(0.01, parseFloat(document.getElementById('grocery-qty')?.value) || 1);
             const unit = document.getElementById('grocery-unit')?.value || 'Kg';
             if (!name) return;
-            const catalogMatch = KIRANA_CATALOG.find(c => c.name.toLowerCase() === name.toLowerCase());
-            const defaultUnitRate = catalogMatch ? Number(catalogMatch.price) : 0;
+
+            let defaultUnitRate = 0;
+            if (pendingCatalogDraft && pendingCatalogDraft.name.toLowerCase() === name.toLowerCase()) {
+                defaultUnitRate = Number(pendingCatalogDraft.unitRate) || 0;
+            } else {
+                const catalogMatch = KIRANA_CATALOG.find(c => c.name.toLowerCase() === name.toLowerCase());
+                defaultUnitRate = catalogMatch ? getCatalogEffectivePrice(catalogMatch) : 0;
+            }
             const initialLineTotal = Number((defaultUnitRate * qty).toFixed(2));
             if (!Array.isArray(appState.groceryItems)) appState.groceryItems = [];
             appState.groceryItems.unshift({
@@ -4884,37 +4977,47 @@
                 unit,
                 unitPrice: defaultUnitRate,
                 price: initialLineTotal,
-                checked: true
+                checked: false
             });
+            pendingCatalogDraft = null;
             document.getElementById('grocery-name').value = '';
-            document.getElementById('grocery-qty').value = '';
-            closeKiranaDropdown();
+            document.getElementById('grocery-qty').value = '1';
+            document.getElementById('grocery-clear-btn')?.classList.add('hidden');
             saveState();
             renderGrocery();
-            showToast(`Added "${name}" (${qty} ${unit}) to checklist`);
+            const clCard = document.getElementById('grocery-checklist-card');
+            if (clCard) clCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            showToast(`Added "${name}" (${qty} ${unit}) to Checklist — tick it to send to Billing Counter!`);
         }
         function toggleGroceryChecked(id) {
             const it = (appState.groceryItems || []).find(x => x.id === id);
-            if (it) it.checked = !it.checked;
+            if (!it) return;
+            it.checked = !it.checked;
             saveState();
             renderGrocery();
+            if (it.checked) {
+                const billCard = document.getElementById('grocery-billing-counter-card');
+                if (billCard) {
+                    billCard.classList.add('ring-2', 'ring-emerald-500');
+                    billCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    setTimeout(() => billCard.classList.remove('ring-2', 'ring-emerald-500'), 1400);
+                }
+                showToast(`"${it.name}" sent to Billing Counter (Checked Items Bill & QR)!`);
+            }
         }
-        function updateGroceryItemQty(id, val) {
+
+        function updateGroceryItemQty(id, newQty) {
             const it = (appState.groceryItems || []).find(x => x.id === id);
             if (!it) return;
-            const oldQty = Math.max(0.01, Number(it.qty) || 1);
-            const newQty = Math.max(0.01, parseFloat(val) || 1);
-            const inferredUnitRate = typeof it.unitPrice === 'number' && it.unitPrice > 0
-                ? it.unitPrice
-                : ((Number(it.price) || 0) / oldQty);
-            it.qty = newQty;
-            if (inferredUnitRate > 0) {
-                it.unitPrice = Number(inferredUnitRate.toFixed(2));
-                it.price = Number((inferredUnitRate * newQty).toFixed(2));
+            const qty = Math.max(0.01, parseFloat(newQty) || 1);
+            it.qty = qty;
+            if (typeof it.unitPrice === 'number' && it.unitPrice > 0) {
+                it.price = Number((it.unitPrice * qty).toFixed(2));
             }
             saveState();
             renderGrocery();
         }
+
         function updateGroceryItemUnit(id, newUnit) {
             const it = (appState.groceryItems || []).find(x => x.id === id);
             if (!it) return;
@@ -4922,87 +5025,143 @@
             saveState();
             renderGrocery();
         }
-        function updateGroceryItemPrice(id, val) {
+
+        function updateGroceryItemPrice(id, newPrice) {
             const it = (appState.groceryItems || []).find(x => x.id === id);
             if (!it) return;
-            const newTotal = Math.max(0, parseFloat(val) || 0);
-            const q = Math.max(0.01, Number(it.qty) || 1);
-            it.price = newTotal;
-            it.unitPrice = Number((newTotal / q).toFixed(2));
+            const price = Math.max(0, parseFloat(newPrice) || 0);
+            it.price = price;
+            it.unitPrice = (Number(it.qty) || 1) > 0 ? Number((price / (Number(it.qty) || 1)).toFixed(2)) : price;
             saveState();
             renderGrocery();
         }
+
         function deleteGroceryItem(id) {
             appState.groceryItems = (appState.groceryItems || []).filter(x => x.id !== id);
             saveState();
             renderGrocery();
+            showToast('Shopping item removed');
         }
+
         function clearCheckedGrocery() {
+            const prevLen = (appState.groceryItems || []).length;
             appState.groceryItems = (appState.groceryItems || []).filter(x => !x.checked);
-            saveState();
-            renderGrocery();
-            showToast('Cleared checked items');
+            if (appState.groceryItems.length !== prevLen) {
+                saveState();
+                renderGrocery();
+                showToast('Cleared checked items from Billing Counter');
+            }
         }
+
         function handlePhoneUpiInput(val) {
             const clean = extractCleanPhone(val);
             const inp = document.getElementById('grocery-merchant-phone');
             if (inp && inp.value !== clean) inp.value = clean;
-            const prev = document.getElementById('formatted-preview-upi');
-            if (prev) prev.textContent = clean.length === 10 ? `${clean}@upi` : '@upi';
+            appState.merchantPhone = clean;
+            appState.merchantUpi = clean.length === 10 ? `${clean}@upi` : (appState.userProfile?.upi || '');
+            const previewEl = document.getElementById('formatted-preview-upi');
+            const badgeEl = document.getElementById('upi-valid-badge');
+            if (previewEl) previewEl.textContent = clean.length === 10 ? `${clean}@upi` : (appState.merchantUpi || '@upi');
+            if (badgeEl) {
+                badgeEl.textContent = clean.length === 10 ? '✓ Valid UPI' : 'Optional';
+                badgeEl.className = clean.length === 10 ? 'text-[10px] font-black text-emerald-600' : 'text-[10px] font-bold text-neutral-400';
+            }
+            saveState();
         }
+
         function renderGrocery() {
             renderProductSlider();
-            const items = appState.groceryItems || [];
-            const pending = items.filter(x => !x.checked);
-            const checked = items.filter(x => x.checked);
-            const totalBill = checked.reduce((s, x) => s + (Number(x.price) || 0), 0);
+            const items = Array.isArray(appState.groceryItems) ? appState.groceryItems : [];
+            const pendingCountEl = document.getElementById('grocery-pending-count');
+            const checklistEl = document.getElementById('grocery-checklist');
+            const pricingListEl = document.getElementById('grocery-pricing-list');
+            const billTotalEl = document.getElementById('grocery-bill-total');
 
-            if (document.getElementById('grocery-pending-count')) document.getElementById('grocery-pending-count').textContent = pending.length;
-            if (document.getElementById('grocery-bill-total')) document.getElementById('grocery-bill-total').textContent = `₹${totalBill.toLocaleString('en-IN')}`;
+            const pendingItems = items.filter(x => !x.checked);
+            const checkedItems = items.filter(x => x.checked);
+            const billTotal = checkedItems.reduce((s, x) => s + (Number(x.price) || 0), 0);
 
-            const clEl = document.getElementById('grocery-checklist');
-            if (clEl) {
-                clEl.innerHTML = items.length ? items.map(it => `
-                    <div class="p-2.5 rounded-xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 flex flex-wrap items-center justify-between gap-2 text-xs">
-                        <label class="flex items-center gap-2 min-w-0 cursor-pointer flex-1">
-                            <input type="checkbox" ${it.checked ? 'checked' : ''} onchange="toggleGroceryChecked('${it.id}')" class="w-4 h-4 accent-emerald-600 rounded flex-shrink-0">
-                            <span class="font-bold truncate ${it.checked ? 'text-neutral-900 dark:text-white' : 'text-neutral-600 dark:text-neutral-300'}">${it.name}</span>
-                        </label>
-                        <div class="flex items-center gap-1 flex-shrink-0">
-                            <input type="number" step="any" min="0.01" value="${it.qty}" onchange="updateGroceryItemQty('${it.id}', this.value)" title="Customize Quantity" class="w-14 px-1.5 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 text-center font-black text-[11px]">
-                            <select onchange="updateGroceryItemUnit('${it.id}', this.value)" title="Customize Unit" class="px-1.5 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 font-bold text-[10px]">
-                                ${['Kg', 'Grams (gm)', 'Packets', 'Pieces (pcs)', 'Litre (L)'].map(u => `<option value="${u}" ${it.unit === u ? 'selected' : ''}>${u.split(' ')[0]}</option>`).join('')}
-                            </select>
-                            <button type="button" onclick="openEditGroceryItem('${it.id}')" class="text-primary-600 p-1" title="Edit Item"><i class="fa-solid fa-pen"></i></button>
-                            <button type="button" onclick="deleteGroceryItem('${it.id}')" class="text-rose-500 p-1" title="Delete Item"><i class="fa-solid fa-trash"></i></button>
-                        </div>
-                    </div>
-                `).join('') : '<div class="text-center py-8 text-xs text-neutral-400">Your shopping checklist is empty. Tap any of the 1,300+ Kirana items above!</div>';
+            if (pendingCountEl) pendingCountEl.textContent = pendingItems.length;
+            if (billTotalEl) billTotalEl.textContent = `₹${billTotal.toLocaleString('en-IN', { maximumFractionDigits: 2 })}`;
+
+            const phoneInp = document.getElementById('grocery-merchant-phone');
+            if (phoneInp && !phoneInp.value && appState.merchantPhone) {
+                phoneInp.value = extractCleanPhone(appState.merchantPhone);
             }
 
-            const prEl = document.getElementById('grocery-pricing-list');
-            if (prEl) {
-                prEl.innerHTML = checked.length ? checked.map(it => `
-                    <div class="p-2.5 rounded-xl bg-white dark:bg-neutral-900 border border-emerald-200 dark:border-neutral-800 space-y-1.5 text-xs">
-                        <div class="flex items-center justify-between gap-2">
-                            <span class="font-extrabold text-neutral-900 dark:text-white truncate flex-1">${it.name}</span>
-                            <button type="button" onclick="deleteGroceryItem('${it.id}')" class="text-rose-500 text-[10px] p-0.5"><i class="fa-solid fa-xmark"></i></button>
-                        </div>
-                        <div class="flex items-center justify-between gap-2">
-                            <div class="flex items-center gap-1">
-                                <input type="number" step="any" min="0.01" value="${it.qty}" onchange="updateGroceryItemQty('${it.id}', this.value)" class="w-14 p-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 border text-center font-black text-[11px]">
-                                <select onchange="updateGroceryItemUnit('${it.id}', this.value)" class="p-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 border font-bold text-[10px]">
-                                    ${['Kg', 'Grams (gm)', 'Packets', 'Pieces (pcs)', 'Litre (L)'].map(u => `<option value="${u}" ${it.unit === u ? 'selected' : ''}>${u.split(' ')[0]}</option>`).join('')}
-                                </select>
+            if (checklistEl) {
+                checklistEl.innerHTML = items.length ? items.map(it => {
+                    const escapedId = String(it.id).replace(/'/g, "\\'");
+                    return `
+                        <div class="p-3 rounded-2xl bg-white dark:bg-neutral-900 border ${it.checked ? 'border-emerald-300/80 dark:border-emerald-800/70 bg-emerald-50/40 dark:bg-emerald-950/20' : 'border-neutral-200 dark:border-neutral-800'} flex items-center justify-between gap-2.5 text-xs transition shadow-2xs">
+                            <label class="flex items-start gap-2.5 min-w-0 flex-1 cursor-pointer">
+                                <input type="checkbox" ${it.checked ? 'checked' : ''} onchange="toggleGroceryChecked('${escapedId}')" class="mt-0.5 w-4 h-4 rounded accent-emerald-600 flex-shrink-0 cursor-pointer">
+                                <div class="min-w-0 flex-1">
+                                    <div class="font-extrabold leading-snug break-words ${it.checked ? 'line-through text-neutral-400' : 'text-neutral-900 dark:text-white'}">${it.name}</div>
+                                    <div class="flex flex-wrap items-center gap-1.5 mt-1 text-[10px] font-bold">
+                                        <span class="px-2 py-0.5 rounded-md bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300">${it.qty} ${it.unit}</span>
+                                        ${Number(it.price) > 0 ? `<span class="px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-700 dark:text-emerald-300">Est. ₹${Number(it.price).toLocaleString('en-IN')}</span>` : ''}
+                                    </div>
+                                </div>
+                            </label>
+                            <div class="flex items-center gap-1.5 flex-shrink-0">
+                                <button type="button" onclick="openEditGroceryItem('${escapedId}')" class="w-8 h-8 rounded-xl bg-primary-500/10 text-primary-600 hover:bg-primary-600 hover:text-white flex items-center justify-center transition" title="Edit Item"><i class="fa-solid fa-pen text-[11px]"></i></button>
+                                <button type="button" onclick="deleteGroceryItem('${escapedId}')" class="w-8 h-8 rounded-xl bg-rose-500/10 text-rose-600 hover:bg-rose-600 hover:text-white flex items-center justify-center transition" title="Delete Item"><i class="fa-solid fa-trash text-[11px]"></i></button>
                             </div>
-                            <div class="flex items-center gap-1">
-                                <span class="text-[10px] font-bold text-neutral-400">Price ₹</span>
-                                <input type="number" step="any" min="0" value="${it.price || ''}" placeholder="0" onchange="updateGroceryItemPrice('${it.id}', this.value)" class="w-20 p-1 rounded-lg bg-emerald-500/10 dark:bg-neutral-800 border border-emerald-400/50 text-right font-black text-emerald-700 dark:text-emerald-300">
-                            </div>
                         </div>
-                    </div>
-                `).join('') : '<div class="text-center py-6 text-xs text-neutral-400">Tick items on the left to calculate & adjust bill prices.</div>';
+                    `;
+                }).join('') : '<div class="text-center py-8 text-xs text-neutral-400">Your shopping checklist is empty. Select from catalog or add items above!</div>';
             }
+
+            if (pricingListEl) {
+                pricingListEl.innerHTML = checkedItems.length ? checkedItems.map(it => {
+                    const escapedId = String(it.id).replace(/'/g, "\\'");
+                    return `
+                        <div class="p-3 rounded-2xl bg-white dark:bg-neutral-900 border border-emerald-200/90 dark:border-emerald-800/60 space-y-2.5 text-xs shadow-2xs">
+                            <!-- Row 1: Full Item Title + Uncheck Button -->
+                            <div class="flex items-start justify-between gap-2">
+                                <div class="font-black text-neutral-900 dark:text-white leading-snug break-words flex-1">${it.name}</div>
+                                <button type="button" onclick="toggleGroceryChecked('${escapedId}')" class="w-7 h-7 rounded-xl bg-neutral-100 dark:bg-neutral-800 text-neutral-400 hover:bg-rose-500 hover:text-white flex items-center justify-center flex-shrink-0 transition" title="Remove from Bill">
+                                    <i class="fa-solid fa-xmark text-xs"></i>
+                                </button>
+                            </div>
+
+                            <!-- Row 2: Clean 3-Column Mobile Grid (Qty | Unit | Price ₹) with Zero Overlap -->
+                            <div class="grid grid-cols-12 gap-2 items-center">
+                                <div class="col-span-3">
+                                    <label class="block text-[9px] font-black uppercase text-neutral-400 mb-0.5">Qty</label>
+                                    <input type="number" step="any" min="0.01" value="${it.qty}" onchange="updateGroceryItemQty('${escapedId}', this.value)" class="w-full px-2 py-2 rounded-xl bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 text-xs font-black text-center focus:outline-none focus:border-primary-500">
+                                </div>
+                                <div class="col-span-4">
+                                    <label class="block text-[9px] font-black uppercase text-neutral-400 mb-0.5">Unit</label>
+                                    <select onchange="updateGroceryItemUnit('${escapedId}', this.value)" class="w-full px-2 py-2 rounded-xl bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 text-xs font-bold focus:outline-none focus:border-primary-500">
+                                        ${['Kg', 'Grams (gm)', 'Packets', 'Pieces (pcs)', 'Litre (L)'].map(u => `<option value="${u}" ${it.unit === u ? 'selected' : ''}>${u}</option>`).join('')}
+                                    </select>
+                                </div>
+                                <div class="col-span-5">
+                                    <label class="block text-[9px] font-black uppercase text-emerald-700 dark:text-emerald-300 mb-0.5">Price (₹)</label>
+                                    <div class="flex items-center px-2.5 py-2 rounded-xl bg-emerald-500/10 border border-emerald-400/50 focus-within:border-emerald-600">
+                                        <span class="font-black text-emerald-700 dark:text-emerald-300 mr-1">₹</span>
+                                        <input type="number" step="any" min="0" value="${Number(it.price) || 0}" onchange="updateGroceryItemPrice('${escapedId}', this.value)" class="w-full min-w-0 bg-transparent text-right text-xs font-black text-emerald-700 dark:text-emerald-300 focus:outline-none">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('') : '<div class="text-center py-8 text-xs text-neutral-500">Tick items on the left Checklist to calculate their bill & generate QR!</div>';
+            }
+        }
+
+        function openGroceryCounterQrModal() {
+            const checked = (appState.groceryItems || []).filter(x => x.checked);
+            const total = checked.reduce((s, x) => s + (Number(x.price) || 0), 0);
+            if (checked.length === 0 || total <= 0) {
+                showToast('Tick items and enter price first to generate QR', 'error');
+                return;
+            }
+            const phone = extractCleanPhone(document.getElementById('grocery-merchant-phone')?.value || '');
+            const storeUpi = phone.length === 10 ? `${phone}@upi` : (appState.merchantUpi || 'store@upi');
+            openUpiQrModal(getPrimaryUserName(), 'Kirana Store', total, storeUpi);
         }
 
         function extractCleanPhone(val) {
@@ -5118,6 +5277,7 @@
             document.getElementById('gate-login-identifier-container')?.classList.toggle('hidden', isReg);
             document.getElementById('gate-confirm-pwd-col')?.classList.toggle('hidden', !isReg);
             document.getElementById('gate-forgot-password-row')?.classList.toggle('hidden', isReg);
+            document.getElementById('gate-terms-wrapper')?.classList.toggle('hidden', !isReg);
 
             const loginTab = document.getElementById('gate-tab-login');
             const regTab = document.getElementById('gate-tab-register');
@@ -5132,6 +5292,50 @@
             const subText = document.getElementById('gate-submit-text');
             if (subText) subText.textContent = isReg ? 'Create Cloud Account' : 'Sign In & Access NeoKhata';
             refreshAuthCaptcha();
+        }
+
+        function calculateExactAgeFromDob(dobStr) {
+            if (!dobStr) return null;
+            const birthDate = new Date(`${dobStr}T00:00:00`);
+            if (isNaN(birthDate.getTime())) return null;
+            const today = new Date();
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const mDiff = today.getMonth() - birthDate.getMonth();
+            if (mDiff < 0 || (mDiff === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+            return age;
+        }
+
+        function handleGateDobChange(dobStr) {
+            const age = calculateExactAgeFromDob(dobStr);
+            const badge = document.getElementById('gate-age-display-badge');
+            const box = document.getElementById('gate-age-box');
+            if (age === null || age < 0) {
+                if (badge) {
+                    badge.textContent = 'Enter DOB';
+                    badge.className = 'text-[10px] font-black px-2 py-0.5 rounded-full bg-neutral-200/80 dark:bg-neutral-800 text-neutral-500';
+                }
+                if (box) {
+                    box.textContent = 'Age: — Yrs';
+                    box.className = 'px-3 py-2.5 rounded-2xl bg-neutral-100 dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 text-xs font-black text-neutral-600 dark:text-neutral-300 whitespace-nowrap';
+                }
+                return age;
+            }
+            const isAdult = age >= 18;
+            if (badge) {
+                badge.textContent = isAdult ? '✓ 18+ Eligible' : '✕ Under 18 (Not Allowed)';
+                badge.className = isAdult
+                    ? 'text-[10px] font-black px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-700 dark:text-emerald-300'
+                    : 'text-[10px] font-black px-2 py-0.5 rounded-full bg-rose-500/15 text-rose-600';
+            }
+            if (box) {
+                box.textContent = `Age: ${age} Yrs`;
+                box.className = isAdult
+                    ? 'px-3 py-2.5 rounded-2xl bg-emerald-500/10 border border-emerald-500/40 text-xs font-black text-emerald-700 dark:text-emerald-300 whitespace-nowrap'
+                    : 'px-3 py-2.5 rounded-2xl bg-rose-500/10 border border-rose-500/40 text-xs font-black text-rose-600 whitespace-nowrap';
+            }
+            return age;
         }
 
         function handleGatePhoneInput(val) {
@@ -5183,26 +5387,59 @@
             if (!adminConfig.loginLockoutPolicy || typeof adminConfig.loginLockoutPolicy !== 'object') {
                 adminConfig.loginLockoutPolicy = {
                     maxAttempts: 3,
-                    initialValue: 30,
-                    initialUnit: 'hours',
-                    stepMinutes: 30
+                    initialDurationVal: 30,
+                    initialDurationUnit: 'hours',
+                    progressiveStepMins: 30,
+                    userOverrides: {}
                 };
             }
-            const p = adminConfig.loginLockoutPolicy;
-            p.maxAttempts = Math.max(1, Number(p.maxAttempts) || 3);
-            p.initialValue = Math.max(1, Number(p.initialValue) || 30);
-            p.initialUnit = p.initialUnit === 'minutes' ? 'minutes' : 'hours';
-            p.stepMinutes = Math.max(1, Number(p.stepMinutes) || 30);
-            return p;
+            const lp = adminConfig.loginLockoutPolicy;
+            if (!lp.maxAttempts || lp.maxAttempts < 1) lp.maxAttempts = 3;
+            if (!lp.initialDurationVal || lp.initialDurationVal < 1) lp.initialDurationVal = 30;
+            if (!lp.initialDurationUnit) lp.initialDurationUnit = 'hours';
+            if (!lp.progressiveStepMins || lp.progressiveStepMins < 1) lp.progressiveStepMins = 30;
+            if (!lp.userOverrides || typeof lp.userOverrides !== 'object') lp.userOverrides = {};
+            return lp;
+        }
+
+        function getNormalizedLockUserKey(identifier) {
+            const cleanPh = extractCleanPhone(identifier || '');
+            if (cleanPh.length === 10) return `phone_${cleanPh}`;
+            return (identifier || '').trim().toLowerCase();
+        }
+
+        function isUserLoginLockoutBypassed(identifier) {
+            const lp = ensureLoginLockoutPolicy();
+            const uKey = getNormalizedLockUserKey(identifier);
+            if (!uKey) return false;
+            return !!(lp.userOverrides[uKey]?.bypass);
         }
 
         function getLoginLockoutState(identifier) {
+            const lp = ensureLoginLockoutPolicy();
+            const uKey = getNormalizedLockUserKey(identifier);
+            const cloudOv = uKey ? lp.userOverrides[uKey] : null;
+            if (cloudOv?.bypass) {
+                return { failedAttempts: 0, lockStage: 0, lockedUntil: 0, bypassed: true };
+            }
+            let localSt = { failedAttempts: 0, lockStage: 0, lockedUntil: 0 };
             try {
                 const raw = JSON.parse(localStorage.getItem(getLoginLockoutStorageKey(identifier)) || 'null');
-                return raw && typeof raw === 'object' ? raw : { failedAttempts: 0, lockStage: 0, lockedUntil: 0, adminLocked: false };
-            } catch (e) {
-                return { failedAttempts: 0, lockStage: 0, lockedUntil: 0, adminLocked: false };
+                if (raw && typeof raw === 'object') localSt = raw;
+            } catch (e) {}
+
+            // Merge any Admin-set cloud lock / reset timestamp
+            if (cloudOv) {
+                if (cloudOv.resetAt && (!localSt.lastResetApplied || cloudOv.resetAt > localSt.lastResetApplied)) {
+                    localSt = { failedAttempts: 0, lockStage: 0, lockedUntil: 0, lastResetApplied: cloudOv.resetAt };
+                    saveLoginLockoutState(identifier, localSt);
+                }
+                if (cloudOv.lockedUntil && Number(cloudOv.lockedUntil) > (Number(localSt.lockedUntil) || 0)) {
+                    localSt.lockedUntil = Number(cloudOv.lockedUntil);
+                    localSt.lockStage = Math.max(1, Number(localSt.lockStage) || 1);
+                }
             }
+            return localSt;
         }
 
         function saveLoginLockoutState(identifier, stateObj) {
@@ -5228,23 +5465,30 @@
         }
 
         function recordFailedLoginAttempt(identifier) {
-            const policy = ensureLoginLockoutPolicy();
+            if (isUserLoginLockoutBypassed(identifier)) {
+                return { st: { failedAttempts: 0, lockStage: 0, lockedUntil: 0, bypassed: true }, lockDurationMs: 0, lockLabel: '' };
+            }
+            const lp = ensureLoginLockoutPolicy();
+            const maxTries = Math.max(1, Number(lp.maxAttempts) || 3);
+            const initVal = Math.max(1, Number(lp.initialDurationVal) || 30);
+            const initUnit = lp.initialDurationUnit === 'minutes' ? 'minutes' : 'hours';
+            const stepMins = Math.max(1, Number(lp.progressiveStepMins) || 30);
+
             const st = getLoginLockoutState(identifier);
             st.failedAttempts = (Number(st.failedAttempts) || 0) + 1;
             let lockDurationMs = 0;
             let lockLabel = '';
 
             if (st.lockStage === 0) {
-                if (st.failedAttempts >= policy.maxAttempts) {
+                if (st.failedAttempts >= maxTries) {
                     st.lockStage = 1;
-                    const unitMult = policy.initialUnit === 'minutes' ? (60 * 1000) : (60 * 60 * 1000);
-                    lockDurationMs = policy.initialValue * unitMult;
-                    lockLabel = `${policy.initialValue} ${policy.initialUnit === 'minutes' ? 'Minutes' : 'Hours'}`;
+                    lockDurationMs = initUnit === 'hours' ? initVal * 3600000 : initVal * 60000;
+                    lockLabel = initUnit === 'hours' ? `${initVal} Hour${initVal > 1 ? 's' : ''}` : `${initVal} Minute${initVal > 1 ? 's' : ''}`;
                 }
             } else {
-                const extraMins = st.lockStage * policy.stepMinutes;
+                const extraMins = st.lockStage * stepMins;
                 st.lockStage += 1;
-                lockDurationMs = extraMins * 60 * 1000;
+                lockDurationMs = extraMins * 60000;
                 lockLabel = `${extraMins} Minutes`;
             }
 
@@ -5253,7 +5497,7 @@
             }
             saveLoginLockoutState(identifier, st);
             updateLoginLockoutUI(identifier);
-            return { st, lockDurationMs, lockLabel, policy };
+            return { st, lockDurationMs, lockLabel };
         }
 
         function updateLoginLockoutUI(identifierOverride) {
@@ -5265,24 +5509,30 @@
             const detailTxt = document.getElementById('gate-lockout-detail-text');
             const submitBtn = document.getElementById('gate-submit-btn');
 
-            if (authGateMode !== 'login' || !idVal.trim()) {
+            if (authGateMode !== 'login' || !idVal.trim() || isUserLoginLockoutBypassed(idVal)) {
                 banner?.classList.add('hidden');
-                if (submitBtn) submitBtn.disabled = false;
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                }
                 return false;
             }
 
-            const policy = ensureLoginLockoutPolicy();
+            const lp = ensureLoginLockoutPolicy();
+            const maxTries = Math.max(1, Number(lp.maxAttempts) || 3);
+            const initVal = Math.max(1, Number(lp.initialDurationVal) || 30);
+            const initUnitLabel = lp.initialDurationUnit === 'minutes' ? 'मिनट' : 'घंटे';
+            const stepMins = Math.max(1, Number(lp.progressiveStepMins) || 30);
+
             const st = getLoginLockoutState(idVal);
             const remMs = (Number(st.lockedUntil) || 0) - Date.now();
             if (remMs > 0) {
                 banner?.classList.remove('hidden');
                 if (timerTxt) timerTxt.textContent = `⏱ Locked for ${formatLockoutDuration(remMs)}`;
                 if (detailTxt) {
-                    detailTxt.textContent = st.adminLocked
-                        ? 'यह अकाउंट एडमिन द्वारा अस्थायी रूप से लॉक किया गया है।'
-                        : (st.lockStage === 1
-                            ? `${policy.maxAttempts} गलत पासवर्ड डालने के कारण आपका लॉगिन ${policy.initialValue} ${policy.initialUnit === 'minutes' ? 'मिनट' : 'घंटे'} के लिए लॉक कर दिया गया है।`
-                            : `दोबारा गलत पासवर्ड डालने के कारण अतिरिक्त +${policy.stepMinutes} मिनट का लॉक लगाया गया है।`);
+                    detailTxt.textContent = st.lockStage === 1
+                        ? `${maxTries} गलत पासवर्ड डालने के कारण आपका लॉगिन ${initVal} ${initUnitLabel} के लिए लॉक कर दिया गया है।`
+                        : `दोबारा गलत पासवर्ड डालने के कारण अतिरिक्त +${stepMins} मिनट का लॉक लगाया गया है।`;
                 }
                 if (submitBtn) {
                     submitBtn.disabled = true;
@@ -5297,84 +5547,6 @@
                 }
                 return false;
             }
-        }
-
-        function renderAdminLoginLockoutStudio() {
-            const policy = ensureLoginLockoutPolicy();
-            if (document.getElementById('adm-lock-max-attempts')) document.getElementById('adm-lock-max-attempts').value = policy.maxAttempts;
-            if (document.getElementById('adm-lock-initial-val')) document.getElementById('adm-lock-initial-val').value = policy.initialValue;
-            if (document.getElementById('adm-lock-initial-unit')) document.getElementById('adm-lock-initial-unit').value = policy.initialUnit;
-            if (document.getElementById('adm-lock-step-mins')) document.getElementById('adm-lock-step-mins').value = policy.stepMinutes;
-
-            const listEl = document.getElementById('admin-login-lockout-users-list');
-            if (!listEl) return;
-            const q = (document.getElementById('adm-lock-user-search')?.value || '').toLowerCase().trim();
-            const users = getDeduplicatedAdminUsers().filter(u => !q || `${u.name || ''} ${u.phone || ''} ${u.email || ''}`.toLowerCase().includes(q));
-            const now = Date.now();
-
-            listEl.innerHTML = users.map((u, idx) => {
-                const ph = extractCleanPhone(u.phone || '');
-                const idKey = ph.length === 10 ? ph : (u.email || u.uid || '');
-                const encId = encodeURIComponent(idKey);
-                const st = getLoginLockoutState(idKey);
-                const remMs = Math.max(0, (Number(st.lockedUntil) || 0) - now);
-                const isLocked = remMs > 0;
-                return `
-                    <div class="p-3 rounded-2xl bg-neutral-100/90 dark:bg-neutral-800/90 border ${isLocked ? 'border-rose-400/70' : 'border-neutral-200 dark:border-neutral-700'} flex flex-wrap items-center justify-between gap-2 text-[11px]">
-                        <div class="min-w-0">
-                            <div class="font-black text-neutral-900 dark:text-white flex items-center gap-1.5 flex-wrap">
-                                <span>${u.name || 'User'}</span>
-                                <span class="font-mono text-[10px] text-neutral-500">${ph ? '+91 ' + ph : (u.email || '')}</span>
-                                ${isLocked
-                                    ? `<span class="px-2 py-0.5 rounded-full bg-rose-600 text-white font-mono font-black text-[9px]">🔒 Locked (${formatLockoutDuration(remMs)})</span>`
-                                    : `<span class="px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-600 font-black text-[9px]">Unlocked (${st.failedAttempts || 0}/${policy.maxAttempts} tries)</span>`}
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-1.5 flex-wrap">
-                            <input type="number" id="adm-manual-lock-val-${idx}" min="1" value="30" class="w-14 p-1 rounded-lg bg-white dark:bg-neutral-900 border font-black text-center">
-                            <select id="adm-manual-lock-unit-${idx}" class="p-1 rounded-lg bg-white dark:bg-neutral-900 border font-bold">
-                                <option value="minutes">Mins</option>
-                                <option value="hours">Hrs</option>
-                            </select>
-                            <button type="button" onclick="adminManualLockAccount('${encId}', ${idx})" class="px-2.5 py-1 rounded-lg bg-rose-600 hover:bg-rose-700 text-white font-black text-[10px]">Lock Account</button>
-                            <button type="button" onclick="adminManualUnlockAccount('${encId}')" class="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-black text-[10px]">Unlock / Reset</button>
-                        </div>
-                    </div>
-                `;
-            }).join('') || '<div class="text-center py-4 text-neutral-400">No registered user accounts found.</div>';
-        }
-
-        function saveAdminLoginLockoutPolicy() {
-            const p = ensureLoginLockoutPolicy();
-            p.maxAttempts = Math.max(1, parseInt(document.getElementById('adm-lock-max-attempts')?.value, 10) || 3);
-            p.initialValue = Math.max(1, parseInt(document.getElementById('adm-lock-initial-val')?.value, 10) || 30);
-            p.initialUnit = document.getElementById('adm-lock-initial-unit')?.value === 'minutes' ? 'minutes' : 'hours';
-            p.stepMinutes = Math.max(1, parseInt(document.getElementById('adm-lock-step-mins')?.value, 10) || 30);
-            localStorage.setItem('khataflow_admin_config', JSON.stringify(adminConfig));
-            renderAdminLoginLockoutStudio();
-            saveAllAdminChangesLive();
-            showToast(`Login Lockout Policy saved (${p.maxAttempts} tries → ${p.initialValue} ${p.initialUnit}, +${p.stepMinutes}m step)!`);
-        }
-
-        function adminManualLockAccount(encId, idx) {
-            const idKey = decodeURIComponent(encId || '');
-            const val = Math.max(1, parseInt(document.getElementById(`adm-manual-lock-val-${idx}`)?.value, 10) || 30);
-            const unit = document.getElementById(`adm-manual-lock-unit-${idx}`)?.value === 'hours' ? 'hours' : 'minutes';
-            const durMs = val * (unit === 'hours' ? 3600000 : 60000);
-            const st = getLoginLockoutState(idKey);
-            st.lockedUntil = Date.now() + durMs;
-            st.adminLocked = true;
-            st.lockStage = Math.max(1, st.lockStage || 1);
-            saveLoginLockoutState(idKey, st);
-            renderAdminLoginLockoutStudio();
-            showToast(`Account "${idKey}" locked for ${val} ${unit}!`);
-        }
-
-        function adminManualUnlockAccount(encId) {
-            const idKey = decodeURIComponent(encId || '');
-            clearLoginLockoutState(idKey);
-            renderAdminLoginLockoutStudio();
-            showToast(`Account "${idKey}" unlocked & failed attempts reset!`);
         }
 
         function startLoginLockoutTicker() {
@@ -5400,13 +5572,30 @@
                 const fullName = (document.getElementById('gate-input-fullname')?.value || '').trim();
                 const email = (document.getElementById('gate-input-email')?.value || '').trim().toLowerCase();
                 const phone = extractCleanPhone(document.getElementById('gate-input-phone')?.value || '');
+                const dob = (document.getElementById('gate-input-dob')?.value || '').trim();
+                const computedAge = handleGateDobChange(dob);
+                const termsAccepted = !!document.getElementById('gate-input-terms')?.checked;
                 const confirmPwd = document.getElementById('gate-input-confirm-password')?.value || '';
                 if (!fullName || !email || phone.length !== 10 || password.length < 6) {
                     if (statusEl) { statusEl.textContent = 'Fill Name, Email, 10-digit Mobile & 6+ char Password.'; statusEl.className = 'text-center text-xs pt-1 font-bold text-rose-600'; }
                     return;
                 }
+                if (!dob || computedAge === null || computedAge < 0) {
+                    if (statusEl) { statusEl.textContent = 'कृपया अपनी सही जन्मतिथि (Date of Birth) दर्ज करें।'; statusEl.className = 'text-center text-xs pt-1 font-bold text-rose-600'; }
+                    return;
+                }
+                if (computedAge < 18) {
+                    if (statusEl) { statusEl.textContent = `आपकी उम्र ${computedAge} वर्ष है। केवल 18+ वर्ष के यूज़र्स ही अकाउंट बना सकते हैं।`; statusEl.className = 'text-center text-xs pt-1 font-bold text-rose-600'; }
+                    showToast('Only 18+ age users can create an account!', 'error');
+                    return;
+                }
                 if (password !== confirmPwd) {
                     if (statusEl) { statusEl.textContent = 'Passwords do not match.'; statusEl.className = 'text-center text-xs pt-1 font-bold text-rose-600'; }
+                    return;
+                }
+                if (!termsAccepted) {
+                    if (statusEl) { statusEl.textContent = 'आगे बढ़ने के लिए कृपया नियम और शर्तों (Terms & Conditions) वाले टिक बॉक्स को चुनें।'; statusEl.className = 'text-center text-xs pt-1 font-bold text-rose-600'; }
+                    showToast('Please tick "I agree to Terms & Conditions"!', 'error');
                     return;
                 }
                 showLiveProcessOverlay({
@@ -5420,10 +5609,10 @@
                 try {
                     if (statusEl) { statusEl.textContent = 'Creating cloud workspace...'; statusEl.className = 'text-center text-xs pt-1 font-bold text-primary-600'; }
                     const res = typeof window.firebaseRegister === 'function'
-                        ? await window.firebaseRegister(email, password, fullName, phone)
+                        ? await window.firebaseRegister(email, password, fullName, phone, dob, computedAge)
                         : { user: { uid: `phone_${phone}`, email, displayName: fullName } };
                     updateLiveProcessOverlay({ step: 'Account created! Preparing your workspace...', progress: 85 });
-                    const sess = { isLoggedIn: true, role: 'user', uid: res.user.uid, name: fullName, phone, email, username: phone };
+                    const sess = { isLoggedIn: true, role: 'user', uid: res.user.uid, name: fullName, phone, email, dob, age: computedAge, username: phone };
                     setAuthSession(sess);
 
                     // Register user in local & cloud directory immediately so Admin & Multi-Device always see it
@@ -5435,6 +5624,9 @@
                             name: fullName,
                             phone,
                             email,
+                            dob,
+                            age: computedAge,
+                            termsAccepted: true,
                             username: phone,
                             passwordHash: btoa(unescape(encodeURIComponent(password))),
                             createdAt: new Date().toISOString()
@@ -5443,7 +5635,7 @@
                     }
 
                     appState = createEmptyAppState();
-                    appState.userProfile = { name: fullName, phone, email, upi: `${phone}@upi`, registered: true, createdAt: new Date().toISOString() };
+                    appState.userProfile = { name: fullName, phone, email, dob, age: computedAge, upi: `${phone}@upi`, registered: true, createdAt: new Date().toISOString() };
                     appState.merchantPhone = phone;
                     appState.merchantUpi = `${phone}@upi`;
                     propagateUserProfileAcrossApp();
@@ -5501,12 +5693,15 @@
                 }
                 if (isAdminIdentifier && !isAdminPassword) {
                     refreshAuthCaptcha();
-                    const { st, lockDurationMs, lockLabel, policy } = recordFailedLoginAttempt(identifier);
-                    const leftTries = Math.max(0, policy.maxAttempts - st.failedAttempts);
+                    const { st, lockDurationMs, lockLabel } = recordFailedLoginAttempt(identifier);
+                    const lpPolicy = ensureLoginLockoutPolicy();
+                    const maxTries = Math.max(1, Number(lpPolicy.maxAttempts) || 3);
+                    const initDurLabel = `${lpPolicy.initialDurationVal} ${lpPolicy.initialDurationUnit === 'minutes' ? 'minute' : 'hour'}`;
+                    const remainingTries = Math.max(0, maxTries - st.failedAttempts);
                     if (statusEl) {
                         statusEl.textContent = lockDurationMs > 0
                             ? `Incorrect password! Account locked for ${lockLabel}.`
-                            : `Incorrect Master Admin password (${leftTries} attempt(s) left before ${policy.initialValue}-${policy.initialUnit} lock).`;
+                            : `Incorrect Admin password. (${remainingTries} attempt${remainingTries === 1 ? '' : 's'} left before ${initDurLabel} lock)`;
                         statusEl.className = 'text-center text-xs pt-1 font-bold text-rose-600';
                     }
                     return;
@@ -5550,12 +5745,12 @@
                 } catch (err) {
                     hideLiveProcessOverlay();
                     refreshAuthCaptcha();
-                    const { st, lockDurationMs, lockLabel, policy } = recordFailedLoginAttempt(identifier);
-                    const remainingTries = Math.max(0, policy.maxAttempts - st.failedAttempts);
+                    const { st, lockDurationMs, lockLabel } = recordFailedLoginAttempt(identifier);
+                    const remainingTries = Math.max(0, 3 - st.failedAttempts);
                     if (statusEl) {
                         statusEl.textContent = lockDurationMs > 0
                             ? `Incorrect password! Account locked for ${lockLabel}.`
-                            : `${err?.message || 'Incorrect password.'} (${remainingTries} attempt${remainingTries === 1 ? '' : 's'} left before ${policy.initialValue}-${policy.initialUnit} lock)`;
+                            : `${err?.message || 'Incorrect password.'} (${remainingTries} attempt${remainingTries === 1 ? '' : 's'} left before 30-hour lock)`;
                         statusEl.className = 'text-center text-xs pt-1 font-bold text-rose-600';
                     }
                 }
@@ -12629,7 +12824,7 @@ ${JSON.stringify(liveSnapshot)}`;
             if (tabId === 'admin') {
                 updateAdminDashboardMetrics();
                 renderAdminSubscriptionStudio();
-                renderAdminLoginLockoutStudio();
+                renderAdminLockoutStudio();
                 renderAdmin9ModulesGrid();
                 renderAdmin70ControlsGrid();
                 renderAdminUsersList();
@@ -14353,7 +14548,157 @@ ${JSON.stringify(liveSnapshot)}`;
             saveAllAdminChangesLive();
         }
 
+        // ================= ADMIN LOGIN LOCKOUT, BYPASS & TIMER RESET CONTROLS =================
+        function renderAdminLockoutStudio() {
+            const lp = ensureLoginLockoutPolicy();
+            if (document.getElementById('adm-lock-max-attempts')) document.getElementById('adm-lock-max-attempts').value = lp.maxAttempts;
+            if (document.getElementById('adm-lock-initial-val')) document.getElementById('adm-lock-initial-val').value = lp.initialDurationVal;
+            if (document.getElementById('adm-lock-initial-unit')) document.getElementById('adm-lock-initial-unit').value = lp.initialDurationUnit;
+            if (document.getElementById('adm-lock-progressive-mins')) document.getElementById('adm-lock-progressive-mins').value = lp.progressiveStepMins;
+
+            const listEl = document.getElementById('admin-lockout-users-list');
+            if (!listEl) return;
+            const q = (document.getElementById('adm-lock-user-search')?.value || '').toLowerCase().trim();
+            const users = getDeduplicatedAdminUsers().filter(u => !q || `${u.name || ''} ${u.phone || ''} ${u.email || ''}`.toLowerCase().includes(q));
+
+            listEl.innerHTML = users.map(u => {
+                const ph = extractCleanPhone(u.phone || '');
+                const uKey = ph.length === 10 ? `phone_${ph}` : (u.email || u.uid || '').toLowerCase();
+                const ov = lp.userOverrides[uKey] || {};
+                const st = getLoginLockoutState(ph || u.email || uKey);
+                const remMs = Math.max(0, (Number(st.lockedUntil) || 0) - Date.now());
+                const isLocked = !ov.bypass && remMs > 0;
+                const encKey = encodeURIComponent(uKey);
+                const safeId = uKey.replace(/[^a-zA-Z0-9_-]/g, '_');
+
+                const statusPill = ov.bypass
+                    ? '<span class="px-2 py-0.5 rounded-full bg-indigo-500/15 text-indigo-600 dark:text-indigo-300 font-black text-[9px] uppercase">⚡ Bypass Active (Early Login Allowed)</span>'
+                    : (isLocked
+                        ? `<span class="px-2 py-0.5 rounded-full bg-rose-500/15 text-rose-600 font-mono font-black text-[9px]">🔒 Locked (${formatLockoutDuration(remMs)})</span>`
+                        : `<span class="px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-600 font-black text-[9px]">✓ Unlocked (${st.failedAttempts || 0} fails)</span>`);
+
+                return `
+                    <div class="p-3 rounded-xl bg-neutral-100/90 dark:bg-neutral-800/90 border ${isLocked ? 'border-rose-400/60' : 'border-neutral-200 dark:border-neutral-700'} flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-[11px]">
+                        <div class="min-w-0 space-y-1">
+                            <div class="flex items-center gap-2 flex-wrap">
+                                <span class="font-black text-neutral-900 dark:text-white truncate">${u.name || 'User'}</span>
+                                <span class="font-mono text-[10px] text-neutral-400">${ph ? '+91 ' + ph : (u.email || uKey)}</span>
+                                ${statusPill}
+                            </div>
+                        </div>
+
+                        <div class="flex flex-wrap items-center gap-1.5 flex-shrink-0">
+                            <label class="px-2.5 py-1.5 rounded-lg ${ov.bypass ? 'bg-indigo-600 text-white' : 'bg-white dark:bg-neutral-900 border text-neutral-700 dark:text-neutral-200'} font-black text-[10px] flex items-center gap-1.5 cursor-pointer transition">
+                                <input type="checkbox" ${ov.bypass ? 'checked' : ''} onchange="toggleAdminUserLoginBypass('${encKey}', this.checked)" class="accent-indigo-600">
+                                <span>Allow Bypass</span>
+                            </label>
+                            <button type="button" onclick="resetAdminUserLoginLockout('${encKey}')" class="px-2.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-black text-[10px] transition">
+                                <i class="fa-solid fa-rotate-left mr-1"></i> Reset Timer
+                            </button>
+                            <div class="flex items-center gap-1 bg-white dark:bg-neutral-900 border rounded-lg p-0.5">
+                                <input type="number" id="adm-custom-lock-mins-${safeId}" min="1" placeholder="Mins" class="w-14 px-1.5 py-1 bg-transparent font-mono font-black text-[10px] focus:outline-none">
+                                <button type="button" onclick="applyAdminCustomUserLock('${encKey}', 'adm-custom-lock-mins-${safeId}')" class="px-2 py-1 rounded bg-rose-600 hover:bg-rose-700 text-white font-black text-[9px]">Lock</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('') || '<div class="text-center py-4 text-neutral-400">No registered users found.</div>';
+        }
+
+        function saveAdminLockoutPolicyConfig() {
+            const lp = ensureLoginLockoutPolicy();
+            lp.maxAttempts = Math.max(1, parseInt(document.getElementById('adm-lock-max-attempts')?.value, 10) || 3);
+            lp.initialDurationVal = Math.max(1, parseInt(document.getElementById('adm-lock-initial-val')?.value, 10) || 30);
+            lp.initialDurationUnit = document.getElementById('adm-lock-initial-unit')?.value === 'minutes' ? 'minutes' : 'hours';
+            lp.progressiveStepMins = Math.max(1, parseInt(document.getElementById('adm-lock-progressive-mins')?.value, 10) || 30);
+            localStorage.setItem('khataflow_admin_config', JSON.stringify(adminConfig));
+            renderAdminLockoutStudio();
+            saveAllAdminChangesLive();
+            showToast(`Login Lockout Policy saved (${lp.maxAttempts} attempts → ${lp.initialDurationVal} ${lp.initialDurationUnit})!`);
+        }
+
+        function toggleAdminUserLoginBypass(encKey, enabled) {
+            const uKey = decodeURIComponent(encKey || '');
+            const lp = ensureLoginLockoutPolicy();
+            if (!lp.userOverrides[uKey]) lp.userOverrides[uKey] = {};
+            lp.userOverrides[uKey].bypass = !!enabled;
+            if (enabled) {
+                lp.userOverrides[uKey].lockedUntil = 0;
+                lp.userOverrides[uKey].resetAt = Date.now();
+                clearLoginLockoutState(uKey.replace(/^phone_/, ''));
+            }
+            localStorage.setItem('khataflow_admin_config', JSON.stringify(adminConfig));
+            renderAdminLockoutStudio();
+            saveAllAdminChangesLive();
+            showToast(enabled ? 'Bypass enabled — User can sign in immediately!' : 'Bypass disabled — Standard lockout rules active');
+        }
+
+        function resetAdminUserLoginLockout(encKey) {
+            const uKey = decodeURIComponent(encKey || '');
+            const lp = ensureLoginLockoutPolicy();
+            if (!lp.userOverrides[uKey]) lp.userOverrides[uKey] = {};
+            lp.userOverrides[uKey].lockedUntil = 0;
+            lp.userOverrides[uKey].resetAt = Date.now();
+            clearLoginLockoutState(uKey.replace(/^phone_/, ''));
+            localStorage.setItem('khataflow_admin_config', JSON.stringify(adminConfig));
+            renderAdminLockoutStudio();
+            saveAllAdminChangesLive();
+            showToast('User lockout timer & failed attempts reset to 0!');
+        }
+
+        function applyAdminCustomUserLock(encKey, inputId) {
+            const uKey = decodeURIComponent(encKey || '');
+            const mins = Math.max(1, parseInt(document.getElementById(inputId)?.value, 10) || 0);
+            if (!mins) {
+                showToast('Enter custom lock duration in minutes', 'error');
+                return;
+            }
+            const lp = ensureLoginLockoutPolicy();
+            if (!lp.userOverrides[uKey]) lp.userOverrides[uKey] = {};
+            lp.userOverrides[uKey].bypass = false;
+            lp.userOverrides[uKey].lockedUntil = Date.now() + mins * 60000;
+            saveLoginLockoutState(uKey.replace(/^phone_/, ''), { failedAttempts: lp.maxAttempts, lockStage: 1, lockedUntil: lp.userOverrides[uKey].lockedUntil });
+            localStorage.setItem('khataflow_admin_config', JSON.stringify(adminConfig));
+            renderAdminLockoutStudio();
+            saveAllAdminChangesLive();
+            showToast(`Custom ${mins}-minute login lock applied!`);
+        }
+
+        function resetAllUsersLoginLockouts() {
+            const lp = ensureLoginLockoutPolicy();
+            const nowTs = Date.now();
+            Object.keys(lp.userOverrides).forEach(k => {
+                lp.userOverrides[k].lockedUntil = 0;
+                lp.userOverrides[k].resetAt = nowTs;
+            });
+            getDeduplicatedAdminUsers().forEach(u => {
+                const ph = extractCleanPhone(u.phone || '');
+                const uKey = ph.length === 10 ? `phone_${ph}` : (u.email || u.uid || '').toLowerCase();
+                if (uKey) {
+                    lp.userOverrides[uKey] = { ...(lp.userOverrides[uKey] || {}), lockedUntil: 0, resetAt: nowTs };
+                    clearLoginLockoutState(ph || u.email || uKey);
+                }
+            });
+            localStorage.setItem('khataflow_admin_config', JSON.stringify(adminConfig));
+            renderAdminLockoutStudio();
+            saveAllAdminChangesLive();
+            showToast('All user lockout timers have been reset!');
+        }
+
         // ================= TOUCH SWIPE SUPPORT & INITIALIZATION =================
+        (function initKiranaOutsideClickClose() {
+            const handleOutsideDismiss = (e) => {
+                const wrapper = document.getElementById('grocery-search-wrapper');
+                const dd = document.getElementById('custom-kirana-dropdown');
+                if (!wrapper || !dd || dd.classList.contains('hidden')) return;
+                if (!wrapper.contains(e.target)) {
+                    closeKiranaDropdown();
+                }
+            };
+            document.addEventListener('pointerdown', handleOutsideDismiss, true);
+            document.addEventListener('click', handleOutsideDismiss, true);
+        })();
+
         (function initSponsoredBannerSwipe() {
             const banner = document.getElementById('sponsored-ad-banner');
             if (!banner) return;
@@ -14519,10 +14864,23 @@ ${JSON.stringify(liveSnapshot)}`;
         }
 
         function sanitizeForRtdb(obj) {
-            return JSON.parse(JSON.stringify(obj, (k, v) => (v === undefined ? null : v)));
+            if (obj === null || obj === undefined) return null;
+            if (Array.isArray(obj)) {
+                return obj.map(item => sanitizeForRtdb(item));
+            }
+            if (typeof obj === 'object') {
+                const clean = {};
+                Object.entries(obj).forEach(([k, v]) => {
+                    if (v === undefined) return;
+                    const safeKey = String(k).replace(/[.#$\[\]/]/g, '_');
+                    clean[safeKey] = sanitizeForRtdb(v);
+                });
+                return clean;
+            }
+            return obj;
         }
 
-        window.firebaseRegister = async function(email, password, fullName, phone) {
+        window.firebaseRegister = async function(email, password, fullName, phone, dob = '', age = null) {
             await ensureCloudReady();
             const cleanPh = extractCleanPhoneSafe(phone);
             const cleanEm = (email || '').trim().toLowerCase();
@@ -14533,6 +14891,9 @@ ${JSON.stringify(liveSnapshot)}`;
                 name: fullName,
                 phone: cleanPh,
                 email: cleanEm,
+                dob: dob || '',
+                age: age !== null ? Number(age) : null,
+                termsAccepted: true,
                 username: cleanPh || cleanEm,
                 passwordHash: btoa(unescape(encodeURIComponent(password))),
                 createdAt: new Date().toISOString()
